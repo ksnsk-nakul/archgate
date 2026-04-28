@@ -35,7 +35,7 @@
 - **Objective**: Implement RBAC database structure.
 - **Tasks**:
   - Create `Role` and `Permission` models with migrations.
-  - Create pivot tables: `role_user`, `role_permission`, `permission_user`.
+  - Create pivot tables: `role_user`, `permission_role`.
   - Implement role assignment and permission checking logic.
 
 ### 2.3 Organization & User Management APIs
