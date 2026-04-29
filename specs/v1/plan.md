@@ -1,5 +1,28 @@
 # Implementation Plan for FluxHaven v1
 
+## Module 0: Tenancy Foundation
+
+### 0.1 Subdomain Routing
+- **Objective**: Resolve the active tenant from the request subdomain.
+- **Tasks**:
+  - Register a subdomain route group in `routes/api.php` (e.g., `{tenant}.app.com`).
+  - Create `TenantResolver` service to look up `Organization` by subdomain.
+  - Bind resolved tenant to the request context (service container / request macro).
+
+### 0.2 Per-Tenant Database Isolation
+- **Objective**: Switch database connection per tenant on every request.
+- **Tasks**:
+  - Add per-tenant database connection entries to `config/database.php`.
+  - Create `TenantDatabaseMiddleware` that calls `DB::purge()` and reconnects using tenant credentials.
+  - Ensure migrations are scoped per tenant or use a shared schema with `organization_id` scoping (decide and document in spec).
+
+### 0.3 Tenant Context Enforcement
+- **Objective**: Prevent cross-tenant data leakage on all authenticated routes.
+- **Tasks**:
+  - Apply `TenantMiddleware` to all `api` route groups after authentication.
+  - Add global Eloquent scope `BelongsToTenant` on all tenant-owned models.
+  - Write integration tests verifying tenant A cannot read tenant B data.
+
 ## Module 1: Auth & Sanctum
 
 ### 1.1 CSRF & Sanctum Setup
@@ -133,6 +156,14 @@
 - **Objective**: Build pipeline stage management.
 - **Tasks**:
   - Implement `POST /api/v1/stages` and `GET /api/v1/stages` endpoints.
+
+### 4.6 CRM Lead Reports
+- **Objective**: Generate lead tracking reports for CRM pipeline visibility.
+- **Tasks**:
+  - Create `ReportController` with a `leads` method.
+  - Implement `GET /api/v1/reports/leads` returning deal counts and values grouped by stage.
+  - Support query filters: `owner_id`, `from_date`, `to_date`.
+  - Restrict to Manager and Admin roles via RBAC middleware.
 
 ## Module 5: Library & Subscriptions
 
@@ -273,6 +304,23 @@
   - Set up Pinia stores for user, projects, tasks, CRM data.
   - Implement optimistic updates for common actions.
   - Handle loading states and errors.
+
+## Module 8: Testing
+
+### 8.1 Unit & Feature Tests (Pest)
+- **Objective**: Achieve high test coverage per module per constitution mandate.
+- **Tasks**:
+  - Write Pest feature tests for all auth endpoints (register, login, logout, `/me`).
+  - Write feature tests for RBAC middleware and role assignment.
+  - Write feature tests for each CRUD module (Projects, Tasks, CRM, Library, LMS).
+  - Write cross-tenant isolation tests verifying no data leakage between tenants.
+
+### 8.2 End-to-End Tests (Cypress)
+- **Objective**: Verify critical user flows end-to-end per constitution mandate.
+- **Tasks**:
+  - Install and configure Cypress in the project.
+  - Write smoke tests for: login flow, project creation, task creation, course enrollment.
+  - Integrate Cypress into CI pipeline.
 
 ## Risks & Performance Considerations
 

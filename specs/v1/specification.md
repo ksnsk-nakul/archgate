@@ -155,6 +155,11 @@
 | POST | /api/v1/stages | Create pipeline stage |
 | GET | /api/v1/stages | List pipeline stages |
 
+### CRM - Reports
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/v1/reports/leads | Lead tracking report (deals by stage, owner, date range) |
+
 ### Library - Content
 | Method | Endpoint | Description |
 |--------|----------|-------------|

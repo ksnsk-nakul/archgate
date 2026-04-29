@@ -2,6 +2,30 @@
 
 ---
 
+## ✅ Module 0: Tenancy Foundation
+
+### Day 0: Tenancy Setup
+
+#### Task 0.1: Subdomain Routing Middleware
+
+- Register subdomain route group (`{tenant}.app.com`)
+- Create `TenantResolver` service to look up `Organization` by subdomain
+- Bind resolved tenant to request context
+
+#### Task 0.2: Per-Tenant Database Isolation
+
+- Configure per-tenant DB connections in `config/database.php`
+- Create `TenantDatabaseMiddleware` (purge + reconnect on each request)
+- Document schema strategy: isolated DB vs shared DB with `organization_id` scoping
+
+#### Task 0.3: Tenant Context Enforcement
+
+- Apply `TenantMiddleware` to all authenticated API route groups
+- Add global Eloquent scope `BelongsToTenant` to all tenant-owned models
+- Write cross-tenant isolation integration tests
+
+---
+
 ## ✅ Module 1: Auth & Sanctum
 
 ### Day 1: Setup Authentication Core
@@ -128,6 +152,13 @@
 
 #### Task 4.5: Pipeline Stages API
 
+#### Task 4.6: CRM Lead Report API
+
+- Implement `GET /api/v1/reports/leads`
+- Aggregate deals by pipeline stage, owner, and date range
+- Return summary counts and deal values per stage
+- Apply RBAC: Manager and Admin only
+
 ---
 
 ## ✅ Module 5: Library
@@ -235,3 +266,46 @@
 ### Day 24: State Management
 
 #### Task 7.9: Pinia Stores
+
+---
+
+## ✅ Module 8: Testing
+
+### Day 25: Auth, RBAC & Tenancy Tests
+
+#### Task 8.1: Auth Tests
+
+- Pest feature tests for register, login, logout, `/me`
+- Test token issuance and revocation
+
+#### Task 8.2: RBAC & Tenancy Tests
+
+- Unit tests for Role/Permission models
+- Feature tests for role assignment and permission middleware
+- Cross-tenant isolation tests (tenant A cannot access tenant B data)
+
+---
+
+### Day 26: Module Feature Tests
+
+#### Task 8.3: Project & Task Tests
+
+- Feature tests for project/task CRUD
+- Test task filters (today, overdue, upcoming)
+- Test subtask creation and listing
+
+#### Task 8.4: CRM, Library & LMS Tests
+
+- Feature tests for contacts, deals, pipeline stages
+- Subscription access restriction tests (free vs premium content)
+- Enrollment and progress tracking tests
+
+---
+
+### Day 27: E2E Tests
+
+#### Task 8.5: Cypress Setup & Smoke Tests
+
+- Install and configure Cypress
+- Write smoke tests for critical user flows: login, create project, create task, enroll in course
+- Add Cypress run to CI pipeline (`npm run cypress:ci`)
