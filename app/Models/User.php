@@ -7,16 +7,19 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Sanctum\HasApiTokens;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     /**
      * Get the attributes that should be cast.
@@ -30,5 +33,40 @@ class User extends Authenticatable
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'role_user')
+            ->withPivot('organization_id')
+            ->withTimestamps();
+    }
+
+    public function organizations(): BelongsToMany
+    {
+        return $this->belongsToMany(Organization::class, 'role_user')
+            ->withPivot('role_id')
+            ->withTimestamps();
+    }
+
+    public function hasRole(string $slug, ?int $organizationId = null): bool
+    {
+        return $this->roles()
+            ->when($organizationId, fn ($q) => $q->where('role_user.organization_id', $organizationId))
+            ->where('roles.slug', $slug)
+            ->exists();
+    }
+
+    public function hasPermission(string $slug, ?int $organizationId = null): bool
+    {
+        return $this->roles()
+            ->when($organizationId, fn ($q) => $q->where('role_user.organization_id', $organizationId))
+            ->whereHas('permissions', fn ($q) => $q->where('permissions.slug', $slug))
+            ->exists();
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(UserSubscription::class);
     }
 }

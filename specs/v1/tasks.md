@@ -37,7 +37,7 @@
 
 ### Day 1: Setup Authentication Core
 
-#### Task 1.1: Install & Configure Sanctum
+#### [X] Task 1.1: Install & Configure Sanctum
 
 - Install Sanctum
 - Publish config
@@ -45,7 +45,7 @@
 - Enable middleware in Kernel
 - Set token expiry TTL in `config/sanctum.php` (`expiration` key, e.g., 1440 minutes)
 
-#### Task 1.2: CSRF Setup
+#### [X] Task 1.2: CSRF Setup
 
 - Enable CSRF cookie endpoint
 - Test with Postman / frontend
@@ -54,32 +54,32 @@
 
 ### Day 2: Auth APIs
 
-#### Task 1.3: Register API
+#### [X] Task 1.3: Register API
 
 - Validate inputs
 - Create user
 - Return token
 
-#### Task 1.4: Login API
+#### [X] Task 1.4: Login API
 
 - Authenticate user
 - Issue token
 
-#### Task 1.5: Logout API
+#### [X] Task 1.5: Logout API
 
 - Revoke token
 
-#### Task 1.6: `/me` Endpoint
+#### [X] Task 1.6: `/me` Endpoint
 
 - Return user + role + org
 
-#### Task 1.7: Rate Limiting Middleware
+#### [X] Task 1.7: Rate Limiting Middleware
 
 - Apply `throttle:10,1` to auth routes (login, register)
 - Apply `throttle:60,1` to all other `/api/v1/*` routes
 - Return `429 Too Many Requests` with `Retry-After` header on breach
 
-#### Task 1.8: Content Security Policy Middleware
+#### [X] Task 1.8: Content Security Policy Middleware
 
 - Create `CspMiddleware` (or use `spatie/laravel-csp`) to set CSP headers
 - Restrict `script-src` and `style-src` to trusted origins

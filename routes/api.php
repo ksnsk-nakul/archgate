@@ -1,54 +1,72 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\DealController;
+use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\LessonController;
+use App\Http\Controllers\LibraryContentController;
+use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\PipelineStageController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SectionController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\SubtaskController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
 
     // --- Auth (Module 1) ---
-    Route::post('register', [AuthController::class, 'register']);
-    Route::post('login', [AuthController::class, 'login']);
+    Route::middleware('throttle:10,1')->group(function () {
+        Route::post('register', [AuthController::class, 'register']);
+        Route::post('login', [AuthController::class, 'login']);
+    });
 
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::get('me', [AuthController::class, 'me']);
 
         // --- Users (Module 2) ---
-        Route::apiResource('users', \App\Http\Controllers\UserController::class);
+        Route::apiResource('users', UserController::class);
 
         // --- Organizations (Module 2) ---
-        Route::apiResource('organizations', \App\Http\Controllers\OrganizationController::class);
+        Route::apiResource('organizations', OrganizationController::class);
 
         // --- Roles & Permissions (Module 2) ---
-        Route::apiResource('roles', \App\Http\Controllers\RoleController::class);
-        Route::post('user-role-assignments', [\App\Http\Controllers\UserRoleController::class, 'store']);
+        Route::apiResource('roles', RoleController::class);
+        Route::post('user-role-assignments', [UserRoleController::class, 'store']);
 
         // --- Projects (Module 3) ---
-        Route::apiResource('projects', \App\Http\Controllers\ProjectController::class);
+        Route::apiResource('projects', ProjectController::class);
 
         // --- Tasks (Module 3) ---
-        Route::get('tasks/today', [\App\Http\Controllers\TaskController::class, 'today']);
-        Route::get('tasks/overdue', [\App\Http\Controllers\TaskController::class, 'overdue']);
-        Route::get('tasks/upcoming', [\App\Http\Controllers\TaskController::class, 'upcoming']);
-        Route::apiResource('tasks', \App\Http\Controllers\TaskController::class);
-        Route::apiResource('tasks.subtasks', \App\Http\Controllers\SubtaskController::class)
+        Route::get('tasks/today', [TaskController::class, 'today']);
+        Route::get('tasks/overdue', [TaskController::class, 'overdue']);
+        Route::get('tasks/upcoming', [TaskController::class, 'upcoming']);
+        Route::apiResource('tasks', TaskController::class);
+        Route::apiResource('tasks.subtasks', SubtaskController::class)
             ->shallow();
 
         // --- CRM (Module 4) ---
-        Route::apiResource('contacts', \App\Http\Controllers\ContactController::class);
-        Route::apiResource('deals', \App\Http\Controllers\DealController::class);
-        Route::apiResource('stages', \App\Http\Controllers\PipelineStageController::class)
+        Route::apiResource('contacts', ContactController::class);
+        Route::apiResource('deals', DealController::class);
+        Route::apiResource('stages', PipelineStageController::class)
             ->only(['index', 'store']);
 
         // --- Library (Module 5) ---
-        Route::apiResource('content', \App\Http\Controllers\LibraryContentController::class);
-        Route::apiResource('subscriptions', \App\Http\Controllers\SubscriptionController::class);
+        Route::apiResource('content', LibraryContentController::class);
+        Route::apiResource('subscriptions', SubscriptionController::class);
 
         // --- LMS (Module 6) ---
-        Route::apiResource('courses', \App\Http\Controllers\CourseController::class);
-        Route::apiResource('sections', \App\Http\Controllers\SectionController::class);
-        Route::apiResource('lessons', \App\Http\Controllers\LessonController::class);
-        Route::apiResource('enrollments', \App\Http\Controllers\EnrollmentController::class)
+        Route::apiResource('courses', CourseController::class);
+        Route::apiResource('sections', SectionController::class);
+        Route::apiResource('lessons', LessonController::class);
+        Route::apiResource('enrollments', EnrollmentController::class)
             ->only(['index', 'show', 'store']);
     });
 });

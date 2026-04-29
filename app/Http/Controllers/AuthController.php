@@ -45,7 +45,7 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (! Auth::attempt($request->only('email', 'password'))) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
@@ -65,7 +65,7 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        $request->user()->currentAccessToken()?->delete();
 
         return response()->json([
             'message' => 'Successfully logged out.',
@@ -73,12 +73,14 @@ class AuthController extends Controller
     }
 
     /**
-     * Get authenticated user.
+     * Get authenticated user with roles and organizations.
      */
     public function me(Request $request)
     {
+        $user = $request->user()->load(['roles', 'organizations']);
+
         return response()->json([
-            'user' => $request->user(),
+            'user' => $user,
         ]);
     }
 }
