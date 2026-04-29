@@ -91,13 +91,13 @@
 
 ### Day 3: Database Design
 
-#### Task 2.1: Organizations Table
+#### [X] Task 2.1: Organizations Table
 
-#### Task 2.2: Roles Table
+#### [X] Task 2.2: Roles Table
 
-#### Task 2.3: Permissions Table
+#### [X] Task 2.3: Permissions Table
 
-#### Task 2.4: Pivot Tables
+#### [X] Task 2.4: Pivot Tables
 
 - role_user
 - permission_role
@@ -106,21 +106,21 @@
 
 ### Day 4: Core APIs
 
-#### Task 2.5: Organization CRUD
+#### [X] Task 2.5: Organization CRUD
 
-#### Task 2.6: User CRUD
+#### [X] Task 2.6: User CRUD
 
 ---
 
 ### Day 5: RBAC Logic
 
-#### Task 2.7: Role CRUD
+#### [X] Task 2.7: Role CRUD
 
-#### Task 2.8: Assign Roles to Users
+#### [X] Task 2.8: Assign Roles to Users
 
-#### Task 2.9: RBAC Middleware
+#### [X] Task 2.9: RBAC Middleware
 
-#### Task 2.10: Redis Caching Setup
+#### [X] Task 2.10: Redis Caching Setup
 
 - Set `CACHE_DRIVER=redis` in `.env`
 - Configure Redis connection in `config/database.php`

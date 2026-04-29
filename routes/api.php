@@ -40,6 +40,7 @@ Route::prefix('v1')->group(function () {
         // --- Roles & Permissions (Module 2) ---
         Route::apiResource('roles', RoleController::class);
         Route::post('user-role-assignments', [UserRoleController::class, 'store']);
+        Route::delete('user-role-assignments', [UserRoleController::class, 'destroy']);
 
         // --- Projects (Module 3) ---
         Route::apiResource('projects', ProjectController::class);

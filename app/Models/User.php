@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -49,20 +51,32 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function cachedRoles(): Collection
+    {
+        return Cache::remember("user:roles:{$this->id}", now()->addMinutes(15), function () {
+            return $this->roles()->with('permissions')->get();
+        });
+    }
+
+    public function clearRolesCache(): void
+    {
+        Cache::forget("user:roles:{$this->id}");
+    }
+
     public function hasRole(string $slug, ?int $organizationId = null): bool
     {
-        return $this->roles()
-            ->when($organizationId, fn ($q) => $q->where('role_user.organization_id', $organizationId))
-            ->where('roles.slug', $slug)
-            ->exists();
+        return $this->cachedRoles()
+            ->when($organizationId, fn ($c) => $c->filter(fn ($r) => $r->pivot->organization_id == $organizationId))
+            ->contains('slug', $slug);
     }
 
     public function hasPermission(string $slug, ?int $organizationId = null): bool
     {
-        return $this->roles()
-            ->when($organizationId, fn ($q) => $q->where('role_user.organization_id', $organizationId))
-            ->whereHas('permissions', fn ($q) => $q->where('permissions.slug', $slug))
-            ->exists();
+        $roles = $organizationId
+            ? $this->cachedRoles()->filter(fn ($r) => $r->pivot->organization_id == $organizationId)
+            : $this->cachedRoles();
+
+        return $roles->some(fn ($role) => $role->permissions->contains('slug', $slug));
     }
 
     public function subscriptions(): HasMany
