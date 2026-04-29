@@ -2,8 +2,7 @@
 
 ## Overview
 
-FluxHaven is a multi-tenant SaaS platform built on Laravel, Inertia.js, and Vue.js. Our mission is to provide a scalable, secure, and performant solution for our users while maintaining a  
- consistent user experience across various modules such as tasks, CRM, LMS, and HRMS.
+FluxHaven is a multi-tenant SaaS platform built on Laravel, Inertia.js, and Vue.js. Our mission is to provide a scalable, secure, and performant solution for our users while maintaining a consistent user experience across various modules such as Tasks, CRM, and LMS.
 
 ## Architecture
 
@@ -12,7 +11,7 @@ FluxHaven is a multi-tenant SaaS platform built on Laravel, Inertia.js, and Vue.
 #### RBAC First
 
 - **Role-Based Access Control (RBAC):** FluxHaven follows an RBAC-first approach to ensure that users have the appropriate permissions based on their roles.
-    - **Roles:** Define specific roles such as Admin, Manager, User, etc., with associated permissions.
+    - **Roles:** Define specific roles such as Admin, Manager, Member, with associated permissions.
     - **Permission Management:** Implement a robust permission management system to manage user access at both the module and feature level.
 
 #### Tenant Isolation
@@ -54,12 +53,12 @@ FluxHaven is a multi-tenant SaaS platform built on Laravel, Inertia.js, and Vue.
 
 #### Unit Tests
 
-- **PHPUnit:** Write unit tests for individual functions and methods to ensure they work as expected.
+- **PHPUnit / Pest:** Write unit tests for individual functions and methods to ensure they work as expected.
     - **Code Coverage Report:** Maintain a code coverage report to identify untested parts of the codebase.
 
 #### Integration Tests
 
-- **Laravel Dusk / PHPUnit:** Write integration tests to simulate real-world scenarios and ensure that components interact correctly.
+- **Pest Feature Tests:** Write integration tests to simulate real-world scenarios and ensure that components interact correctly.
     - **Test Suite Organization:** Organize tests into meaningful suites for better organization and execution.
 
 #### End-to-End (E2E) Tests
@@ -69,12 +68,12 @@ FluxHaven is a multi-tenant SaaS platform built on Laravel, Inertia.js, and Vue.
 
 ## UX
 
-### Consistent UX Across Modules (Tasks, CRM, LMS, HRMS)
+### Consistent UX Across Modules (Tasks, CRM, LMS)
 
 #### Design Guidelines
 
-- **Material Design:** Adhere to Material Design guidelines for a consistent and intuitive user experience.
-    - **Design Tokens:** Use design tokens for consistent color schemes, typography, and spacing across the platform.
+- **Tailwind CSS:** Use Tailwind CSS v4 utility classes for all UI styling to ensure a consistent, responsive, and maintainable design system.
+    - **Design Tokens:** Use Tailwind's theme configuration for consistent color schemes, typography, and spacing across the platform.
 
 #### User Feedback
 
@@ -92,7 +91,7 @@ FluxHaven is a multi-tenant SaaS platform built on Laravel, Inertia.js, and Vue.
 
 #### API Optimization
 
-- **Caching:** Use caching mechanisms such as Redis or in-memory caching to minimize latency.
+- **Caching:** Use Redis caching to minimize latency for roles, permissions, and frequently read data.
     - **Rate Limiting:** Implement rate limiting to prevent abuse and ensure fair usage.
 
 ## Security
@@ -116,5 +115,4 @@ FluxHaven is a multi-tenant SaaS platform built on Laravel, Inertia.js, and Vue.
 
 ## Conclusion
 
-FluxHaven v1 is designed to be a robust, scalable, and secure multi-tenant SaaS platform. By adhering to these constitution principles, we aim to deliver a high-quality product that meets the
-needs of our users while ensuring their data remains safe and secure.
+FluxHaven v1 is designed to be a robust, scalable, and secure multi-tenant SaaS platform. By adhering to these constitution principles, we aim to deliver a high-quality product that meets the needs of our users while ensuring their data remains safe and secure.

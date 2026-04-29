@@ -21,12 +21,12 @@
 - Generate reports on lead tracking.
 
 ### 4. Library System (Content + Subscription Restriction)
-- Manage digital content (books, articles, etc.).
+- Manage digital content (book, article, video).
 - Restrict access to content based on user subscriptions.
 - Allow users to subscribe to different plans (free, premium).
 
 ### 5. Basic LMS (Courses for Developers/Freshers)
-- Create courses with modules and lessons.
+- Create courses with sections and lessons.
 - Assign courses to learners.
 - Track learner progress and completion status.
 
@@ -43,12 +43,12 @@
 ## Non-Functional Requirements
 
 ### 1. Performance
-- Ensure fast response times for API endpoints.
-- Optimize database queries to improve performance.
+- API endpoints must respond within 500ms at p95 under normal load.
+- Optimize database queries to maintain response time targets.
 
 ### 2. Scalability
-- Design the system to handle growth in user base and content.
-- Implement caching mechanisms (Redis, Memcached).
+- System must support at least 100 organizations and 10,000 total users at launch.
+- Implement caching mechanisms (Redis) for roles, permissions, and frequently read data.
 
 ### 3. Security
 - Use Sanctum for authentication and authorization.
@@ -211,6 +211,7 @@
 | POST | /api/v1/enrollments | Enroll user in course |
 | GET | /api/v1/enrollments | List enrollments |
 | GET | /api/v1/enrollments/{id} | Get enrollment by ID |
+| PUT | /api/v1/enrollments/{id} | Update enrollment progress |
 
 ## Summary
 

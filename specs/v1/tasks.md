@@ -24,6 +24,13 @@
 - Add global Eloquent scope `BelongsToTenant` to all tenant-owned models
 - Write cross-tenant isolation integration tests
 
+#### Task 0.4: Code Quality Tooling Setup
+
+- Install PHPStan (`phpstan/phpstan-laravel`) and configure `phpstan.neon` at level 5
+- Verify ESLint v9 config (`eslint.config.js`) covers all `.vue` and `.ts` files
+- Add `composer analyse` and `npm run lint` scripts to CI pipeline
+- Resolve all baseline violations before implementation begins
+
 ---
 
 ## ✅ Module 1: Auth & Sanctum
@@ -36,6 +43,7 @@
 - Publish config
 - Configure `.env` (SESSION_DOMAIN, SANCTUM_STATEFUL_DOMAINS)
 - Enable middleware in Kernel
+- Set token expiry TTL in `config/sanctum.php` (`expiration` key, e.g., 1440 minutes)
 
 #### Task 1.2: CSRF Setup
 
@@ -64,6 +72,18 @@
 #### Task 1.6: `/me` Endpoint
 
 - Return user + role + org
+
+#### Task 1.7: Rate Limiting Middleware
+
+- Apply `throttle:10,1` to auth routes (login, register)
+- Apply `throttle:60,1` to all other `/api/v1/*` routes
+- Return `429 Too Many Requests` with `Retry-After` header on breach
+
+#### Task 1.8: Content Security Policy Middleware
+
+- Create `CspMiddleware` (or use `spatie/laravel-csp`) to set CSP headers
+- Restrict `script-src` and `style-src` to trusted origins
+- Register middleware globally in `bootstrap/app.php`
 
 ---
 
@@ -100,6 +120,13 @@
 
 #### Task 2.9: RBAC Middleware
 
+#### Task 2.10: Redis Caching Setup
+
+- Set `CACHE_DRIVER=redis` in `.env`
+- Configure Redis connection in `config/database.php`
+- Cache resolved user roles/permissions per user ID (invalidate on role change)
+- Cache organization settings and subscription plans with appropriate TTLs
+
 ---
 
 ## ✅ Module 3: Projects & Tasks
@@ -131,6 +158,13 @@
 #### Task 3.6: Subtasks Model
 
 #### Task 3.7: Subtasks CRUD
+
+#### Task 3.8: Task Deadline Reminders
+
+- Create `SendTaskDeadlineReminder` queued notification (Laravel Notifications)
+- Schedule daily job to dispatch reminders for tasks due within 24 hours
+- Notify assigned user via database channel (email channel optional for v1)
+- Register scheduled command in `routes/console.php`
 
 ---
 
@@ -215,6 +249,16 @@
 
 #### Task 6.8: Enrollment APIs
 
+- `POST /api/v1/enrollments` — enroll user in course
+- `GET /api/v1/enrollments` — list enrollments (scoped to tenant)
+- `GET /api/v1/enrollments/{id}` — retrieve single enrollment
+
+#### Task 6.9: Enrollment Progress Update
+
+- `PUT /api/v1/enrollments/{id}` — update `progress` (0–100) and `status` fields
+- Validate progress is between 0 and 100
+- Auto-set status to `completed` when progress reaches 100
+
 ---
 
 ## ✅ Module 7: Frontend (Inertia + Vue)
@@ -266,6 +310,22 @@
 ### Day 24: State Management
 
 #### Task 7.9: Pinia Stores
+
+---
+
+### Day 25: Profile, Settings & Performance
+
+#### Task 7.10: Profile & Settings Page
+
+- Create `Profile/Show.vue` displaying user info and role
+- Create `Profile/Edit.vue` form for name, email, password update
+- Wire up to `GET /api/v1/me` and `PUT /api/v1/users/{id}`
+
+#### Task 7.11: Frontend Performance Optimisation
+
+- Enable route-level lazy loading via dynamic `import()` in Vue Router
+- Configure Vite code splitting for vendor and per-module chunks
+- Verify Vite build output has no single chunk exceeding 500KB
 
 ---
 

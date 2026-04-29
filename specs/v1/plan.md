@@ -46,6 +46,20 @@
   - Implement `GET /api/v1/me` endpoint.
   - Add Sanctum middleware protection.
 
+### 1.4 Rate Limiting
+- **Objective**: Prevent API abuse and ensure fair usage.
+- **Tasks**:
+  - Apply Laravel's `throttle` middleware to all `/api/v1/*` routes.
+  - Set auth routes (login/register) to a stricter limit (e.g., 10 req/min).
+  - Set general API routes to a standard limit (e.g., 60 req/min).
+
+### 1.5 Content Security Policy
+- **Objective**: Protect against XSS and injection attacks.
+- **Tasks**:
+  - Add CSP headers via middleware (or `spatie/laravel-csp`).
+  - Configure policy to restrict script/style sources to trusted origins.
+  - Apply middleware globally in `bootstrap/app.php`.
+
 ## Module 2: RBAC & Organization Management
 
 ### 2.1 Organizations Table
@@ -80,6 +94,13 @@
   - Create `RoleMiddleware` for route protection.
   - Create `PermissionMiddleware` for granular access.
   - Apply middleware to protected routes.
+
+### 2.6 Redis Caching
+- **Objective**: Meet scalability and performance NFRs via caching.
+- **Tasks**:
+  - Configure Redis as the default cache driver in `.env` and `config/cache.php`.
+  - Cache resolved user roles and permissions per request (invalidate on role change).
+  - Cache frequently read data (organization settings, subscription plans) with appropriate TTLs.
 
 ## Module 3: Projects & Tasks
 
@@ -241,6 +262,8 @@
   - Define enrollment fields (id, user_id, course_id, progress, status).
   - Implement `POST /api/v1/enrollments` for enrollment.
   - Implement `GET /api/v1/enrollments` for listing enrollments.
+  - Implement `GET /api/v1/enrollments/{id}` for retrieving a single enrollment.
+  - Implement `PUT /api/v1/enrollments/{id}` for updating learner progress (progress %, status).
 
 ## Module 7: Frontend
 
@@ -305,6 +328,20 @@
   - Implement optimistic updates for common actions.
   - Handle loading states and errors.
 
+### 7.10 Profile & Settings Page
+- **Objective**: Allow users to view and update their own profile.
+- **Tasks**:
+  - Create `Profile/Show.vue` page displaying user info and role.
+  - Create `Profile/Edit.vue` form for updating name, email, password.
+  - Wire up to `GET /api/v1/me` and `PUT /api/v1/users/{id}` endpoints.
+
+### 7.11 Frontend Performance
+- **Objective**: Meet performance-first constitution mandate.
+- **Tasks**:
+  - Enable route-level lazy loading via dynamic `import()` in Vue Router.
+  - Configure Vite code splitting for vendor and per-module chunks.
+  - Audit and remove unused component imports.
+
 ## Module 8: Testing
 
 ### 8.1 Unit & Feature Tests (Pest)
@@ -321,6 +358,14 @@
   - Install and configure Cypress in the project.
   - Write smoke tests for: login flow, project creation, task creation, course enrollment.
   - Integrate Cypress into CI pipeline.
+
+### 8.3 Code Quality Tooling (PHPStan + ESLint)
+- **Objective**: Enforce code quality standards per constitution mandate.
+- **Tasks**:
+  - Install and configure PHPStan at level 5+ (`phpstan.neon`).
+  - Ensure ESLint v9 config covers all `.vue` and `.ts` files (`eslint.config.js`).
+  - Add `composer analyse` and `npm run lint` as CI pipeline steps.
+  - Fix any baseline violations before marking this task complete.
 
 ## Risks & Performance Considerations
 
