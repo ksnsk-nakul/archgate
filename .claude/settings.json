@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/nakul/Herd/archgate/.claude/worktrees/nifty-dirac-e9320f/.claude/scripts/update-context.sh",
+            "timeout": 30,
+            "statusMessage": "Updating context file..."
+          }
+        ]
+      }
+    ]
+  }
+}
