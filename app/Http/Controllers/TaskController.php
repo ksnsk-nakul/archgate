@@ -15,7 +15,7 @@ class TaskController extends Controller
         return TaskResource::collection(Task::with('subtasks')->get());
     }
 
-    public function store(Request $request): TaskResource
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],

@@ -18,7 +18,8 @@ class PipelineStageFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->randomElement(['Lead', 'Qualified', 'Proposal', 'Negotiation', 'Closed Won', 'Closed Lost']),
+            'order' => fake()->numberBetween(0, 10),
         ];
     }
 }

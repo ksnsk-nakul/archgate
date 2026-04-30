@@ -14,6 +14,10 @@ class Subtask extends Model
     /** @use HasFactory<SubtaskFactory> */
     use HasFactory;
 
+    protected $attributes = [
+        'completed' => false,
+    ];
+
     protected function casts(): array
     {
         return [

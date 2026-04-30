@@ -15,7 +15,7 @@ class LibraryContentController extends Controller
         return LibraryContentResource::collection(LibraryContent::all());
     }
 
-    public function store(Request $request): LibraryContentResource
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -26,7 +26,7 @@ class LibraryContentController extends Controller
 
         $content = LibraryContent::create($validated);
 
-        return new LibraryContentResource($content);
+        return (new LibraryContentResource($content))->response()->setStatusCode(201);
     }
 
     public function show(LibraryContent $content): LibraryContentResource

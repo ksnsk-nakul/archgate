@@ -14,6 +14,17 @@ class DealResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'value' => $this->value,
+            'stage_id' => $this->stage_id,
+            'contact_id' => $this->contact_id,
+            'owner_id' => $this->owner_id,
+            'stage' => new PipelineStageResource($this->whenLoaded('stage')),
+            'contact' => new ContactResource($this->whenLoaded('contact')),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
     }
 }

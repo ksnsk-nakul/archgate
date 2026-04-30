@@ -16,14 +16,17 @@ class SubtaskController extends Controller
         return SubtaskResource::collection($task->subtasks);
     }
 
-    public function store(Request $request, Task $task): SubtaskResource
+    public function store(Request $request, Task $task): JsonResponse
     {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'completed' => ['sometimes', 'boolean'],
         ]);
 
-        $subtask = $task->subtasks()->create($validated);
+        $subtask = $task->subtasks()->create([
+            'title' => $validated['title'],
+            'completed' => $validated['completed'] ?? false,
+        ]);
 
         return (new SubtaskResource($subtask))->response()->setStatusCode(201);
     }

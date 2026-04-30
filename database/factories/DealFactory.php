@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Deal;
+use App\Models\PipelineStage;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +20,11 @@ class DealFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => fake()->sentence(3),
+            'value' => fake()->randomFloat(2, 100, 100000),
+            'stage_id' => PipelineStage::factory(),
+            'contact_id' => null,
+            'owner_id' => User::factory(),
         ];
     }
 }

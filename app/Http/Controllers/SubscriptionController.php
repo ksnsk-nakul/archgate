@@ -19,7 +19,7 @@ class SubscriptionController extends Controller
         );
     }
 
-    public function store(Request $request): SubscriptionResource
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'plan_id' => ['required', 'exists:subscription_plans,id'],
@@ -30,9 +30,10 @@ class SubscriptionController extends Controller
         $subscription = UserSubscription::create([
             ...$validated,
             'user_id' => $request->user()->id,
+            'status' => $validated['status'] ?? 'active',
         ]);
 
-        return new SubscriptionResource($subscription->load('plan'));
+        return (new SubscriptionResource($subscription->load('plan')))->response()->setStatusCode(201);
     }
 
     public function show(UserSubscription $subscription): SubscriptionResource
