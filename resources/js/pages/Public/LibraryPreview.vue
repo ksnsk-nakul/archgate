@@ -6,7 +6,7 @@ import PublicLayout from '@/layouts/PublicLayout.vue';
 defineOptions({ layout: PublicLayout });
 
 type LibraryItem = { id: number; title: string; type: string; cover_url: string | null };
-const props = defineProps<{ items: LibraryItem[] }>();
+defineProps<{ items: LibraryItem[] }>();
 const page = usePage<{ appDetails: { name: string }; auth: { user: unknown } }>();
 const appName = computed(() => page.props.appDetails?.name ?? 'FluxHaven');
 const isAuthed = computed(() => !!page.props.auth?.user);

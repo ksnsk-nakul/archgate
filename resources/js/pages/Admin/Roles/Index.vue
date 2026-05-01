@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Form, Head, Link } from '@inertiajs/vue3';
-import { onMounted } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { edit } from '@/routes/admin/roles/permissions';
 import { store } from '@/routes/admin/roles/subadmin';
@@ -22,7 +21,7 @@ type Role = {
     permissions?: Permission[];
 };
 
-const props = defineProps<{
+defineProps<{
     roles: {
         data: Role[];
     };
