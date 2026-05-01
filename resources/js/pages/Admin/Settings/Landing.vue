@@ -355,7 +355,7 @@ const pageIconPaths: Record<string, string> = {
                     </div>
                 </div>
 
-                <!-- FOOTER & NAV -->
+                <!-- FOOTER & NAVIGATION -->
                 <template v-if="activePage === 'footer-nav'">
                     <div class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
                         <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">

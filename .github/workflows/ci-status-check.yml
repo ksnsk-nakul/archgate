@@ -1,0 +1,42 @@
+name: CI Status Check
+
+on:
+  pull_request:
+    branches: [main, stage, 001-module-MVP]
+
+jobs:
+  laravel-vue-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, dom, curl, libxml, mysql
+          coverage: none
+
+      - name: Install PHP Dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist
+
+      - name: Prepare Laravel Environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install NPM Dependencies
+        run: npm install
+
+      - name: Compile Assets (Vue)
+        run: npm run build
+
+      - name: Run PHP Tests
+        run: php artisan test
