@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->decimal('value', 15, 2)->default(0);
-            $table->foreignId('stage_id')->constrained('pipeline_stages');
+            $table->text('notes')->nullable();
+            $table->foreignId('stage_id')->nullable()->constrained('pipeline_stages')->nullOnDelete();
             $table->foreignId('contact_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('owner_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('owner_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }
