@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Head, Link, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
 import { dashboard, login, register } from '@/routes';
 
 defineProps<{ canRegister: boolean }>();
@@ -40,6 +40,33 @@ const footerText   = computed(() => landing.value?.footer_text   ?? `© ${new Da
 const contactEmail   = computed(() => landing.value?.contact_email   ?? '');
 const contactPhone   = computed(() => landing.value?.contact_phone   ?? '');
 const contactAddress = computed(() => landing.value?.contact_address ?? '');
+
+const leadForm = ref({ name: '', email: '', phone: '', interest: 'learn', message: '', website: '' });
+const leadSubmitted = ref(false);
+const leadSubmitting = ref(false);
+const leadErrors = ref<Record<string, string>>({});
+
+function submitLead() {
+    leadErrors.value = {};
+    if (!leadForm.value.name.trim()) { leadErrors.value.name = 'Name is required.'; }
+    if (!leadForm.value.email.trim()) { leadErrors.value.email = 'Email is required.'; }
+    if (Object.keys(leadErrors.value).length) { return; }
+    if (leadForm.value.website) { return; } // honeypot
+
+    leadSubmitting.value = true;
+    router.post('/landing/contact', {
+        name: leadForm.value.name,
+        email: leadForm.value.email,
+        phone: leadForm.value.phone,
+        interest: leadForm.value.interest,
+        message: leadForm.value.message,
+        website: leadForm.value.website,
+    }, {
+        onSuccess: () => { leadSubmitted.value = true; },
+        onError: (e) => { leadErrors.value = e; },
+        onFinish: () => { leadSubmitting.value = false; },
+    });
+}
 
 const serviceIcons: Record<string, string> = {
     briefcase:  'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
@@ -184,6 +211,68 @@ const serviceIcons: Record<string, string> = {
                     </a>
                     <p v-if="contactAddress" class="text-slate-500 text-sm mt-1">{{ contactAddress }}</p>
                 </div>
+            </div>
+        </section>
+
+        <!-- Lead capture form -->
+        <section class="border-t border-slate-800 py-20 bg-[#0a1929]">
+            <div class="mx-auto max-w-xl px-4">
+                <div class="text-center mb-10">
+                    <span class="inline-flex items-center gap-2 bg-[#f7600d]/10 border border-[#f7600d]/20 text-[#f7600d] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-4">Get Started</span>
+                    <h2 class="text-2xl font-extrabold text-white sm:text-3xl" style="font-family: Manrope, sans-serif;">Send us a message</h2>
+                    <p class="mt-2 text-sm text-slate-400">Tell us what you're looking for and we'll get back to you.</p>
+                </div>
+
+                <!-- Thank-you -->
+                <div v-if="leadSubmitted" class="rounded-2xl border border-green-500/20 bg-green-500/5 px-6 py-10 text-center flex flex-col items-center gap-4">
+                    <div class="size-14 rounded-2xl bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                        <svg class="size-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white" style="font-family: Manrope, sans-serif;">Message received!</h3>
+                    <p class="text-sm text-slate-400">Thanks for reaching out. We'll be in touch shortly.</p>
+                </div>
+
+                <!-- Form -->
+                <form v-else @submit.prevent="submitLead" class="rounded-2xl border border-slate-800 bg-[#0d1c2d] p-6 flex flex-col gap-4">
+                    <!-- Honeypot -->
+                    <input v-model="leadForm.website" type="text" name="website" class="hidden" tabindex="-1" autocomplete="off" />
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Name *</label>
+                        <input v-model="leadForm.name" type="text" placeholder="Your name" class="bg-slate-900 border rounded-lg px-3 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none transition-colors" :class="leadErrors.name ? 'border-red-500' : 'border-slate-700 focus:border-[#f7600d]'" />
+                        <p v-if="leadErrors.name" class="text-xs text-red-400">{{ leadErrors.name }}</p>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Email *</label>
+                        <input v-model="leadForm.email" type="email" placeholder="you@example.com" class="bg-slate-900 border rounded-lg px-3 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none transition-colors" :class="leadErrors.email ? 'border-red-500' : 'border-slate-700 focus:border-[#f7600d]'" />
+                        <p v-if="leadErrors.email" class="text-xs text-red-400">{{ leadErrors.email }}</p>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Phone</label>
+                        <input v-model="leadForm.phone" type="tel" placeholder="+1 (555) 000-0000" class="bg-slate-900 border border-slate-700 focus:border-[#f7600d] rounded-lg px-3 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none transition-colors" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs text-slate-500 font-semibold uppercase tracking-wider">I'm interested in</label>
+                        <div class="flex gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input v-model="leadForm.interest" type="radio" value="learn" class="accent-[#f7600d]" />
+                                <span class="text-sm text-slate-300">Learning</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input v-model="leadForm.interest" type="radio" value="buy" class="accent-[#f7600d]" />
+                                <span class="text-sm text-slate-300">Purchasing</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Message</label>
+                        <textarea v-model="leadForm.message" rows="3" placeholder="Tell us more..." class="bg-slate-900 border border-slate-700 focus:border-[#f7600d] rounded-lg px-3 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none resize-none transition-colors" />
+                    </div>
+                    <button type="submit" :disabled="leadSubmitting" class="flex items-center justify-center gap-2 bg-[#f7600d] hover:bg-orange-600 disabled:opacity-50 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors mt-1">
+                        <svg v-if="leadSubmitting" class="size-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                        Send message
+                    </button>
+                </form>
             </div>
         </section>
 
