@@ -5,6 +5,7 @@ namespace App\Models;
 use Database\Factories\DealFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Deal extends Model
 {
@@ -19,17 +20,17 @@ class Deal extends Model
         return ['value' => 'decimal:2'];
     }
 
-    public function stage(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function stage(): BelongsTo
     {
         return $this->belongsTo(PipelineStage::class, 'stage_id');
     }
 
-    public function contact(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function contact(): BelongsTo
     {
         return $this->belongsTo(Contact::class);
     }
 
-    public function owner(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');
     }

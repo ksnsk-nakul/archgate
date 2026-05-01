@@ -61,10 +61,10 @@ class PublicController extends Controller
             ->implode("\n");
 
         Deal::query()->create([
-            'title'      => "Lead: {$validated['name']}",
+            'title' => "Lead: {$validated['name']}",
             'contact_id' => $contact->id,
-            'stage_id'   => $stage?->id,
-            'notes'      => $notes ?: null,
+            'stage_id' => $stage?->id,
+            'notes' => $notes ?: null,
         ]);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Message received! We\'ll be in touch soon.']);
