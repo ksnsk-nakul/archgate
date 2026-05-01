@@ -51,10 +51,10 @@ const mainNavItems: NavItem[] = [
     { title: 'Courses', href: coursesIndex(), icon: GraduationCap },
 ];
 
-const crmNavItems: NavItem[] = [
-    { title: 'Contacts', href: contactsIndex(), icon: UsersRound },
-    { title: 'Deals', href: dealsIndex(), icon: CircleUserRound },
-];
+// const crmNavItems: NavItem[] = [
+//     { title: 'Contacts', href: contactsIndex(), icon: UsersRound },
+//     { title: 'Deals', href: dealsIndex(), icon: CircleUserRound },
+// ];
 
 const adminNavItems: NavItem[] = [
     { title: 'App settings', href: appSettings(), icon: Settings },

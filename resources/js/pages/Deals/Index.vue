@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Head, Link, router } from '@inertiajs/vue3';
-import { Plus, TrendingUp } from 'lucide-vue-next';
+import { Head, router } from '@inertiajs/vue3';
+import { TrendingUp } from 'lucide-vue-next';
 import { computed } from 'vue';
 import PageHeader from '@/components/PageHeader.vue';
 import { Badge } from '@/components/ui/badge';
