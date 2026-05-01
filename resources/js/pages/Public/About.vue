@@ -17,7 +17,7 @@ const aboutText = computed(() => page.props.landing?.about_text ?? '');
     <!-- Hero -->
     <section class="py-20 px-6 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 60%, #051424 100%);">
         <div class="max-w-3xl mx-auto">
-            <span class="inline-flex items-center gap-2 bg-[#f7600d]/10 border border-[#f7600d]/20 text-[#f7600d] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6">About Us</span>
+            <span class="inline-flex items-center gap-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6">About Us</span>
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight" style="font-family: Manrope, sans-serif;">Who we are</h1>
         </div>
     </section>

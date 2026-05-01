@@ -42,7 +42,7 @@ const toolbarButtons = [
 </script>
 
 <template>
-    <div class="rounded-lg border border-slate-700 bg-slate-900 overflow-hidden focus-within:border-[#f7600d] focus-within:ring-1 focus-within:ring-[#f7600d]/20 transition-colors">
+    <div class="rounded-lg border border-slate-700 bg-slate-900 overflow-hidden focus-within:border-[var(--primary)] focus-within:ring-1 focus-within:ring-[var(--primary)]/20 transition-colors">
         <!-- Toolbar -->
         <div class="flex items-center gap-0.5 px-2 py-1.5 border-b border-slate-700 bg-slate-800/50">
             <button
@@ -52,7 +52,7 @@ const toolbarButtons = [
                 :title="btn.label"
                 @click="exec(btn.cmd)"
                 class="w-7 h-7 rounded text-xs flex items-center justify-center transition-colors"
-                :class="[btn.style, isActive(btn.cmd) ? 'bg-[#f7600d]/20 text-[#f7600d]' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700']"
+                :class="[btn.style, isActive(btn.cmd) ? 'bg-[var(--primary)]/20 text-[var(--primary)]' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700']"
             >
                 {{ btn.icon }}
             </button>

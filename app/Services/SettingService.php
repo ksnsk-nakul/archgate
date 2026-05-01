@@ -20,6 +20,7 @@ class SettingService
             'logo_url' => $this->publicUrl($this->get('app', 'logo_path')),
             'favicon_path' => $this->get('app', 'favicon_path'),
             'favicon_url' => $this->publicUrl($this->get('app', 'favicon_path')),
+            'primary_color' => $this->get('app', 'primary_color', '#f7600d'),
         ];
     }
 
@@ -56,6 +57,10 @@ class SettingService
     public function updateAppSettings(array $attributes): void
     {
         $this->set('app', 'name', $attributes['app_name']);
+
+        if (isset($attributes['primary_color']) && $attributes['primary_color']) {
+            $this->set('app', 'primary_color', $attributes['primary_color']);
+        }
 
         if (($attributes['logo'] ?? null) instanceof UploadedFile) {
             $this->set('app', 'logo_path', $attributes['logo']->store('settings', 'public'));
@@ -100,8 +105,14 @@ class SettingService
     /**
      * @return array<string, mixed>
      */
+    /** @return array<string, mixed> */
     public function landingSettings(): array
     {
+        $defaultPageEnabled = json_encode([
+            'home' => true, 'services' => true, 'about' => true, 'careers' => true,
+            'contact' => true, 'library-preview' => true, 'footer-nav' => true,
+        ]);
+
         return [
             'hero_title' => $this->get('landing', 'hero_title', 'Build, Learn & Grow with FluxHaven'),
             'hero_subtitle' => $this->get('landing', 'hero_subtitle', 'The all-in-one platform for teams, learners, and businesses.'),
@@ -126,6 +137,7 @@ class SettingService
             'contact_email' => $this->get('landing', 'contact_email', ''),
             'contact_phone' => $this->get('landing', 'contact_phone', ''),
             'contact_address' => $this->get('landing', 'contact_address', ''),
+            'page_enabled' => json_decode($this->get('landing', 'page_enabled', $defaultPageEnabled) ?? $defaultPageEnabled, true),
         ];
     }
 
@@ -144,6 +156,12 @@ class SettingService
             if (array_key_exists($jsonKey, $attributes)) {
                 $this->set('landing', $jsonKey, is_string($attributes[$jsonKey]) ? $attributes[$jsonKey] : json_encode($attributes[$jsonKey]));
             }
+        }
+
+        if (array_key_exists('page_enabled', $attributes) && is_array($attributes['page_enabled'])) {
+            // Always force home to true
+            $attributes['page_enabled']['home'] = true;
+            $this->set('landing', 'page_enabled', json_encode($attributes['page_enabled']));
         }
     }
 
