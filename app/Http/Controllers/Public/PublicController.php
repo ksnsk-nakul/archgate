@@ -56,11 +56,15 @@ class PublicController extends Controller
 
         $stage = PipelineStage::query()->orderBy('order')->first();
 
+        $notes = collect([$validated['interest'] ?? null, $validated['message'] ?? null])
+            ->filter()
+            ->implode("\n");
+
         Deal::query()->create([
-            'name' => "Lead: {$validated['name']}",
+            'title'      => "Lead: {$validated['name']}",
             'contact_id' => $contact->id,
-            'pipeline_stage_id' => $stage?->id,
-            'notes' => trim(($validated['interest'] ?? '')."\n".($validated['message'] ?? '')),
+            'stage_id'   => $stage?->id,
+            'notes'      => $notes ?: null,
         ]);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Message received! We\'ll be in touch soon.']);

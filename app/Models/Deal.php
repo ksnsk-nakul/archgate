@@ -11,7 +11,7 @@ class Deal extends Model
     /** @use HasFactory<DealFactory> */
     use HasFactory;
 
-    protected $fillable = ['title', 'value', 'stage_id', 'contact_id', 'owner_id'];
+    protected $fillable = ['title', 'value', 'notes', 'stage_id', 'contact_id', 'owner_id'];
 
     /** @return array<string, string> */
     protected function casts(): array
