@@ -369,3 +369,100 @@
 - Install and configure Cypress
 - Write smoke tests for critical user flows: login, create project, create task, enroll in course
 - Add Cypress run to CI pipeline (`npm run cypress:ci`)
+
+---
+
+## ✅ Module 9: Public Landing Page + CMS
+
+### REQ-CRM-04 → TASK-9.1: Lead Capture Form (Public) [✅ done]
+- `LandingController@submit` (POST, rate-limited 5/min/IP, honeypot)
+- Creates `Contact` + `Deal` (stage: new) from form submission
+
+### REQ-CRM-05, REQ-LAND-02a–02d, REQ-LAND-08, REQ-LAND-09 → TASK-9.2: Landing CMS — Page List + Per-Page Editors [✅ done]
+- `SettingService::landingSettings()` / `updateLandingSettings()` — stores all CMS fields (hero_title, hero_subtitle, cta_label, about_text, footer_text, contact_email, contact_phone, contact_address, nav_links JSON, services JSON, careers JSON)
+- `SettingController::landing()` + `updateLanding()` — GET/PUT `/admin/settings/landing`, cache invalidation on save
+- `Admin/Settings/Landing.vue` — tabbed page editor (Hero, Navigation, Services, About, Careers, Contact, Footer) with live split-panel preview for Hero, Services, About, Careers tabs; Preview toggle in toolbar
+- `RichEditor.vue` — native contenteditable rich text component (Bold/Italic/Underline/Lists/H2/H3/Paragraph/Clear) wired to heroSubtitle and aboutText via v-model
+- `HandleInertiaRequests` shares `landing` prop (5-min cached) to all pages including public Welcome.vue
+
+### REQ-LAND-01, REQ-LAND-03 → TASK-9.3: Public Landing Pages + Shared Layout [🔲 next]
+- Create `PublicLayout.vue` with top nav (from `nav_links` CMS) + footer (from `footer_text` CMS)
+- Create individual public Inertia pages: `/services`, `/about`, `/careers`, `/contact`, `/library-preview`
+- Each page is a separate Vue component under `resources/js/pages/Public/`
+- `PublicController` serves each route, passing relevant CMS slice as Inertia prop
+- Routes registered in `routes/web.php` (no auth middleware)
+
+### REQ-LAND-02b, REQ-LAND-02c → TASK-9.4: CMS Page List View + Section Cards [🔲 next]
+- Refactor `Admin/Settings/Landing.vue` to show a **page list** as the default view (replaces tab bar)
+- Page list rows: Home (always enabled), Services, About, Careers, Contact, Library Preview, Footer/Nav — each with enabled toggle + "Edit page" link
+- Clicking "Edit page" navigates to the per-page section editor (same URL with `?page=services` query param or separate sub-route)
+- Section cards within each page: title, content fields, `enabled` toggle, `order`, optional `link_to` field
+- `link_to` renders a "View more →" CTA on the public page linking to the target route
+- Persist page-level `enabled` state and section `order`/`link_to` to `SettingService` as JSON
+
+### REQ-LAND-04 → TASK-9.5: Library Preview Public Page [🔲 pending]
+- Public `/library-preview` lists `LibraryItem` records (title, cover, type) — no auth
+- "Read" / "Buy" buttons redirect to `/login?intended=/library/{id}/read`
+
+### REQ-LAND-05 → TASK-9.6: Lead Form Integration [🔲 pending]
+- Embed lead capture form on Home and Contact public pages
+- Wire to `LandingController@submit`
+
+---
+
+## 🔲 Module 10: ePub Library + FAQ
+
+### REQ-LIB-04 → TASK-10.1: ePub Upload
+- Add `epub_path` nullable column to `library_items` via migration
+- Update admin library CRUD to accept `.epub` upload (max 50 MB), store in `private/epubs/{uuid}.epub`
+- Serve via signed URL: `GET /library/{item}/epub` (auth + subscription gate)
+
+### REQ-LIB-05 → TASK-10.2: In-Browser ePub Reader
+- `npm install epubjs`
+- Create `Library/Reader.vue` — full-screen dark reader with prev/next, TOC sidebar, font-size toggle
+- Fetch ePub via signed URL, render with `ePub()` / `rendition.display()`
+- Create `user_library_progress` table: `user_id, item_id, cfi, updated_at` — save/restore reading position
+- Route: `GET /library/{item}/read` → `LibraryController@read`
+
+### REQ-LIB-06 → TASK-10.3: FAQ Section
+- Create `Faq` model + migration: `question, answer, category, sort_order, is_published`
+- Seed 5–8 example FAQs
+- `Admin/Faq/Index.vue` — dark design CRUD with inline edit + sort order control
+- Public `Faq/Index.vue` — accordion grouped by category, route `GET /faq` (no auth)
+- Wire `FaqController` with admin + public routes; permission gate `faqs.manage` for admin actions
+
+---
+
+## 🔲 Module 11: LMS Roadmap Tasks + Verification
+
+### REQ-LMS-05 → TASK-11.1: Roadmap-to-Course Import
+- Create `RoadmapParserService` — parses JSON `[{ section, lessons:[{title,description}] }]`
+- `Admin/Courses/ImportRoadmap.vue` — textarea input, parsed preview, confirm to scaffold
+- `POST /admin/courses/{course}/import-roadmap` → transaction creates sections + lessons
+- Return to course edit page with toast
+
+### REQ-LMS-06 → TASK-11.2: Lesson Tasks CRUD
+- Migration: `lesson_tasks` (id, lesson_id, title, description, acceptance_criteria, due_days_after_enrollment)
+- Migration: `lesson_task_submissions` (id, lesson_task_id, user_id, status enum, submission_url, submission_note, feedback, submitted_at, reviewed_at, reviewer_id)
+- `LessonTask` + `LessonTaskSubmission` models with relationships
+- Admin UI: task list on lesson edit page (add/edit/delete)
+
+### REQ-LMS-07 → TASK-11.3: Task Assignment on Enrollment
+- `EnrollmentObserver` (or listener): on enrollment created, loop lessons → create `LessonTaskSubmission` rows (status: pending) with computed due dates
+- Learner task list shows assigned tasks grouped by course/lesson
+
+### REQ-LMS-07 → TASK-11.4: Submission & Verification Workflow
+- Learner: `PATCH /my/task-submissions/{submission}` — submit with url + note
+- Tutor: `PATCH /tutor/task-submissions/{submission}` — verify or reject with feedback
+- Admin override via `tasks.verify` permission (Gate bypass)
+- Policy ensures only assigned tutor or admin can review
+
+### REQ-LMS-08 → TASK-11.5: Tutor Dashboard
+- Create `course_tutor` pivot: `course_id, user_id, assigned_by`
+- `TutorDashboard.vue` — lists pending submissions for assigned courses, filter by status/course
+- Admin: "Tutors" tab on course page — assign/remove users with `tutor` role
+
+### REQ-LMS-08 → TASK-11.6: Seed Permissions for New Modules
+- Add permissions: `faqs.manage`, `landing.manage`, `tasks.verify`, `courses.import-roadmap`
+- Update `RbacSeeder` to include these under correct groups
+- Update permission group icons in `Permissions.vue` groupIcon map
