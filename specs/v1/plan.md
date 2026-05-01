@@ -378,3 +378,109 @@
 - **Caching**: Implement caching for frequently accessed data (user roles, permissions).
 - **Database Indexing**: Ensure proper indexing on all foreign keys and filter columns.
 - **Load Balancing**: Plan for horizontal scaling with load balancers as user base grows.
+
+---
+
+## Module 9: Public Landing Page + CMS (REQ-LAND-01 through REQ-LAND-09)
+
+### 9.1 Landing Page Lead Capture ✅ done
+- `LandingController@submit` (POST, rate-limited 5/min/IP, honeypot) creates Contact + Deal (stage: new).
+
+### 9.2 CMS Backend + Shared Props ✅ done
+- `SettingService::landingSettings()` / `updateLandingSettings()` — all CMS keys (hero_title, hero_subtitle, cta_label, about_text, footer_text, contact_email, contact_phone, contact_address, nav_links JSON, services JSON, careers JSON).
+- `SettingController::landing()` + `updateLanding()` — GET/PUT `/admin/settings/landing`, `Cache::forget('settings:landing')` on save.
+- `HandleInertiaRequests` shares `landing` prop (5-min TTL) to every page including public.
+
+### 9.3 Admin CMS — Tabbed Editor + Live Preview ✅ done
+- `Admin/Settings/Landing.vue` — page editor with 7 tabs (Hero, Navigation, Services, About, Careers, Contact, Footer).
+- Split-panel live preview for Hero, Services, About, Careers tabs; Preview toggle in toolbar.
+- `RichEditor.vue` — native contenteditable rich text component wired to heroSubtitle and aboutText.
+
+### 9.4 CMS Page List + Per-Page Section Cards 🔲 next
+- **Objective**: Replace tab bar with a navigable page list; each page has section cards with `enabled` toggle, `order`, and optional `link_to` cross-page links.
+- **Tasks**:
+  - Add `pages` key to `SettingService` storing `[{ slug, enabled, sections:[{id,title,enabled,order,link_to}] }]` as JSON.
+  - Refactor `Admin/Settings/Landing.vue` to show page list as the default view.
+  - Add per-page editor view (query param `?page=services` or sub-route) reusing existing section form fields.
+  - Section card component with `link_to` optional field.
+  - `SettingController::updateLandingPage()` — PATCH `/admin/settings/landing/{page}`.
+
+### 9.5 Public Multi-Page Site 🔲 next
+- **Objective**: Serve individual public pages driven by CMS data.
+- **Tasks**:
+  - Create `PublicLayout.vue` — top nav from `nav_links`, footer from `footer_text`, no hardcoded copy.
+  - Create `resources/js/pages/Public/{Services,About,Careers,Contact,LibraryPreview}.vue`.
+  - Create `PublicController` serving each route; pass relevant CMS slice as Inertia prop.
+  - Register public routes in `routes/web.php` (no auth): `/services`, `/about`, `/careers`, `/contact`, `/library-preview`.
+  - Sections with `link_to` render a "View more →" anchor on the page.
+  - Home page renders teaser cards for Services, About, Careers, Contact — each clicking through to the full page.
+
+---
+
+## Module 10: ePub Library + FAQ (REQ-LIB-04, REQ-LIB-05, REQ-LIB-06)
+
+### 10.1 ePub Upload & Storage
+- **Objective**: Admin uploads ePub files; system stores securely and links to library item.
+- **Tasks**:
+  - Add `epub_path` nullable column to `library_items` (migration).
+  - Update admin library CRUD to accept `.epub` file upload (max 50 MB); store in `storage/app/private/epubs/{uuid}.epub`.
+  - Serve via signed URL route `GET /library/{item}/epub` (auth + subscription check).
+
+### 10.2 In-Browser ePub Reader
+- **Objective**: Subscribed users read ePubs in-browser without downloading.
+- **Tasks**:
+  - Install `epubjs` via npm (`npm install epubjs`).
+  - Create `Library/Reader.vue` — full-screen dark reader with prev/next page, chapter TOC sidebar, font-size controls.
+  - Reader fetches ePub via the signed URL and renders via `ePub()` / `rendition.display()`.
+  - Save reading position (CFI string) to `user_library_progress` table (user_id, item_id, cfi, updated_at); restore on next open.
+  - Route: `GET /library/{item}/read` → `LibraryController@read` → `Inertia::render('Library/Reader')`.
+
+### 10.3 FAQ Section
+- **Objective**: Admin manages FAQs; public FAQ page renders them grouped by category.
+- **Tasks**:
+  - Create `Faq` model + migration: `id, question, answer (text), category (string), sort_order (int), is_published (bool)`.
+  - Seed a few example FAQs.
+  - `Admin/Faq/Index.vue` — dark design system, CRUD list with inline edit + drag-to-reorder (sort_order).
+  - Public `Faq/Index.vue` — accordion grouped by category, accessible on `/faq` (no auth).
+  - Wire `FaqController` with admin routes (auth + permission `faqs.manage`) and public route.
+
+---
+
+## Module 11: LMS Roadmap Tasks + Verification (REQ-LMS-05 to REQ-LMS-08)
+
+### 11.1 Roadmap-to-Course Scaffolding
+- **Objective**: Admin pastes a roadmap; system creates sections + lessons automatically.
+- **Tasks**:
+  - Create `RoadmapParserService` — accepts JSON array `[{ section, lessons: [{ title, description }] }]` or structured Markdown; outputs `Section[]` + `Lesson[]`.
+  - Add `Admin/Courses/ImportRoadmap.vue` — textarea for roadmap input, preview of parsed structure, confirm button.
+  - `POST /admin/courses/{course}/import-roadmap` → parse → create sections + lessons in one DB transaction.
+  - Return to course edit page with success toast.
+
+### 11.2 Lesson Tasks
+- **Objective**: Each lesson has tasks that learners must complete and submit.
+- **Tasks**:
+  - Create `lesson_tasks` table: `id, lesson_id, title, description (text), acceptance_criteria (text), due_days_after_enrollment (int nullable)`.
+  - Create `lesson_task_submissions` table: `id, lesson_task_id, user_id, status (enum: pending|submitted|verified|rejected), submission_url (nullable), submission_note (text nullable), feedback (text nullable), submitted_at, reviewed_at, reviewer_id`.
+  - Create `LessonTask` + `LessonTaskSubmission` models with relationships.
+  - Admin UI: task list on the lesson edit page (add/edit/delete tasks per lesson).
+
+### 11.3 Task Assignment on Enrollment
+- **Objective**: When a learner enrolls in a course, tasks for all lessons are auto-assigned.
+- **Tasks**:
+  - In `EnrollmentObserver` (or `enrolled` event listener): loop course lessons → create `LessonTaskSubmission` rows (status: pending) for each task, computing due date from `due_days_after_enrollment`.
+  - Learner's task list shows tasks from their enrollments, grouped by course/lesson.
+
+### 11.4 Task Verification Workflow
+- **Objective**: Learner submits → tutor reviews → admin can override.
+- **Tasks**:
+  - Learner: `PATCH /my/task-submissions/{submission}` — set `submission_url`, `submission_note`, `status: submitted`.
+  - Tutor: `PATCH /tutor/task-submissions/{submission}` — set `status: verified|rejected`, `feedback`.
+  - Admin/subadmin with `tasks.verify` permission: same endpoint; Gate bypasses tutor-only restriction.
+  - `TutorDashboard.vue` — lists all submissions for courses the tutor is assigned to, filterable by status.
+
+### 11.5 Tutor Assignment
+- **Objective**: Admin assigns tutors to courses or individual enrollments.
+- **Tasks**:
+  - Create `course_tutor` pivot: `course_id, user_id (tutor), assigned_by`.
+  - Admin `Courses/Show.vue` panel: "Tutors" tab — assign/remove tutors (users with `tutor` role).
+  - Tutor sees only courses + submissions they're assigned to (Gate policy on `TutorDashboard`).
