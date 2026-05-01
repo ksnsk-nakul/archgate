@@ -2,7 +2,7 @@ name: CI Status Check
 
 on:
   pull_request:
-    branches: [main, stagedmodule]
+    branches: [main, stage, 001-module-MVP]
 
 jobs:
   laravel-vue-tests:
