@@ -3,7 +3,6 @@ import { Link, usePage } from '@inertiajs/vue3';
 import {
     BriefcaseBusiness,
     CircleDollarSign,
-    FolderGit2,
     Globe,
     GraduationCap,
     LayoutGrid,
