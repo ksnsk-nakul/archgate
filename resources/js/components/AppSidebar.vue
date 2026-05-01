@@ -3,7 +3,6 @@ import { Link, usePage } from '@inertiajs/vue3';
 import {
     BookOpen,
     BriefcaseBusiness,
-    CircleUserRound,
     FolderGit2,
     Globe,
     GraduationCap,
@@ -13,7 +12,6 @@ import {
     Settings,
     ShieldCheck,
     Wrench,
-    UsersRound,
 } from 'lucide-vue-next';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
@@ -31,10 +29,8 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { index as adminRolesIndex } from '@/routes/admin/roles';
-import { app as appSettings, landing as landingCms, thirdParty, thirdParty as thirdPartySettings } from '@/routes/admin/settings';
-import { index as contactsIndex } from '@/routes/app/contacts';
+import { app as appSettings, landing as landingCms, thirdParty } from '@/routes/admin/settings';
 import { index as coursesIndex } from '@/routes/app/courses';
-import { index as dealsIndex } from '@/routes/app/deals';
 import { index as libraryIndex } from '@/routes/app/library';
 import { index as projectsIndex } from '@/routes/app/projects';
 import { index as tasksIndex } from '@/routes/app/tasks';
