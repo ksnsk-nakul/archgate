@@ -67,7 +67,7 @@ const subtasks = computed(() => {
                     </div>
                     <div>
                         <p class="text-muted-foreground">Due date</p>
-                        <p class="font-medium">{{ task.data.due_date || 'Not set' }}</p>
+                        <p class="font-medium">{{ task.data.converted_due_date || 'Not set' }}</p>
                     </div>
                 </div>
                 <p class="text-muted-foreground">

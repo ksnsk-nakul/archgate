@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Database\Factories\TaskFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,13 +10,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Carbon;
 
 #[Fillable(['title', 'description', 'status', 'priority', 'due_date', 'project_id', 'assignee_id'])]
 class Task extends Model
 {
     /** @use HasFactory<TaskFactory> */
     use HasFactory;
+
+    protected $appends = ['converted_due_date'];
 
     protected function casts(): array
     {
@@ -59,5 +61,10 @@ class Task extends Model
     {
         return $query->where('due_date', '>', Carbon::today())
             ->where('status', '!=', 'completed');
+    }
+
+    public function getConvertedDueDateAttribute(): ?string
+    {
+        return $this->due_date ? Carbon::parse($this->due_date)->format('M, d Y') : null;
     }
 }

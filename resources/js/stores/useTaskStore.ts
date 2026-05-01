@@ -13,6 +13,7 @@ export type Task = {
     due_date?: string | null;
     project_id?: number;
     assignee_id?: number | null;
+    converted_due_date?: string | null;
 };
 
 type TaskFilters = {
@@ -66,6 +67,7 @@ export const useTaskStore = defineStore('tasks', () => {
             status: payload.status ?? 'pending',
             priority: payload.priority ?? 'medium',
             due_date: payload.due_date,
+            converted_due_date: payload.converted_due_date,
             project_id: payload.project_id,
         };
 
