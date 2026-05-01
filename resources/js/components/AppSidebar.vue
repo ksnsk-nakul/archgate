@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { index as adminRolesIndex } from '@/routes/admin/roles';
-import { app as appSettings, landing as landingCms, thirdParty, thirdParty as thirdPartySettings } from '@/routes/admin/settings';
+import { app as appSettings, landing as landingCms, thirdParty } from '@/routes/admin/settings';
 import { index as contactsIndex } from '@/routes/app/contacts';
 import { index as coursesIndex } from '@/routes/app/courses';
 import { index as dealsIndex } from '@/routes/app/deals';
