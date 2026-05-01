@@ -22,6 +22,11 @@ jobs:
       - name: Install PHP Dependencies
         run: composer install --no-progress --no-suggest --prefer-dist
 
+      - name: Prepare Laravel Environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
