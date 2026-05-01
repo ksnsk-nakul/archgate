@@ -39,6 +39,11 @@ class Task extends Model
         return $this->hasMany(Subtask::class);
     }
 
+    public function logs(): HasMany
+    {
+        return $this->hasMany(TaskLog::class);
+    }
+
     public function scopeToday(Builder $query): Builder
     {
         return $query->whereDate('due_date', Carbon::today());

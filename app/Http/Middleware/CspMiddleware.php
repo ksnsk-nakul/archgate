@@ -20,9 +20,11 @@ class CspMiddleware
         $policy = implode('; ', array_filter([
             "default-src {$self}",
             "script-src {$self} {$noncePart}",
-            "style-src {$self} {$noncePart} 'unsafe-inline'",
+            "style-src {$self} {$noncePart}",
+            "style-src-elem {$self} 'unsafe-inline' https://fonts.bunny.net",
+            "style-src-attr 'unsafe-inline'",
             "img-src {$self} data: blob:",
-            "font-src {$self} data:",
+            "font-src {$self} data: https://fonts.bunny.net",
             "connect-src {$self}",
             "frame-ancestors 'none'",
         ]));

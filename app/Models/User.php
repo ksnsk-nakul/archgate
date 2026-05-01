@@ -53,9 +53,25 @@ class User extends Authenticatable
 
     public function cachedRoles(): Collection
     {
-        return Cache::remember("user:roles:{$this->id}", now()->addMinutes(15), function () {
-            return $this->roles()->with('permissions')->get();
-        });
+        $key = "user:roles:{$this->id}";
+
+        try {
+            $cached = Cache::get($key);
+
+            if ($cached instanceof Collection) {
+                return $cached;
+            }
+
+            // Stale or corrupt cache entry — forget and re-fetch
+            Cache::forget($key);
+        } catch (\Throwable) {
+            Cache::forget($key);
+        }
+
+        $roles = $this->roles()->with('permissions')->get();
+        Cache::put($key, $roles, now()->addMinutes(15));
+
+        return $roles;
     }
 
     public function clearRolesCache(): void

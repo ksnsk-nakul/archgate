@@ -19,6 +19,7 @@ class SectionResource extends JsonResource
             'title' => $this->title,
             'order' => $this->order,
             'course_id' => $this->course_id,
+            'lessons' => LessonResource::collection($this->whenLoaded('lessons')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

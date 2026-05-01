@@ -64,8 +64,7 @@ Route::prefix('v1')->group(function () {
         // Free routes: list all content, manage subscriptions, and admin CRUD
         Route::get('content', [LibraryContentController::class, 'index']);
         Route::post('content', [LibraryContentController::class, 'store']);
-        Route::put('content/{content}', [LibraryContentController::class, 'update']);
-        Route::patch('content/{content}', [LibraryContentController::class, 'update']);
+        Route::match(['put', 'patch'], 'content/{content}', [LibraryContentController::class, 'update']);
         Route::delete('content/{content}', [LibraryContentController::class, 'destroy']);
         Route::apiResource('subscriptions', SubscriptionController::class);
 
