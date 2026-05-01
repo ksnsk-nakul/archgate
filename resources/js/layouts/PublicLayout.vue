@@ -28,7 +28,7 @@ function isActive(href: string): boolean {
         <!-- Top Nav -->
         <header class="sticky top-0 z-50 border-b border-slate-800 bg-[#051424]/95 backdrop-blur-sm">
             <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-6">
-                <Link href="/" class="text-lg font-extrabold text-white hover:text-[#f7600d] transition-colors" style="font-family: Manrope, sans-serif;">
+                <Link href="/" class="text-lg font-extrabold text-white hover:text-[var(--primary)] transition-colors" style="font-family: Manrope, sans-serif;">
                     {{ appName }}
                 </Link>
                 <nav class="hidden md:flex items-center gap-1">
@@ -37,7 +37,7 @@ function isActive(href: string): boolean {
                         :key="link.href"
                         :href="link.href"
                         class="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
-                        :class="isActive(link.href) ? 'text-[#f7600d] bg-[#f7600d]/10' : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60'"
+                        :class="isActive(link.href) ? 'text-[var(--primary)] bg-[var(--primary)]/10' : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60'"
                     >{{ link.label }}</a>
                 </nav>
                 <div class="flex items-center gap-2">
@@ -46,7 +46,7 @@ function isActive(href: string): boolean {
                     </template>
                     <template v-else>
                         <Link href="/login" class="text-sm text-slate-400 hover:text-white px-3 py-1.5 rounded-lg hover:bg-slate-800 transition-colors">Sign in</Link>
-                        <Link href="/register" class="text-sm font-semibold text-white bg-[#f7600d] hover:bg-orange-600 px-4 py-1.5 rounded-lg transition-colors">Get started</Link>
+                        <Link href="/register" class="text-sm font-semibold text-white bg-[var(--primary)] hover:bg-[var(--primary-hover)] px-4 py-1.5 rounded-lg transition-colors">Get started</Link>
                     </template>
                 </div>
             </div>

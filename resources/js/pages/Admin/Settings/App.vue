@@ -8,6 +8,7 @@ defineProps<{
         app_name: string;
         logo_url?: string | null;
         favicon_url?: string | null;
+        primary_color?: string | null;
     };
 }>();
 </script>
@@ -45,9 +46,38 @@ defineProps<{
                             name="app_name"
                             :value="settings.app_name"
                             required
-                            class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors"
+                            class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors"
                         />
                         <InputError :message="errors.app_name" />
+                    </div>
+
+                    <!-- Primary colour -->
+                    <div class="flex flex-col gap-2">
+                        <label for="primary_color" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Brand colour</label>
+                        <div class="flex items-center gap-3">
+                            <div class="relative size-10 rounded-lg overflow-hidden border border-slate-700 shrink-0 cursor-pointer">
+                                <input
+                                    id="primary_color"
+                                    name="primary_color"
+                                    type="color"
+                                    :value="settings.primary_color ?? `var(--primary)`"
+                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    oninput="this.previousElementSibling.style.background=this.value; document.getElementById('primary_color_hex').value=this.value;"
+                                />
+                                <div class="size-full rounded-lg" :style="{ background: settings.primary_color ?? `var(--primary)` }"></div>
+                            </div>
+                            <input
+                                id="primary_color_hex"
+                                type="text"
+                                :value="settings.primary_color ?? `var(--primary)`"
+                                maxlength="7"
+                                placeholder="#f7600d"
+                                class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono w-32 focus:outline-none focus:border-[var(--primary)] transition-colors"
+                                oninput="if(/^#[0-9a-fA-F]{6}$/.test(this.value)){document.getElementById('primary_color').value=this.value; this.previousElementSibling.querySelector('div').style.background=this.value;}"
+                            />
+                            <p class="text-xs text-slate-500">Used for buttons, active states, and accents site-wide.</p>
+                        </div>
+                        <InputError :message="errors.primary_color" />
                     </div>
 
                     <!-- Logo -->
@@ -90,7 +120,7 @@ defineProps<{
                         <button
                             type="submit"
                             :disabled="processing"
-                            class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                            class="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
                         >
                             <svg v-if="processing" class="size-4 animate-spin" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>

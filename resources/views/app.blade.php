@@ -25,7 +25,7 @@
             })();
         </script>
 
-        {{-- Inline style to set the HTML background color based on our theme in app.css --}}
+        {{-- Inline style to set the HTML background color and primary theme colour --}}
         <style nonce="{{ Vite::cspNonce() }}">
             html {
                 background-color: oklch(1 0 0);
@@ -33,6 +33,13 @@
 
             html.dark {
                 background-color: oklch(0.145 0 0);
+            }
+
+            :root {
+                --primary: {{ $appSettings['primary_color'] ?? '#f7600d' }};
+                --primary-hover: color-mix(in srgb, var(--primary) 85%, black);
+                --primary-dim: color-mix(in srgb, var(--primary) 10%, transparent);
+                --primary-border: color-mix(in srgb, var(--primary) 20%, transparent);
             }
         </style>
 
