@@ -3,7 +3,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import {
     BookOpen,
     BriefcaseBusiness,
-    CircleUserRound,
+    CircleDollarSign,
     FolderGit2,
     Globe,
     GraduationCap,
@@ -12,8 +12,8 @@ import {
     ListChecks,
     Settings,
     ShieldCheck,
-    Wrench,
     UsersRound,
+    Wrench,
 } from 'lucide-vue-next';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { index as adminRolesIndex } from '@/routes/admin/roles';
-import { app as appSettings, landing as landingCms, thirdParty, thirdParty as thirdPartySettings } from '@/routes/admin/settings';
+import { app as appSettings, landing as landingCms, thirdParty } from '@/routes/admin/settings';
 import { index as contactsIndex } from '@/routes/app/contacts';
 import { index as coursesIndex } from '@/routes/app/courses';
 import { index as dealsIndex } from '@/routes/app/deals';
@@ -53,7 +53,7 @@ const mainNavItems: NavItem[] = [
 
 const crmNavItems: NavItem[] = [
     { title: 'Contacts', href: contactsIndex(), icon: UsersRound },
-    { title: 'Deals', href: dealsIndex(), icon: CircleUserRound },
+    { title: 'Deals', href: dealsIndex(), icon: CircleDollarSign },
 ];
 
 const adminNavItems: NavItem[] = [
@@ -85,7 +85,7 @@ const footerNavItems: NavItem[] = [
 
         <SidebarContent>
             <NavMain :items="mainNavItems" />
-            <!-- <NavMain :items="crmNavItems" label="CRM" /> -->
+            <NavMain :items="crmNavItems" label="CRM" />
             <NavMain v-if="isAdmin" :items="adminNavItems" label="Admin" />
         </SidebarContent>
 
