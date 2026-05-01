@@ -88,6 +88,8 @@ class SettingController extends Controller
             'careers.*.location' => ['nullable', 'string', 'max:100'],
             'careers.*.type' => ['nullable', 'string', 'max:50'],
             'careers.*.description' => ['nullable', 'string'],
+            'page_enabled' => ['nullable', 'array'],
+            'page_enabled.*' => ['boolean'],
         ]);
 
         $settings->updateLandingSettings($validated);

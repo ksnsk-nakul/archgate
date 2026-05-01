@@ -88,7 +88,7 @@ const serviceIcons: Record<string, string> = {
         <header class="sticky top-0 z-50 border-b border-slate-800 bg-[#051424]/95 backdrop-blur">
             <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
                 <div class="flex items-center gap-2">
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f7600d]">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--primary)]">
                         <svg class="size-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                         </svg>
@@ -106,12 +106,12 @@ const serviceIcons: Record<string, string> = {
                     </a>
                 </nav>
                 <div class="flex items-center gap-2">
-                    <Link v-if="$page.props.auth.user" :href="dashboard()" class="rounded-lg bg-[#f7600d] px-4 py-1.5 text-sm font-semibold text-white hover:bg-orange-600 transition-colors">
+                    <Link v-if="$page.props.auth.user" :href="dashboard()" class="rounded-lg bg-[var(--primary)] px-4 py-1.5 text-sm font-semibold text-white hover:bg-[var(--primary-hover)] transition-colors">
                         Dashboard
                     </Link>
                     <template v-else>
                         <Link :href="login()" class="px-4 py-1.5 text-sm text-slate-400 hover:text-white transition-colors">Log in</Link>
-                        <Link v-if="canRegister" :href="register()" class="rounded-lg bg-[#f7600d] px-4 py-1.5 text-sm font-semibold text-white hover:bg-orange-600 transition-colors">
+                        <Link v-if="canRegister" :href="register()" class="rounded-lg bg-[var(--primary)] px-4 py-1.5 text-sm font-semibold text-white hover:bg-[var(--primary-hover)] transition-colors">
                             {{ ctaLabel }}
                         </Link>
                     </template>
@@ -121,8 +121,8 @@ const serviceIcons: Record<string, string> = {
 
         <!-- Hero -->
         <section class="mx-auto max-w-6xl px-4 py-24 text-center">
-            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-[#f7600d]/30 bg-[#f7600d]/10 px-4 py-1.5 text-xs font-semibold text-[#f7600d]">
-                <span class="h-1.5 w-1.5 rounded-full bg-[#f7600d]" />
+            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-4 py-1.5 text-xs font-semibold text-[var(--primary)]">
+                <span class="h-1.5 w-1.5 rounded-full bg-[var(--primary)]" />
                 Now in version 1 — ready for production
             </div>
             <!-- eslint-disable-next-line vue/no-v-html -->
@@ -130,11 +130,11 @@ const serviceIcons: Record<string, string> = {
             <!-- eslint-disable-next-line vue/no-v-html -->
             <p class="mx-auto mb-10 max-w-2xl text-lg text-slate-400" v-html="heroSubtitle" />
             <div class="flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Link v-if="canRegister && !$page.props.auth.user" :href="register()" class="inline-flex items-center gap-2 rounded-xl bg-[#f7600d] px-7 py-3.5 text-sm font-semibold text-white shadow-lg hover:bg-orange-600 transition-colors">
+                <Link v-if="canRegister && !$page.props.auth.user" :href="register()" class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary)] px-7 py-3.5 text-sm font-semibold text-white shadow-lg hover:bg-[var(--primary-hover)] transition-colors">
                     {{ ctaLabel }}
                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                 </Link>
-                <Link v-if="$page.props.auth.user" :href="dashboard()" class="inline-flex items-center gap-2 rounded-xl bg-[#f7600d] px-7 py-3.5 text-sm font-semibold text-white shadow-lg hover:bg-orange-600 transition-colors">
+                <Link v-if="$page.props.auth.user" :href="dashboard()" class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary)] px-7 py-3.5 text-sm font-semibold text-white shadow-lg hover:bg-[var(--primary-hover)] transition-colors">
                     Go to Dashboard
                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                 </Link>
@@ -152,9 +152,9 @@ const serviceIcons: Record<string, string> = {
                     <p class="text-slate-400 text-sm">Integrated modules that replace multiple SaaS tools.</p>
                 </div>
                 <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                    <div v-for="svc in services" :key="svc.title" class="rounded-xl border border-slate-800 bg-[#0d1c2d] p-5 hover:border-[#f7600d]/30 transition-colors">
-                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-[#f7600d]/10 border border-[#f7600d]/20">
-                            <svg class="size-5 text-[#f7600d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div v-for="svc in services" :key="svc.title" class="rounded-xl border border-slate-800 bg-[#0d1c2d] p-5 hover:border-[var(--primary)]/30 transition-colors">
+                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--primary)]/10 border border-[var(--primary)]/20">
+                            <svg class="size-5 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="serviceIcons[svc.icon] ?? serviceIcons.default" />
                             </svg>
                         </div>
@@ -189,7 +189,7 @@ const serviceIcons: Record<string, string> = {
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
                             <span v-if="job.location" class="text-xs text-slate-500 bg-slate-800 px-2.5 py-1 rounded-full">{{ job.location }}</span>
-                            <span v-if="job.type" class="text-xs text-[#f7600d] bg-[#f7600d]/10 border border-[#f7600d]/20 px-2.5 py-1 rounded-full">{{ job.type }}</span>
+                            <span v-if="job.type" class="text-xs text-[var(--primary)] bg-[var(--primary)]/10 border border-[var(--primary)]/20 px-2.5 py-1 rounded-full">{{ job.type }}</span>
                         </div>
                     </div>
                 </div>
@@ -201,11 +201,11 @@ const serviceIcons: Record<string, string> = {
             <div class="mx-auto max-w-2xl px-4 text-center">
                 <h2 class="mb-6 text-2xl font-bold text-white sm:text-3xl" style="font-family: Manrope, sans-serif;">Get in touch</h2>
                 <div class="flex flex-col gap-3 items-center">
-                    <a v-if="contactEmail" :href="`mailto:${contactEmail}`" class="flex items-center gap-2 text-slate-400 hover:text-[#f7600d] transition-colors text-sm">
+                    <a v-if="contactEmail" :href="`mailto:${contactEmail}`" class="flex items-center gap-2 text-slate-400 hover:text-[var(--primary)] transition-colors text-sm">
                         <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                         {{ contactEmail }}
                     </a>
-                    <a v-if="contactPhone" :href="`tel:${contactPhone}`" class="flex items-center gap-2 text-slate-400 hover:text-[#f7600d] transition-colors text-sm">
+                    <a v-if="contactPhone" :href="`tel:${contactPhone}`" class="flex items-center gap-2 text-slate-400 hover:text-[var(--primary)] transition-colors text-sm">
                         <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                         {{ contactPhone }}
                     </a>
@@ -218,7 +218,7 @@ const serviceIcons: Record<string, string> = {
         <section class="border-t border-slate-800 py-20 bg-[#0a1929]">
             <div class="mx-auto max-w-xl px-4">
                 <div class="text-center mb-10">
-                    <span class="inline-flex items-center gap-2 bg-[#f7600d]/10 border border-[#f7600d]/20 text-[#f7600d] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-4">Get Started</span>
+                    <span class="inline-flex items-center gap-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-4">Get Started</span>
                     <h2 class="text-2xl font-extrabold text-white sm:text-3xl" style="font-family: Manrope, sans-serif;">Send us a message</h2>
                     <p class="mt-2 text-sm text-slate-400">Tell us what you're looking for and we'll get back to you.</p>
                 </div>
@@ -239,36 +239,36 @@ const serviceIcons: Record<string, string> = {
 
                     <div class="flex flex-col gap-1.5">
                         <label class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Name *</label>
-                        <input v-model="leadForm.name" type="text" placeholder="Your name" class="bg-slate-900 border rounded-lg px-3 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none transition-colors" :class="leadErrors.name ? 'border-red-500' : 'border-slate-700 focus:border-[#f7600d]'" />
+                        <input v-model="leadForm.name" type="text" placeholder="Your name" class="bg-slate-900 border rounded-lg px-3 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none transition-colors" :class="leadErrors.name ? 'border-red-500' : 'border-slate-700 focus:border-[var(--primary)]'" />
                         <p v-if="leadErrors.name" class="text-xs text-red-400">{{ leadErrors.name }}</p>
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Email *</label>
-                        <input v-model="leadForm.email" type="email" placeholder="you@example.com" class="bg-slate-900 border rounded-lg px-3 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none transition-colors" :class="leadErrors.email ? 'border-red-500' : 'border-slate-700 focus:border-[#f7600d]'" />
+                        <input v-model="leadForm.email" type="email" placeholder="you@example.com" class="bg-slate-900 border rounded-lg px-3 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none transition-colors" :class="leadErrors.email ? 'border-red-500' : 'border-slate-700 focus:border-[var(--primary)]'" />
                         <p v-if="leadErrors.email" class="text-xs text-red-400">{{ leadErrors.email }}</p>
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Phone</label>
-                        <input v-model="leadForm.phone" type="tel" placeholder="+1 (555) 000-0000" class="bg-slate-900 border border-slate-700 focus:border-[#f7600d] rounded-lg px-3 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none transition-colors" />
+                        <input v-model="leadForm.phone" type="tel" placeholder="+1 (555) 000-0000" class="bg-slate-900 border border-slate-700 focus:border-[var(--primary)] rounded-lg px-3 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none transition-colors" />
                     </div>
                     <div class="flex flex-col gap-2">
                         <label class="text-xs text-slate-500 font-semibold uppercase tracking-wider">I'm interested in</label>
                         <div class="flex gap-4">
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input v-model="leadForm.interest" type="radio" value="learn" class="accent-[#f7600d]" />
+                                <input v-model="leadForm.interest" type="radio" value="learn" class="accent-[var(--primary)]" />
                                 <span class="text-sm text-slate-300">Learning</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input v-model="leadForm.interest" type="radio" value="buy" class="accent-[#f7600d]" />
+                                <input v-model="leadForm.interest" type="radio" value="buy" class="accent-[var(--primary)]" />
                                 <span class="text-sm text-slate-300">Purchasing</span>
                             </label>
                         </div>
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Message</label>
-                        <textarea v-model="leadForm.message" rows="3" placeholder="Tell us more..." class="bg-slate-900 border border-slate-700 focus:border-[#f7600d] rounded-lg px-3 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none resize-none transition-colors" />
+                        <textarea v-model="leadForm.message" rows="3" placeholder="Tell us more..." class="bg-slate-900 border border-slate-700 focus:border-[var(--primary)] rounded-lg px-3 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none resize-none transition-colors" />
                     </div>
-                    <button type="submit" :disabled="leadSubmitting" class="flex items-center justify-center gap-2 bg-[#f7600d] hover:bg-orange-600 disabled:opacity-50 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors mt-1">
+                    <button type="submit" :disabled="leadSubmitting" class="flex items-center justify-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] disabled:opacity-50 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors mt-1">
                         <svg v-if="leadSubmitting" class="size-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                         Send message
                     </button>
@@ -277,15 +277,15 @@ const serviceIcons: Record<string, string> = {
         </section>
 
         <!-- CTA -->
-        <section class="border-t border-slate-800 bg-[#f7600d] py-16 text-white">
+        <section class="border-t border-slate-800 bg-[var(--primary)] py-16 text-white">
             <div class="mx-auto max-w-3xl px-4 text-center">
                 <h2 class="mb-3 text-2xl font-bold sm:text-3xl" style="font-family: Manrope, sans-serif;">Ready to bring it all together?</h2>
                 <p class="mb-8 opacity-80 text-sm">Create your account in seconds. No credit card required.</p>
                 <div class="flex flex-col items-center justify-center gap-3 sm:flex-row">
-                    <Link v-if="canRegister && !$page.props.auth.user" :href="register()" class="rounded-xl bg-white px-7 py-3 text-sm font-bold text-[#f7600d] hover:bg-slate-100 transition-colors">
+                    <Link v-if="canRegister && !$page.props.auth.user" :href="register()" class="rounded-xl bg-white px-7 py-3 text-sm font-bold text-[var(--primary)] hover:bg-slate-100 transition-colors">
                         {{ ctaLabel }}
                     </Link>
-                    <Link v-if="$page.props.auth.user" :href="dashboard()" class="rounded-xl bg-white px-7 py-3 text-sm font-bold text-[#f7600d] hover:bg-slate-100 transition-colors">
+                    <Link v-if="$page.props.auth.user" :href="dashboard()" class="rounded-xl bg-white px-7 py-3 text-sm font-bold text-[var(--primary)] hover:bg-slate-100 transition-colors">
                         Go to Dashboard
                     </Link>
                     <Link v-if="!$page.props.auth.user" :href="login()" class="rounded-xl border border-white/30 px-7 py-3 text-sm font-semibold text-white hover:bg-white/10 transition-colors">

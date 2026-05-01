@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         if (! Schema::hasTable('settings')) {
-            $appSettings = ['app_name' => config('app.name'), 'logo_url' => null, 'favicon_url' => null];
+            $appSettings = ['app_name' => config('app.name'), 'logo_url' => null, 'favicon_url' => null, 'primary_color' => '#f7600d'];
             $landingSettings = $this->defaultLandingSettings();
         } else {
             $service = app(SettingService::class);
@@ -56,6 +56,7 @@ class HandleInertiaRequests extends Middleware
                 'name' => $appSettings['app_name'],
                 'logoUrl' => $appSettings['logo_url'],
                 'faviconUrl' => $appSettings['favicon_url'],
+                'primaryColor' => $appSettings['primary_color'] ?? '#f7600d',
             ],
             'landing' => $landingSettings,
             'auth' => [
