@@ -172,10 +172,8 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                         <div class="mt-0.5 shrink-0">
                             <!-- CHECKED: solid orange with tick -->
                             <div
-                                class="size-4 rounded border-2 flex items-center justify-center transition-all duration-150"
-                                :class="checkedIds.has(permission.id)
-                                    ? 'bg-[var(--primary)] border-[var(--primary)] shadow-[0_0_8px_rgba(247,96,13,0.4)]'
-                                    : 'border-slate-600 bg-slate-900 hover:border-slate-500'"
+                                v-if="checkState(permission.id) === 'checked'"
+                                class="size-4 rounded border-2 bg-[var(--primary)] border-[var(--primary)] shadow-[0_0_8px_rgba(247,96,13,0.4)] flex items-center justify-center transition-all duration-150"
                             >
                                 <svg class="size-2.5 text-app" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7" />
@@ -183,7 +181,7 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                             </div>
                             <!-- WAS-ON: greyed-out tick (was previously enabled, now deselected) -->
                             <div
-                                v-if="checkState(permission.id) === 'was-on'"
+                                v-else-if="checkState(permission.id) === 'was-on'"
                                 class="size-4 rounded border-2 border-app bg-app-elevated flex items-center justify-center transition-all duration-150"
                                 title="Previously enabled — will be removed on save"
                             >
