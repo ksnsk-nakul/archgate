@@ -117,8 +117,8 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
 
             <!-- Role summary banner -->
             <div class="rounded-xl border border-app bg-app-surface px-6 py-4 flex items-center gap-4">
-                <div class="w-10 h-10 rounded-xl bg-[#f7600d]/10 border border-[#f7600d]/20 flex items-center justify-center shrink-0">
-                    <svg class="size-5 text-[#f7600d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 rounded-xl bg-[var(--primary)]/10 border border-[var(--primary)]/20 flex items-center justify-center shrink-0">
+                    <svg class="size-5 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                 </div>
@@ -143,7 +143,7 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                     <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">{{ group.group }}</h2>
                     <span class="ml-auto text-xs px-2 py-0.5 rounded-full transition-colors"
                           :class="group.permissions.some(p => checkedIds.has(p.id))
-                              ? 'text-[#f7600d]/80 bg-[#f7600d]/10'
+                              ? 'text-[var(--primary)]/80 bg-[var(--primary)]/10'
                               : 'text-app-muted bg-app-elevated'">
                         {{ group.permissions.filter(p => checkedIds.has(p.id)).length }} / {{ group.permissions.length }}
                     </span>
@@ -184,7 +184,7 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                             <!-- WAS-ON: greyed-out tick (was previously enabled, now deselected) -->
                             <div
                                 v-else-if="checkState(permission.id) === 'was-on'"
-                                class="size-4 rounded border-2 border-slate-500 bg-slate-700 flex items-center justify-center transition-all duration-150"
+                                class="size-4 rounded border-2 border-app bg-app-elevated flex items-center justify-center transition-all duration-150"
                                 title="Previously enabled — will be removed on save"
                             >
                                 <svg class="size-2.5 text-app-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">

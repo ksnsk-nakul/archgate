@@ -28,7 +28,7 @@ defineProps<{
 }>();
 
 const systemRoleBadge: Record<string, string> = {
-    superadmin: 'bg-[#f7600d]/15 text-[#f7600d] border-[#f7600d]/25',
+    superadmin: 'bg-[var(--primary)]/15 text-[var(--primary)] border-[var(--primary)]/25',
     admin: 'bg-amber-500/15 text-amber-400 border-amber-500/25',
     author: 'bg-blue-500/15 text-blue-400 border-blue-500/25',
     tutor: 'bg-violet-500/15 text-violet-400 border-violet-500/25',
@@ -69,7 +69,7 @@ const systemRoleBadge: Record<string, string> = {
                                 name="name"
                                 placeholder="Operations"
                                 required
-                                class="bg-app-elevated border border-app rounded-lg px-3 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors"
+                                class="input-app rounded-lg px-3 py-2.5 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20"
                             />
                             <InputError :message="errors.name" />
                         </div>
@@ -79,14 +79,14 @@ const systemRoleBadge: Record<string, string> = {
                                 id="description"
                                 name="description"
                                 placeholder="Manages operational tasks"
-                                class="bg-app-elevated border border-app rounded-lg px-3 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors"
+                                class="input-app rounded-lg px-3 py-2.5 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20"
                             />
                             <InputError :message="errors.description" />
                         </div>
                         <button
                             type="submit"
                             :disabled="processing"
-                            class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 disabled:opacity-50 text-app text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors whitespace-nowrap"
+                            class="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] disabled:opacity-50 text-white text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors whitespace-nowrap"
                         >
                             <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -121,7 +121,7 @@ const systemRoleBadge: Record<string, string> = {
                     >
                         <!-- Name + description -->
                         <div>
-                            <p class="text-sm font-semibold text-slate-100">{{ role.name }}</p>
+                            <p class="text-sm font-semibold text-app">{{ role.name }}</p>
                             <p class="text-xs text-app-muted">{{ role.description || role.slug }}</p>
                         </div>
 
@@ -150,7 +150,7 @@ const systemRoleBadge: Record<string, string> = {
                             <Link
                                 v-if="role.slug !== 'superadmin'"
                                 :href="edit(role)"
-                                class="flex items-center gap-1.5 text-xs font-semibold text-app-muted hover:text-[#f7600d] border border-app hover:border-[#f7600d]/40 px-3 py-1.5 rounded-lg transition-colors"
+                                class="flex items-center gap-1.5 text-xs font-semibold text-app-muted hover:text-[var(--primary)] border border-app hover:border-[var(--primary)]/40 px-3 py-1.5 rounded-lg transition-colors"
                             >
                                 <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />

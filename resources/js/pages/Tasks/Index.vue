@@ -133,7 +133,7 @@ async function deleteTask(id: number): Promise<void> {
                     <div class="flex items-center bg-app-elevated border border-app rounded-lg p-1">
                         <button
                             @click="viewMode = 'list'"
-                            :class="viewMode === 'list' ? 'bg-slate-700 text-app' : 'text-app-muted hover:text-app-muted'"
+                            :class="viewMode === 'list' ? 'bg-[var(--primary)] text-white' : 'text-app-muted hover:text-app'"
                             class="px-3 py-1.5 rounded text-xs font-medium transition-all flex items-center gap-1.5"
                         >
                             <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -143,7 +143,7 @@ async function deleteTask(id: number): Promise<void> {
                         </button>
                         <button
                             @click="viewMode = 'board'"
-                            :class="viewMode === 'board' ? 'bg-slate-700 text-app' : 'text-app-muted hover:text-app-muted'"
+                            :class="viewMode === 'board' ? 'bg-[var(--primary)] text-white' : 'text-app-muted hover:text-app'"
                             class="px-3 py-1.5 rounded text-xs font-medium transition-all flex items-center gap-1.5"
                         >
                             <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,7 +156,7 @@ async function deleteTask(id: number): Promise<void> {
                     <!-- New task -->
                     <Link
                         :href="create()"
-                        class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-app text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                        class="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
                     >
                         <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -174,13 +174,13 @@ async function deleteTask(id: number): Promise<void> {
             <!-- Empty state -->
             <div v-if="!taskStore.loading && taskStore.tasks.length === 0" class="flex flex-col items-center justify-center flex-1 py-24 text-center">
                 <div class="w-16 h-16 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center mb-4">
-                    <svg class="size-8 text-[#f7600d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="size-8 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                     </svg>
                 </div>
                 <h3 class="text-lg font-bold text-app mb-2" style="font-family: Manrope, sans-serif;">No tasks yet</h3>
                 <p class="text-app-muted text-sm mb-6 max-w-xs">Create your first task to start tracking work and staying on top of your priorities.</p>
-                <Link :href="create()" class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-app text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
+                <Link :href="create()" class="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
@@ -212,7 +212,7 @@ async function deleteTask(id: number): Promise<void> {
                             <span class="text-xs font-bold uppercase tracking-widest text-app-muted group-hover:text-app-muted transition-colors">
                                 {{ statusLabel[section] }}
                             </span>
-                            <span class="text-xs text-slate-700 font-medium">{{ bySection[section].length }}</span>
+                            <span class="text-xs text-app-muted font-medium">{{ bySection[section].length }}</span>
                         </button>
 
                         <!-- Task rows -->
@@ -227,7 +227,7 @@ async function deleteTask(id: number): Promise<void> {
                             </div>
 
                             <div v-if="bySection[section].length === 0" class="px-4 py-6 text-center">
-                                <p class="text-xs text-slate-700">No {{ statusLabel[section].toLowerCase() }} tasks</p>
+                                <p class="text-xs text-app-muted">No {{ statusLabel[section].toLowerCase() }} tasks</p>
                             </div>
 
                             <div
@@ -239,7 +239,7 @@ async function deleteTask(id: number): Promise<void> {
                                 <!-- Completion checkbox -->
                                 <div class="w-5 flex items-center" @click.stop>
                                     <div
-                                        :class="task.status === 'completed' ? 'bg-emerald-500 border-emerald-500' : 'border-slate-600 hover:border-[#f7600d]'"
+                                        :class="task.status === 'completed' ? 'bg-emerald-500 border-emerald-500' : 'border-app hover:border-[var(--primary)]'"
                                         class="size-4 rounded border-2 flex items-center justify-center transition-colors cursor-pointer"
                                     >
                                         <svg v-if="task.status === 'completed'" class="size-2.5 text-app" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -273,12 +273,12 @@ async function deleteTask(id: number): Promise<void> {
                                     >
                                         {{ task.due_date }}
                                     </span>
-                                    <span v-else class="text-xs text-slate-700">—</span>
+                                    <span v-else class="text-xs text-app-muted">—</span>
                                 </div>
 
                                 <!-- Row actions -->
                                 <div class="hidden sm:flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity" @click.stop>
-                                    <Link :href="edit(task)" class="p-1.5 rounded text-app-muted hover:text-slate-200 hover:bg-slate-700 transition-colors" title="Edit">
+                                    <Link :href="edit(task)" class="p-1.5 rounded text-app-muted hover:text-app hover:bg-app-elevated transition-colors" title="Edit">
                                         <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
@@ -328,9 +328,9 @@ async function deleteTask(id: number): Promise<void> {
                                         </svg>
                                         {{ task.due_date }}
                                     </span>
-                                    <span v-else class="text-xs text-slate-700">No due date</span>
+                                    <span v-else class="text-xs text-app-muted">No due date</span>
                                     <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity" @click.stop>
-                                        <Link :href="edit(task)" class="p-1 rounded text-app-muted hover:text-slate-200 hover:bg-slate-700 transition-colors">
+                                        <Link :href="edit(task)" class="p-1 rounded text-app-muted hover:text-app hover:bg-app-elevated transition-colors">
                                             <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                             </svg>
@@ -345,7 +345,7 @@ async function deleteTask(id: number): Promise<void> {
                             </div>
 
                             <div v-if="bySection[section].length === 0" class="border border-dashed border-app rounded-xl p-6 text-center">
-                                <p class="text-xs text-slate-700">No {{ statusLabel[section].toLowerCase() }} tasks</p>
+                                <p class="text-xs text-app-muted">No {{ statusLabel[section].toLowerCase() }} tasks</p>
                             </div>
                         </div>
                     </div>
@@ -362,7 +362,7 @@ async function deleteTask(id: number): Promise<void> {
                 <!-- Panel header -->
                 <div class="flex items-center justify-between px-5 py-4 border-b border-app">
                     <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Task detail</h2>
-                    <button @click="closeDetail" class="p-1.5 rounded text-app-muted hover:text-slate-200 hover:bg-slate-700 transition-colors">
+                    <button @click="closeDetail" class="p-1.5 rounded text-app-muted hover:text-app hover:bg-app-elevated transition-colors">
                         <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>

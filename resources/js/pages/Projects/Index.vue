@@ -87,7 +87,7 @@ async function deleteProject(id: number): Promise<void> {
                 <div class="flex items-center bg-app-elevated border border-app rounded-lg p-1">
                     <button
                         @click="viewMode = 'list'"
-                        :class="viewMode === 'list' ? 'bg-slate-700 text-app' : 'text-app-muted hover:text-app-muted'"
+                        :class="viewMode === 'list' ? 'bg-[var(--primary)] text-white' : 'text-app-muted hover:text-app'"
                         class="px-3 py-1.5 rounded text-xs font-medium transition-all flex items-center gap-1.5"
                     >
                         <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,7 +97,7 @@ async function deleteProject(id: number): Promise<void> {
                     </button>
                     <button
                         @click="viewMode = 'board'"
-                        :class="viewMode === 'board' ? 'bg-slate-700 text-app' : 'text-app-muted hover:text-app-muted'"
+                        :class="viewMode === 'board' ? 'bg-[var(--primary)] text-white' : 'text-app-muted hover:text-app'"
                         class="px-3 py-1.5 rounded text-xs font-medium transition-all flex items-center gap-1.5"
                     >
                         <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,7 +110,7 @@ async function deleteProject(id: number): Promise<void> {
                 <!-- New project -->
                 <Link
                     href="/projects/create"
-                    class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-app text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                    class="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
                 >
                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -128,13 +128,13 @@ async function deleteProject(id: number): Promise<void> {
         <!-- Empty state -->
         <div v-if="!projectStore.loading && projectStore.projects.length === 0" class="flex flex-col items-center justify-center flex-1 py-24 text-center">
             <div class="w-16 h-16 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center mb-4">
-                <svg class="size-8 text-[#f7600d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="size-8 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                 </svg>
             </div>
             <h3 class="text-lg font-bold text-app mb-2" style="font-family: Manrope, sans-serif;">No projects yet</h3>
             <p class="text-app-muted text-sm mb-6 max-w-xs">Create your first project to start organising work and tracking progress.</p>
-            <Link href="/projects/create" class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-app text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
+            <Link href="/projects/create" class="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
                 <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -172,7 +172,7 @@ async function deleteProject(id: number): Promise<void> {
                             <div class="flex flex-col gap-0.5 min-w-0 pr-4">
                                 <Link
                                     :href="`/projects/${project.id}`"
-                                    class="text-sm font-semibold text-slate-100 hover:text-[#f7600d] transition-colors truncate"
+                                    class="text-sm font-semibold text-app hover:text-[var(--primary)] transition-colors truncate"
                                 >
                                     {{ project.name }}
                                 </Link>
@@ -187,7 +187,7 @@ async function deleteProject(id: number): Promise<void> {
                             <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <Link
                                     :href="`/projects/${project.id}/edit`"
-                                    class="p-1.5 rounded text-app-muted hover:text-slate-200 hover:bg-slate-700 transition-colors"
+                                    class="p-1.5 rounded text-app-muted hover:text-app hover:bg-app-elevated transition-colors"
                                     title="Edit"
                                 >
                                     <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -205,7 +205,7 @@ async function deleteProject(id: number): Promise<void> {
                                 </button>
                                 <Link
                                     :href="`/projects/${project.id}`"
-                                    class="p-1.5 rounded text-app-muted hover:text-[#f7600d] hover:bg-orange-500/10 transition-colors"
+                                    class="p-1.5 rounded text-app-muted hover:text-[var(--primary)] hover:bg-[var(--primary)]/10 transition-colors"
                                     title="Open"
                                 >
                                     <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -232,12 +232,12 @@ async function deleteProject(id: number): Promise<void> {
                         <div
                             v-for="project in group"
                             :key="project.id"
-                            class="bg-[#122131] border border-[#273647] rounded-xl p-4 hover:border-orange-500/40 hover:bg-[#1c2b3c] transition-all group"
+                            class="bg-app-surface border border-app rounded-xl p-4 hover:border-[var(--primary)]/40 hover:bg-app-elevated/50 transition-all group"
                         >
                             <div class="flex items-start justify-between gap-2 mb-2">
                                 <Link
                                     :href="`/projects/${project.id}`"
-                                    class="text-sm font-semibold text-slate-100 hover:text-[#f7600d] transition-colors leading-snug"
+                                    class="text-sm font-semibold text-app hover:text-[var(--primary)] transition-colors leading-snug"
                                 >
                                     {{ project.name }}
                                 </Link>
@@ -247,13 +247,13 @@ async function deleteProject(id: number): Promise<void> {
                             </div>
                             <p class="text-xs text-app-muted mb-4 line-clamp-2">{{ project.description || 'No description.' }}</p>
                             <div class="flex items-center justify-between">
-                                <Link :href="`/projects/${project.id}`" class="text-xs text-[#f7600d] font-semibold hover:underline">
+                                <Link :href="`/projects/${project.id}`" class="text-xs text-[var(--primary)] font-semibold hover:underline">
                                     Open →
                                 </Link>
                                 <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                     <Link
                                         :href="`/projects/${project.id}/edit`"
-                                        class="p-1 rounded text-app-muted hover:text-slate-200 hover:bg-slate-700 transition-colors"
+                                        class="p-1 rounded text-app-muted hover:text-app hover:bg-app-elevated transition-colors"
                                     >
                                         <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />

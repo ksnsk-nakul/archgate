@@ -56,27 +56,27 @@ defineProps<{
                 <div class="px-6 py-5 grid gap-4 md:grid-cols-2">
                     <div class="flex flex-col gap-1.5">
                         <label for="mail_mailer" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Mailer</label>
-                        <input id="mail_mailer" name="mail_mailer" :value="settings.mail_mailer ?? ''" placeholder="smtp" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors" />
+                        <input id="mail_mailer" name="mail_mailer" :value="settings.mail_mailer ?? ''" placeholder="smtp" class="input-app rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
                         <InputError :message="errors.mail_mailer" />
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label for="mail_host" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Host</label>
-                        <input id="mail_host" name="mail_host" :value="settings.mail_host ?? ''" placeholder="smtp.example.com" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors" />
+                        <input id="mail_host" name="mail_host" :value="settings.mail_host ?? ''" placeholder="smtp.example.com" class="input-app rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
                         <InputError :message="errors.mail_host" />
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label for="mail_port" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Port</label>
-                        <input id="mail_port" name="mail_port" type="number" :value="settings.mail_port ?? ''" placeholder="587" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors" />
+                        <input id="mail_port" name="mail_port" type="number" :value="settings.mail_port ?? ''" placeholder="587" class="input-app rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
                         <InputError :message="errors.mail_port" />
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label for="mail_encryption" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Encryption</label>
-                        <input id="mail_encryption" name="mail_encryption" :value="settings.mail_encryption ?? ''" placeholder="tls" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors" />
+                        <input id="mail_encryption" name="mail_encryption" :value="settings.mail_encryption ?? ''" placeholder="tls" class="input-app rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
                         <InputError :message="errors.mail_encryption" />
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label for="mail_username" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Username</label>
-                        <input id="mail_username" name="mail_username" :value="settings.mail_username ?? ''" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors" />
+                        <input id="mail_username" name="mail_username" :value="settings.mail_username ?? ''" class="input-app rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
                         <InputError :message="errors.mail_username" />
                     </div>
                     <div class="flex flex-col gap-1.5">
@@ -87,7 +87,7 @@ defineProps<{
                                 name="mail_password"
                                 type="password"
                                 :placeholder="settings.mail_password_configured ? '● Configured — leave blank to keep' : 'Enter password'"
-                                class="w-full bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors"
+                                class="input-app w-full rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20"
                             />
                             <span v-if="settings.mail_password_configured" class="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-400 text-xs">✓</span>
                         </div>
@@ -95,12 +95,12 @@ defineProps<{
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label for="mail_from_address" class="text-xs font-semibold text-app-muted uppercase tracking-wider">From address</label>
-                        <input id="mail_from_address" name="mail_from_address" :value="settings.mail_from_address ?? ''" placeholder="noreply@example.com" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors" />
+                        <input id="mail_from_address" name="mail_from_address" :value="settings.mail_from_address ?? ''" placeholder="noreply@example.com" class="input-app rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
                         <InputError :message="errors.mail_from_address" />
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label for="mail_from_name" class="text-xs font-semibold text-app-muted uppercase tracking-wider">From name</label>
-                        <input id="mail_from_name" name="mail_from_name" :value="settings.mail_from_name ?? ''" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors" />
+                        <input id="mail_from_name" name="mail_from_name" :value="settings.mail_from_name ?? ''" class="input-app rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
                         <InputError :message="errors.mail_from_name" />
                     </div>
                 </div>
@@ -122,7 +122,7 @@ defineProps<{
                 <div class="px-6 py-5 grid gap-4 md:grid-cols-3">
                     <div class="flex flex-col gap-1.5">
                         <label for="twilio_sid" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Account SID</label>
-                        <input id="twilio_sid" name="twilio_sid" :value="settings.twilio_sid ?? ''" placeholder="ACxxxxxxxx" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors" />
+                        <input id="twilio_sid" name="twilio_sid" :value="settings.twilio_sid ?? ''" placeholder="ACxxxxxxxx" class="input-app rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
                         <InputError :message="errors.twilio_sid" />
                     </div>
                     <div class="flex flex-col gap-1.5">
@@ -133,7 +133,7 @@ defineProps<{
                                 name="twilio_token"
                                 type="password"
                                 :placeholder="settings.twilio_token_configured ? '● Configured — leave blank to keep' : 'Enter token'"
-                                class="w-full bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors"
+                                class="input-app w-full rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20"
                             />
                             <span v-if="settings.twilio_token_configured" class="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-400 text-xs">✓</span>
                         </div>
@@ -141,7 +141,7 @@ defineProps<{
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label for="twilio_from" class="text-xs font-semibold text-app-muted uppercase tracking-wider">From number</label>
-                        <input id="twilio_from" name="twilio_from" :value="settings.twilio_from ?? ''" placeholder="+15551234567" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors" />
+                        <input id="twilio_from" name="twilio_from" :value="settings.twilio_from ?? ''" placeholder="+15551234567" class="input-app rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
                         <InputError :message="errors.twilio_from" />
                     </div>
                 </div>
@@ -167,7 +167,7 @@ defineProps<{
                         <div class="grid gap-4 md:grid-cols-2">
                             <div class="flex flex-col gap-1.5">
                                 <label for="stripe_key" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Publishable key</label>
-                                <input id="stripe_key" name="stripe_key" :value="settings.stripe_key ?? ''" placeholder="pk_live_..." class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors" />
+                                <input id="stripe_key" name="stripe_key" :value="settings.stripe_key ?? ''" placeholder="pk_live_..." class="input-app rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
                                 <InputError :message="errors.stripe_key" />
                             </div>
                             <div class="flex flex-col gap-1.5">
@@ -178,7 +178,7 @@ defineProps<{
                                         name="stripe_secret"
                                         type="password"
                                         :placeholder="settings.stripe_secret_configured ? '● Configured — leave blank to keep' : 'sk_live_...'"
-                                        class="w-full bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors"
+                                        class="input-app w-full rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20"
                                     />
                                     <span v-if="settings.stripe_secret_configured" class="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-400 text-xs">✓</span>
                                 </div>
@@ -192,7 +192,7 @@ defineProps<{
                         <div class="grid gap-4 md:grid-cols-2">
                             <div class="flex flex-col gap-1.5">
                                 <label for="razorpay_key" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Key ID</label>
-                                <input id="razorpay_key" name="razorpay_key" :value="settings.razorpay_key ?? ''" placeholder="rzp_live_..." class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors" />
+                                <input id="razorpay_key" name="razorpay_key" :value="settings.razorpay_key ?? ''" placeholder="rzp_live_..." class="input-app rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
                                 <InputError :message="errors.razorpay_key" />
                             </div>
                             <div class="flex flex-col gap-1.5">
@@ -203,7 +203,7 @@ defineProps<{
                                         name="razorpay_secret"
                                         type="password"
                                         :placeholder="settings.razorpay_secret_configured ? '● Configured — leave blank to keep' : 'Enter secret'"
-                                        class="w-full bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors"
+                                        class="input-app w-full rounded-lg px-3 py-2 text-sm border transition-colors focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20"
                                     />
                                     <span v-if="settings.razorpay_secret_configured" class="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-400 text-xs">✓</span>
                                 </div>
@@ -218,7 +218,7 @@ defineProps<{
                 <button
                     type="submit"
                     :disabled="processing"
-                    class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-app text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                    class="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
                 >
                     <svg v-if="processing" class="size-4 animate-spin" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>

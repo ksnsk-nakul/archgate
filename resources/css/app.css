@@ -85,6 +85,9 @@
 }
 
 /* ── shadcn token definitions (light) ────────────────────────────────────── */
+/* NOTE: --primary / --primary-hover / --primary-dim are set per-tenant in   */
+/* app.blade.php (from DB) and overridden reactively by useTheme composable. */
+/* All derived tokens reference var(--primary) so they flex automatically.   */
 :root {
     --background:              #f8fafc;
     --foreground:              #0f172a;
@@ -92,19 +95,23 @@
     --card-foreground:         #0f172a;
     --popover:                 #ffffff;
     --popover-foreground:      #0f172a;
+    /* --primary set by blade / useTheme; fallback here for SSR */
     --primary:                 #EC5800;
     --primary-foreground:      #ffffff;
+    --primary-hover:           color-mix(in srgb, var(--primary) 85%, black);
+    --primary-dim:             color-mix(in srgb, var(--primary) 12%, transparent);
+    --primary-border:          color-mix(in srgb, var(--primary) 25%, transparent);
     --secondary:               #f1f5f9;
     --secondary-foreground:    #0f172a;
     --muted:                   #f1f5f9;
     --muted-foreground:        #64748b;
-    --accent:                  #fff7ed;
-    --accent-foreground:       #EC5800;
+    --accent:                  color-mix(in srgb, var(--primary) 8%, white);
+    --accent-foreground:       var(--primary);
     --destructive:             hsl(0 84.2% 60.2%);
     --destructive-foreground:  #ffffff;
     --border:                  #e2e8f0;
     --input:                   #e2e8f0;
-    --ring:                    #EC5800;
+    --ring:                    var(--primary);
     --chart-1:                 hsl(12 76% 61%);
     --chart-2:                 hsl(173 58% 39%);
     --chart-3:                 hsl(197 37% 24%);
@@ -113,12 +120,12 @@
     --radius:                  0.5rem;
     --sidebar-background:      #ffffff;
     --sidebar-foreground:      #475569;
-    --sidebar-primary:         #EC5800;
+    --sidebar-primary:         var(--primary);
     --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent:          #fff7ed;
-    --sidebar-accent-foreground: #EC5800;
+    --sidebar-accent:          color-mix(in srgb, var(--primary) 8%, white);
+    --sidebar-accent-foreground: var(--primary);
     --sidebar-border:          #e2e8f0;
-    --sidebar-ring:            #EC5800;
+    --sidebar-ring:            var(--primary);
     --sidebar:                 #ffffff;
 }
 
@@ -130,19 +137,23 @@
     --card-foreground:         #f1f5f9;
     --popover:                 #0f172a;
     --popover-foreground:      #f1f5f9;
+    /* --primary set by blade / useTheme */
     --primary:                 #EC5800;
     --primary-foreground:      #ffffff;
+    --primary-hover:           color-mix(in srgb, var(--primary) 85%, black);
+    --primary-dim:             color-mix(in srgb, var(--primary) 12%, transparent);
+    --primary-border:          color-mix(in srgb, var(--primary) 25%, transparent);
     --secondary:               #1e293b;
     --secondary-foreground:    #f1f5f9;
     --muted:                   #1e293b;
     --muted-foreground:        #94a3b8;
-    --accent:                  rgba(236,88,0,0.15);
-    --accent-foreground:       #EC5800;
+    --accent:                  color-mix(in srgb, var(--primary) 15%, transparent);
+    --accent-foreground:       var(--primary);
     --destructive:             hsl(0 84% 60%);
     --destructive-foreground:  #ffffff;
     --border:                  #1e293b;
     --input:                   #1e293b;
-    --ring:                    #EC5800;
+    --ring:                    var(--primary);
     --chart-1:                 hsl(220 70% 50%);
     --chart-2:                 hsl(160 60% 45%);
     --chart-3:                 hsl(30 80% 55%);
@@ -150,12 +161,12 @@
     --chart-5:                 hsl(340 75% 55%);
     --sidebar-background:      #020617;
     --sidebar-foreground:      #94a3b8;
-    --sidebar-primary:         #EC5800;
+    --sidebar-primary:         var(--primary);
     --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent:          rgba(236,88,0,0.15);
-    --sidebar-accent-foreground: #EC5800;
+    --sidebar-accent:          color-mix(in srgb, var(--primary) 15%, transparent);
+    --sidebar-accent-foreground: var(--primary);
     --sidebar-border:          #1e293b;
-    --sidebar-ring:            #EC5800;
+    --sidebar-ring:            var(--primary);
     --sidebar:                 #020617;
 }
 

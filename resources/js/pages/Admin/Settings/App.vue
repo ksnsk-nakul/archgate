@@ -1,8 +1,22 @@
 <script setup lang="ts">
 import { Form, Head } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import InputError from '@/components/InputError.vue';
+import { useTheme } from '@/composables/useTheme';
 import { update } from '@/routes/admin/settings/app';
+
+// Preview swatch selection also live-previews the theme in real time
+function useImagePreview(initial: string | null | undefined) {
+    const preview = ref<string | null>(initial ?? null);
+    function onFile(e: Event): void {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (!file) { return; }
+        const reader = new FileReader();
+        reader.onload = (ev) => { preview.value = ev.target?.result as string; };
+        reader.readAsDataURL(file);
+    }
+    return { preview, onFile };
+}
 
 const props = defineProps<{
     settings: {
@@ -13,7 +27,50 @@ const props = defineProps<{
     };
 }>();
 
-const brandColor = ref(props.settings.primary_color ?? '#f7600d');
+const themes = [
+    { name: 'Stitch Orange', primary: '#EC5800', label: 'Default' },
+    { name: 'Cobalt Blue',   primary: '#2563EB' },
+    { name: 'Emerald',       primary: '#059669' },
+    { name: 'Violet',        primary: '#7C3AED' },
+    { name: 'Rose',          primary: '#E11D48' },
+    { name: 'Amber',         primary: '#D97706' },
+    { name: 'Cyan',          primary: '#0891B2' },
+    { name: 'Pink',          primary: '#DB2777' },
+    { name: 'Indigo',        primary: '#4F46E5' },
+    { name: 'Teal',          primary: '#0D9488' },
+    { name: 'Slate',         primary: '#475569' },
+    { name: 'Fuchsia',       primary: '#A21CAF' },
+];
+
+const brandColor = ref(props.settings.primary_color ?? '#EC5800');
+
+const { preview: logoPreview, onFile: onLogoFile } = useImagePreview(props.settings.logo_url);
+const { preview: faviconPreview, onFile: onFaviconFile } = useImagePreview(props.settings.favicon_url);
+
+// Apply theme reactively (handles initial load + post-save prop updates)
+useTheme();
+
+// Keep local state in sync when props refresh after a successful save/redirect
+watch(() => props.settings.primary_color, (val) => {
+    brandColor.value = val ?? '#EC5800';
+});
+watch(() => props.settings.logo_url, (val) => {
+    logoPreview.value = val ?? null;
+});
+watch(() => props.settings.favicon_url, (val) => {
+    faviconPreview.value = val ?? null;
+});
+
+function selectTheme(color: string): void {
+    brandColor.value = color;
+    // Immediately preview the selected color on :root so the user sees it
+    document.documentElement.style.setProperty('--primary', color);
+    document.documentElement.style.setProperty('--primary-hover', `color-mix(in srgb, ${color} 85%, black)`);
+    document.documentElement.style.setProperty('--primary-dim', `color-mix(in srgb, ${color} 12%, transparent)`);
+    document.documentElement.style.setProperty('--ring', color);
+    document.documentElement.style.setProperty('--sidebar-primary', color);
+    document.documentElement.style.setProperty('--sidebar-accent-foreground', color);
+}
 </script>
 
 <template>
@@ -57,17 +114,27 @@ const brandColor = ref(props.settings.primary_color ?? '#f7600d');
                     <!-- Logo -->
                     <div class="flex flex-col gap-2">
                         <label class="text-xs font-semibold text-app-muted uppercase tracking-wider">Logo</label>
-                        <div v-if="settings.logo_url" class="flex items-center gap-3 rounded-lg border border-app bg-app-elevated/50 p-3">
-                            <img :src="settings.logo_url" alt="Current logo" class="h-10 max-w-48 object-contain" />
-                            <span class="text-xs text-app-muted">Current logo</span>
-                        </div>
-                        <input
-                            id="logo"
-                            name="logo"
-                            type="file"
-                            accept="image/*"
-                            class="text-sm text-app-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-app-elevated file:text-app-muted hover:file:bg-slate-700 file:cursor-pointer cursor-pointer"
-                        />
+                        <label
+                            for="logo"
+                            class="relative flex items-center justify-center w-full h-28 rounded-xl border-2 border-dashed border-app bg-app-elevated/40 hover:bg-app-elevated/70 hover:border-[var(--primary)] transition-all cursor-pointer group overflow-hidden"
+                        >
+                            <img
+                                v-if="logoPreview"
+                                :src="logoPreview"
+                                alt="Logo preview"
+                                class="max-h-20 max-w-full object-contain"
+                            />
+                            <div v-else class="flex flex-col items-center gap-2 text-app-muted group-hover:text-app transition-colors">
+                                <svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span class="text-xs font-medium">Click to upload logo</span>
+                            </div>
+                            <div v-if="logoPreview" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                <span class="text-xs font-semibold text-white">Change image</span>
+                            </div>
+                            <input id="logo" name="logo" type="file" accept="image/*" class="sr-only" @change="onLogoFile" />
+                        </label>
                         <p class="text-xs text-app-muted">PNG, JPG, SVG or WebP — max 2 MB</p>
                         <InputError :message="errors.logo" />
                     </div>
@@ -75,54 +142,73 @@ const brandColor = ref(props.settings.primary_color ?? '#f7600d');
                     <!-- Favicon -->
                     <div class="flex flex-col gap-2">
                         <label class="text-xs font-semibold text-app-muted uppercase tracking-wider">Favicon</label>
-                        <div v-if="settings.favicon_url" class="flex items-center gap-3 rounded-lg border border-app bg-app-elevated/50 p-3">
-                            <img :src="settings.favicon_url" alt="Current favicon" class="size-8 object-contain" />
-                            <span class="text-xs text-app-muted">Current favicon</span>
-                        </div>
-                        <input
-                            id="favicon"
-                            name="favicon"
-                            type="file"
-                            accept=".ico,image/*"
-                            class="text-sm text-app-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-app-elevated file:text-app-muted hover:file:bg-slate-700 file:cursor-pointer cursor-pointer"
-                        />
+                        <label
+                            for="favicon"
+                            class="relative flex items-center justify-center w-24 h-24 rounded-xl border-2 border-dashed border-app bg-app-elevated/40 hover:bg-app-elevated/70 hover:border-[var(--primary)] transition-all cursor-pointer group overflow-hidden"
+                        >
+                            <img
+                                v-if="faviconPreview"
+                                :src="faviconPreview"
+                                alt="Favicon preview"
+                                class="size-12 object-contain"
+                            />
+                            <div v-else class="flex flex-col items-center gap-1.5 text-app-muted group-hover:text-app transition-colors">
+                                <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span class="text-[10px] font-medium text-center leading-tight">Upload favicon</span>
+                            </div>
+                            <div v-if="faviconPreview" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                <span class="text-[10px] font-semibold text-white">Change</span>
+                            </div>
+                            <input id="favicon" name="favicon" type="file" accept=".ico,image/*" class="sr-only" @change="onFaviconFile" />
+                        </label>
                         <p class="text-xs text-app-muted">ICO, PNG, JPG — max 1 MB</p>
                         <InputError :message="errors.favicon" />
                     </div>
 
-                    <!-- Brand colour -->
-                    <div class="flex flex-col gap-2">
-                        <label class="text-xs font-semibold text-app-muted uppercase tracking-wider">Brand colour</label>
-                        <div class="flex items-center gap-3">
-                            <!-- Native colour picker -->
-                            <div class="relative shrink-0">
-                                <input
-                                    v-model="brandColor"
-                                    type="color"
-                                    name="primary_color"
-                                    class="size-10 rounded-lg border-2 border-app cursor-pointer bg-transparent p-0.5"
-                                    title="Pick brand colour"
-                                />
-                            </div>
-                            <!-- Hex input -->
-                            <input
-                                v-model="brandColor"
-                                name="primary_color"
-                                type="text"
-                                maxlength="7"
-                                placeholder="#f7600d"
-                                class="input-app w-32 rounded-lg px-3 py-2 text-sm font-mono border transition-colors"
-                            />
-                            <!-- Live swatch -->
+                    <!-- Brand colour / theme -->
+                    <div class="flex flex-col gap-3">
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs font-semibold text-app-muted uppercase tracking-wider">Theme colour</label>
+                            <!-- Hidden field carries the actual value -->
+                            <input type="hidden" name="primary_color" :value="brandColor" />
+                            <!-- Active preview pill -->
                             <div
-                                class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-app text-xs font-semibold"
-                                :style="{ background: brandColor + '1a', color: brandColor, borderColor: brandColor + '33' }"
+                                class="flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold"
+                                :style="{ background: brandColor + '1a', color: brandColor, borderColor: brandColor + '40' }"
                             >
-                                <div class="size-3 rounded-full" :style="{ background: brandColor }" />
-                                Active colour
+                                <div class="size-2.5 rounded-full" :style="{ background: brandColor }" />
+                                {{ themes.find(t => t.primary === brandColor)?.name ?? 'Custom' }}
                             </div>
                         </div>
-                        <p class="text-xs text-app-muted">Used for buttons, active states, and highlights across the app.</p>
+
+                        <!-- Preset swatches grid -->
+                        <div class="grid grid-cols-6 gap-2">
+                            <button
+                                v-for="theme in themes"
+                                :key="theme.primary"
+                                type="button"
+                                :title="theme.name"
+                                @click="selectTheme(theme.primary)"
+                                class="relative group flex flex-col items-center gap-1.5"
+                            >
+                                <span
+                                    class="block size-9 rounded-xl border-2 transition-all"
+                                    :style="{ background: theme.primary, borderColor: brandColor === theme.primary ? theme.primary : 'transparent' }"
+                                    :class="brandColor === theme.primary ? 'scale-110 shadow-lg' : 'opacity-75 hover:opacity-100 hover:scale-105'"
+                                >
+                                    <span v-if="brandColor === theme.primary" class="flex items-center justify-center h-full">
+                                        <svg class="size-4 text-white drop-shadow" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </span>
+                                </span>
+                                <span class="text-[10px] text-app-muted leading-tight text-center w-full truncate">{{ theme.label ?? theme.name.split(' ')[0] }}</span>
+                            </button>
+                        </div>
+
+                        <p class="text-xs text-app-muted">Applied to buttons, active states, and highlights across the app.</p>
                         <InputError :message="errors.primary_color" />
                     </div>
 
