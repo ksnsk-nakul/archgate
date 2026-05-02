@@ -156,7 +156,7 @@ async function deleteTask(id: number): Promise<void> {
                     <!-- New task -->
                     <Link
                         :href="create()"
-                        class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                        class="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
                     >
                         <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -174,13 +174,13 @@ async function deleteTask(id: number): Promise<void> {
             <!-- Empty state -->
             <div v-if="!taskStore.loading && taskStore.tasks.length === 0" class="flex flex-col items-center justify-center flex-1 py-24 text-center">
                 <div class="w-16 h-16 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center mb-4">
-                    <svg class="size-8 text-[#f7600d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="size-8 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                     </svg>
                 </div>
                 <h3 class="text-lg font-bold text-white mb-2" style="font-family: Manrope, sans-serif;">No tasks yet</h3>
                 <p class="text-slate-500 text-sm mb-6 max-w-xs">Create your first task to start tracking work and staying on top of your priorities.</p>
-                <Link :href="create()" class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
+                <Link :href="create()" class="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
@@ -239,7 +239,7 @@ async function deleteTask(id: number): Promise<void> {
                                 <!-- Completion checkbox -->
                                 <div class="w-5 flex items-center" @click.stop>
                                     <div
-                                        :class="task.status === 'completed' ? 'bg-emerald-500 border-emerald-500' : 'border-slate-600 hover:border-[#f7600d]'"
+                                        :class="task.status === 'completed' ? 'bg-emerald-500 border-emerald-500' : 'border-slate-600 hover:border-[var(--primary)]'"
                                         class="size-4 rounded border-2 flex items-center justify-center transition-colors cursor-pointer"
                                     >
                                         <svg v-if="task.status === 'completed'" class="size-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
