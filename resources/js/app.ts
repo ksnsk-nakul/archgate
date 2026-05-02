@@ -61,7 +61,7 @@ initializeTheme();
 
 // This will listen for flash toast data from the server...
 initializeFlashToast();
-s
+
 
 router.on('navigate', (event) => {
     const color = (event.detail.page.props as Record<string, unknown> & { appDetails?: { primaryColor?: string } })
