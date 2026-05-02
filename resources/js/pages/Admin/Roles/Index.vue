@@ -39,21 +39,21 @@ const systemRoleBadge: Record<string, string> = {
 <template>
     <Head title="Roles" />
 
-    <div class="flex flex-col min-h-full bg-[#051424] text-[#d4e4fa]" style="font-family: Inter, sans-serif;">
+    <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
         <!-- Toolbar -->
-        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-slate-800">
+        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
                 <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Admin</p>
-                <h1 class="text-xl font-bold text-white" style="font-family: Manrope, sans-serif;">Roles & Permissions</h1>
+                <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">Roles & Permissions</h1>
             </div>
         </div>
 
         <div class="px-6 py-6 flex flex-col gap-6">
 
             <!-- Create subadmin card -->
-            <div class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-800">
-                    <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">Create subadmin role</h2>
+            <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                <div class="px-6 py-4 border-b border-app">
+                    <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Create subadmin role</h2>
                     <p class="text-xs text-slate-500 mt-0.5">Custom roles can be assigned tailored permission policies.</p>
                 </div>
                 <div class="px-6 py-5">
@@ -86,7 +86,7 @@ const systemRoleBadge: Record<string, string> = {
                         <button
                             type="submit"
                             :disabled="processing"
-                            class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors whitespace-nowrap"
+                            class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 disabled:opacity-50 text-app text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors whitespace-nowrap"
                         >
                             <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -98,14 +98,14 @@ const systemRoleBadge: Record<string, string> = {
             </div>
 
             <!-- Role list -->
-            <div class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-800">
-                    <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">Role list</h2>
+            <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                <div class="px-6 py-4 border-b border-app">
+                    <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Role list</h2>
                     <p class="text-xs text-slate-500 mt-0.5">Open the policy page to update a role's permissions. Superadmin is locked.</p>
                 </div>
 
                 <!-- Column headers -->
-                <div class="hidden md:grid grid-cols-[1fr_100px_60px_80px_120px] px-6 py-2.5 bg-slate-900/50 border-b border-slate-800 text-xs text-slate-600 font-semibold uppercase tracking-wider gap-4">
+                <div class="hidden md:grid grid-cols-[1fr_100px_60px_80px_120px] px-6 py-2.5 bg-slate-900/50 border-b border-app text-xs text-slate-600 font-semibold uppercase tracking-wider gap-4">
                     <span>Role</span>
                     <span>Type</span>
                     <span class="text-center">Users</span>
@@ -113,7 +113,7 @@ const systemRoleBadge: Record<string, string> = {
                     <span class="text-right">Policy</span>
                 </div>
 
-                <div class="divide-y divide-slate-800/60">
+                <div class="divide-y divide-app/60">
                     <div
                         v-for="role in roles.data"
                         :key="role.id"

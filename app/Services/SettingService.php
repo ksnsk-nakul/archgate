@@ -20,6 +20,7 @@ class SettingService
             'logo_url' => $this->publicUrl($this->get('app', 'logo_path')),
             'favicon_path' => $this->get('app', 'favicon_path'),
             'favicon_url' => $this->publicUrl($this->get('app', 'favicon_path')),
+            'primary_color' => $this->get('app', 'primary_color', '#f7600d'),
         ];
     }
 
@@ -63,6 +64,10 @@ class SettingService
 
         if (($attributes['favicon'] ?? null) instanceof UploadedFile) {
             $this->set('app', 'favicon_path', $attributes['favicon']->store('settings', 'public'));
+        }
+
+        if (! empty($attributes['primary_color'])) {
+            $this->set('app', 'primary_color', $attributes['primary_color']);
         }
     }
 

@@ -94,14 +94,14 @@ async function deleteTask(id: number): Promise<void> {
 <template>
     <Head title="Tasks" />
 
-    <div class="flex min-h-full bg-[#051424] text-[#d4e4fa]" style="font-family: Inter, sans-serif;">
+    <div class="flex min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
         <!-- Main content area -->
         <div class="flex flex-col flex-1 min-w-0">
             <!-- Toolbar -->
-            <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-slate-800">
+            <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
                 <div>
                     <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Workspace</p>
-                    <h1 class="text-xl font-bold text-white" style="font-family: Manrope, sans-serif;">My Tasks</h1>
+                    <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">My Tasks</h1>
                 </div>
 
                 <div class="flex items-center gap-3">
@@ -114,14 +114,14 @@ async function deleteTask(id: number): Promise<void> {
                             v-model="searchQuery"
                             type="text"
                             placeholder="Search tasks..."
-                            class="bg-slate-900 border border-slate-800 text-sm rounded-lg pl-9 pr-4 py-2 w-48 text-slate-300 placeholder-slate-600 focus:outline-none focus:border-orange-500 transition-colors"
+                            class="bg-slate-900 border border-app text-sm rounded-lg pl-9 pr-4 py-2 w-48 text-slate-300 placeholder-slate-600 focus:outline-none focus:border-orange-500 transition-colors"
                         />
                     </div>
 
                     <!-- Priority filter -->
                     <select
                         v-model="taskStore.filters.priority"
-                        class="bg-slate-900 border border-slate-800 text-slate-400 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 transition-colors"
+                        class="bg-slate-900 border border-app text-slate-400 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 transition-colors"
                     >
                         <option value="all">All priorities</option>
                         <option value="high">High</option>
@@ -130,10 +130,10 @@ async function deleteTask(id: number): Promise<void> {
                     </select>
 
                     <!-- View toggle -->
-                    <div class="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-1">
+                    <div class="flex items-center bg-slate-900 border border-app rounded-lg p-1">
                         <button
                             @click="viewMode = 'list'"
-                            :class="viewMode === 'list' ? 'bg-slate-700 text-white' : 'text-slate-500 hover:text-slate-300'"
+                            :class="viewMode === 'list' ? 'bg-slate-700 text-app' : 'text-slate-500 hover:text-slate-300'"
                             class="px-3 py-1.5 rounded text-xs font-medium transition-all flex items-center gap-1.5"
                         >
                             <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -143,7 +143,7 @@ async function deleteTask(id: number): Promise<void> {
                         </button>
                         <button
                             @click="viewMode = 'board'"
-                            :class="viewMode === 'board' ? 'bg-slate-700 text-white' : 'text-slate-500 hover:text-slate-300'"
+                            :class="viewMode === 'board' ? 'bg-slate-700 text-app' : 'text-slate-500 hover:text-slate-300'"
                             class="px-3 py-1.5 rounded text-xs font-medium transition-all flex items-center gap-1.5"
                         >
                             <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,7 +156,7 @@ async function deleteTask(id: number): Promise<void> {
                     <!-- New task -->
                     <Link
                         :href="create()"
-                        class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                        class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-app text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
                     >
                         <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -178,9 +178,9 @@ async function deleteTask(id: number): Promise<void> {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                     </svg>
                 </div>
-                <h3 class="text-lg font-bold text-white mb-2" style="font-family: Manrope, sans-serif;">No tasks yet</h3>
+                <h3 class="text-lg font-bold text-app mb-2" style="font-family: Manrope, sans-serif;">No tasks yet</h3>
                 <p class="text-slate-500 text-sm mb-6 max-w-xs">Create your first task to start tracking work and staying on top of your priorities.</p>
-                <Link :href="create()" class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
+                <Link :href="create()" class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-app text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
@@ -216,9 +216,9 @@ async function deleteTask(id: number): Promise<void> {
                         </button>
 
                         <!-- Task rows -->
-                        <div v-if="!collapsedSections.has(section)" class="rounded-xl border border-slate-800 overflow-hidden">
+                        <div v-if="!collapsedSections.has(section)" class="rounded-xl border border-app overflow-hidden">
                             <!-- Column headers -->
-                            <div class="hidden sm:grid grid-cols-[auto_1fr_100px_100px_90px] px-4 py-2 bg-slate-900/60 border-b border-slate-800 text-xs text-slate-600 font-semibold uppercase tracking-wider gap-3">
+                            <div class="hidden sm:grid grid-cols-[auto_1fr_100px_100px_90px] px-4 py-2 bg-slate-900/60 border-b border-app text-xs text-slate-600 font-semibold uppercase tracking-wider gap-3">
                                 <span class="w-5"></span>
                                 <span>Task</span>
                                 <span class="text-right">Priority</span>
@@ -233,7 +233,7 @@ async function deleteTask(id: number): Promise<void> {
                             <div
                                 v-for="task in bySection[section]"
                                 :key="task.id"
-                                class="grid grid-cols-[auto_1fr] sm:grid-cols-[auto_1fr_100px_100px_90px] items-center px-4 py-3 border-b last:border-0 border-slate-800/60 hover:bg-slate-800/25 transition-colors group gap-3 cursor-pointer"
+                                class="grid grid-cols-[auto_1fr] sm:grid-cols-[auto_1fr_100px_100px_90px] items-center px-4 py-3 border-b last:border-0 border-app/60 hover:bg-slate-800/25 transition-colors group gap-3 cursor-pointer"
                                 @click="openDetail(task)"
                             >
                                 <!-- Completion checkbox -->
@@ -242,7 +242,7 @@ async function deleteTask(id: number): Promise<void> {
                                         :class="task.status === 'completed' ? 'bg-emerald-500 border-emerald-500' : 'border-slate-600 hover:border-[#f7600d]'"
                                         class="size-4 rounded border-2 flex items-center justify-center transition-colors cursor-pointer"
                                     >
-                                        <svg v-if="task.status === 'completed'" class="size-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg v-if="task.status === 'completed'" class="size-2.5 text-app" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                                         </svg>
                                     </div>
@@ -344,7 +344,7 @@ async function deleteTask(id: number): Promise<void> {
                                 </div>
                             </div>
 
-                            <div v-if="bySection[section].length === 0" class="border border-dashed border-slate-800 rounded-xl p-6 text-center">
+                            <div v-if="bySection[section].length === 0" class="border border-dashed border-app rounded-xl p-6 text-center">
                                 <p class="text-xs text-slate-700">No {{ statusLabel[section].toLowerCase() }} tasks</p>
                             </div>
                         </div>
@@ -357,11 +357,11 @@ async function deleteTask(id: number): Promise<void> {
         <transition name="slide">
             <div
                 v-if="selectedTask"
-                class="w-80 flex-shrink-0 border-l border-slate-800 bg-[#0d1c2d] flex flex-col"
+                class="w-80 flex-shrink-0 border-l border-app bg-app-surface flex flex-col"
             >
                 <!-- Panel header -->
-                <div class="flex items-center justify-between px-5 py-4 border-b border-slate-800">
-                    <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">Task detail</h2>
+                <div class="flex items-center justify-between px-5 py-4 border-b border-app">
+                    <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Task detail</h2>
                     <button @click="closeDetail" class="p-1.5 rounded text-slate-500 hover:text-slate-200 hover:bg-slate-700 transition-colors">
                         <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -372,7 +372,7 @@ async function deleteTask(id: number): Promise<void> {
                 <!-- Panel body -->
                 <div class="flex flex-col gap-5 px-5 py-5 overflow-y-auto flex-1">
                     <div>
-                        <h3 class="text-base font-bold text-white mb-1">{{ selectedTask.title }}</h3>
+                        <h3 class="text-base font-bold text-app mb-1">{{ selectedTask.title }}</h3>
                         <p class="text-sm text-slate-400">{{ selectedTask.description || 'No description.' }}</p>
                     </div>
 

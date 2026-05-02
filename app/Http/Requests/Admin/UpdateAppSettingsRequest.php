@@ -27,6 +27,8 @@ class UpdateAppSettingsRequest extends FormRequest
         return [
             'app_name' => ['required', 'string', 'max:120'],
             'logo' => ['nullable', File::image()->max(2048)],
+            'primary_color' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'primary_color' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'favicon' => ['nullable', File::types(['ico', 'png', 'jpg', 'jpeg', 'svg', 'webp'])->max(1024)],
         ];
     }

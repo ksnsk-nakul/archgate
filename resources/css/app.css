@@ -170,3 +170,42 @@
         @apply bg-background text-foreground;
     }
 }
+
+/*
+ * ── App-surface semantic utilities ────────────────────────────────────────────
+ * These allow admin/app pages to use light/dark-aware backgrounds and text
+ * without relying on the shadcn token names which clash with brand --primary.
+ *
+ * Usage in Vue templates:
+ *   bg-app-bg       → page background  (white / #051424)
+ *   bg-app-surface  → card/panel bg    (white / #0d1c2d)
+ *   bg-app-elevated → toolbar/hover bg (#f1f5f9 / #0a1929)
+ *   text-app        → primary text     (#0f172a / #d4e4fa)
+ *   text-app-muted  → secondary text   (#64748b)
+ *   border-app      → card borders     (#e2e8f0 / #1e293b)
+ *
+ * --primary / --primary-hover / --primary-dim are injected per-tenant via
+ * app.blade.php from the DB primary_color setting.
+ */
+@layer utilities {
+    .bg-app-bg       { background-color: var(--app-bg); }
+    .bg-app-surface  { background-color: var(--app-surface); }
+    .bg-app-elevated { background-color: var(--app-elevated); }
+    .text-app        { color: var(--app-text); }
+    .text-app-muted  { color: var(--app-muted); }
+    .border-app      { border-color: var(--app-border); }
+    .divide-app > * + * { border-color: var(--app-border); }
+
+    /* Input fields — dark surface + light text in dark, reversed in light */
+    .input-app {
+        background-color: var(--app-elevated);
+        border-color: var(--app-border);
+        color: var(--app-text);
+    }
+    .input-app::placeholder { color: var(--app-muted); }
+    .input-app:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 20%, transparent);
+        outline: none;
+    }
+}

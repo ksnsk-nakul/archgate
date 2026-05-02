@@ -61,12 +61,12 @@ async function deleteProject(id: number): Promise<void> {
 <template>
     <Head title="Projects" />
 
-    <div class="flex flex-col min-h-full bg-[#051424] text-[#d4e4fa]" style="font-family: Inter, sans-serif;">
+    <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
         <!-- Page toolbar -->
-        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-slate-800">
+        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
                 <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Workspace</p>
-                <h1 class="text-xl font-bold text-white" style="font-family: Manrope, sans-serif;">Projects</h1>
+                <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">Projects</h1>
             </div>
 
             <div class="flex items-center gap-3">
@@ -79,15 +79,15 @@ async function deleteProject(id: number): Promise<void> {
                         v-model="searchQuery"
                         type="text"
                         placeholder="Search projects..."
-                        class="bg-slate-900 border border-slate-800 text-sm rounded-lg pl-9 pr-4 py-2 w-52 text-slate-300 placeholder-slate-600 focus:outline-none focus:border-orange-500 transition-colors"
+                        class="bg-slate-900 border border-app text-sm rounded-lg pl-9 pr-4 py-2 w-52 text-slate-300 placeholder-slate-600 focus:outline-none focus:border-orange-500 transition-colors"
                     />
                 </div>
 
                 <!-- View toggle -->
-                <div class="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-1">
+                <div class="flex items-center bg-slate-900 border border-app rounded-lg p-1">
                     <button
                         @click="viewMode = 'list'"
-                        :class="viewMode === 'list' ? 'bg-slate-700 text-white' : 'text-slate-500 hover:text-slate-300'"
+                        :class="viewMode === 'list' ? 'bg-slate-700 text-app' : 'text-slate-500 hover:text-slate-300'"
                         class="px-3 py-1.5 rounded text-xs font-medium transition-all flex items-center gap-1.5"
                     >
                         <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,7 +97,7 @@ async function deleteProject(id: number): Promise<void> {
                     </button>
                     <button
                         @click="viewMode = 'board'"
-                        :class="viewMode === 'board' ? 'bg-slate-700 text-white' : 'text-slate-500 hover:text-slate-300'"
+                        :class="viewMode === 'board' ? 'bg-slate-700 text-app' : 'text-slate-500 hover:text-slate-300'"
                         class="px-3 py-1.5 rounded text-xs font-medium transition-all flex items-center gap-1.5"
                     >
                         <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,7 +110,7 @@ async function deleteProject(id: number): Promise<void> {
                 <!-- New project -->
                 <Link
                     href="/projects/create"
-                    class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                    class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-app text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
                 >
                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -132,9 +132,9 @@ async function deleteProject(id: number): Promise<void> {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                 </svg>
             </div>
-            <h3 class="text-lg font-bold text-white mb-2" style="font-family: Manrope, sans-serif;">No projects yet</h3>
+            <h3 class="text-lg font-bold text-app mb-2" style="font-family: Manrope, sans-serif;">No projects yet</h3>
             <p class="text-slate-500 text-sm mb-6 max-w-xs">Create your first project to start organising work and tracking progress.</p>
-            <Link href="/projects/create" class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
+            <Link href="/projects/create" class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-app text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
                 <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -156,9 +156,9 @@ async function deleteProject(id: number): Promise<void> {
                         <span class="text-xs font-bold uppercase tracking-widest text-slate-500">{{ statusLabel[key] }}</span>
                         <span class="ml-1 text-xs text-slate-600">{{ group.length }}</span>
                     </div>
-                    <div class="rounded-xl border border-slate-800 overflow-hidden">
+                    <div class="rounded-xl border border-app overflow-hidden">
                         <!-- Column headers -->
-                        <div class="grid grid-cols-[1fr_120px_108px] px-4 py-2 bg-slate-900/60 border-b border-slate-800 text-xs text-slate-600 font-semibold uppercase tracking-wider">
+                        <div class="grid grid-cols-[1fr_120px_108px] px-4 py-2 bg-slate-900/60 border-b border-app text-xs text-slate-600 font-semibold uppercase tracking-wider">
                             <span>Project</span>
                             <span class="text-right">Status</span>
                             <span class="text-right">Actions</span>
@@ -167,7 +167,7 @@ async function deleteProject(id: number): Promise<void> {
                         <div
                             v-for="project in group"
                             :key="project.id"
-                            class="grid grid-cols-[1fr_120px_108px] items-center px-4 py-3.5 border-b last:border-0 border-slate-800/60 hover:bg-slate-800/30 transition-colors group"
+                            class="grid grid-cols-[1fr_120px_108px] items-center px-4 py-3.5 border-b last:border-0 border-app/60 hover:bg-slate-800/30 transition-colors group"
                         >
                             <div class="flex flex-col gap-0.5 min-w-0 pr-4">
                                 <Link
@@ -272,7 +272,7 @@ async function deleteProject(id: number): Promise<void> {
                         </div>
 
                         <!-- Empty column placeholder -->
-                        <div v-if="group.length === 0" class="border border-dashed border-slate-800 rounded-xl p-6 text-center">
+                        <div v-if="group.length === 0" class="border border-dashed border-app rounded-xl p-6 text-center">
                             <p class="text-xs text-slate-600">No {{ statusLabel[key].toLowerCase() }} projects</p>
                         </div>
                     </div>

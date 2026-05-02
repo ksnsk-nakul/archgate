@@ -1,33 +1,37 @@
 <script setup lang="ts">
 import { Form, Head } from '@inertiajs/vue3';
+import { ref } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { update } from '@/routes/admin/settings/app';
 
-defineProps<{
+const props = defineProps<{
     settings: {
         app_name: string;
         logo_url?: string | null;
         favicon_url?: string | null;
+        primary_color?: string | null;
     };
 }>();
+
+const brandColor = ref(props.settings.primary_color ?? '#f7600d');
 </script>
 
 <template>
     <Head title="App settings" />
 
-    <div class="flex flex-col min-h-full bg-[#051424] text-[#d4e4fa]" style="font-family: Inter, sans-serif;">
+    <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
         <!-- Toolbar -->
-        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-slate-800">
+        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
                 <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Admin</p>
-                <h1 class="text-xl font-bold text-white" style="font-family: Manrope, sans-serif;">App Settings</h1>
+                <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">App Settings</h1>
             </div>
         </div>
 
         <div class="px-6 py-6 max-w-2xl">
-            <div class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-800">
-                    <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">App details</h2>
+            <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                <div class="px-6 py-4 border-b border-app">
+                    <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">App details</h2>
                     <p class="text-xs text-slate-500 mt-0.5">Public app identity displayed across the platform.</p>
                 </div>
 
@@ -45,7 +49,7 @@ defineProps<{
                             name="app_name"
                             :value="settings.app_name"
                             required
-                            class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#f7600d] focus:ring-1 focus:ring-[#f7600d]/20 transition-colors"
+                            class="input-app rounded-lg px-4 py-2.5 text-sm border transition-colors"
                         />
                         <InputError :message="errors.app_name" />
                     </div>
@@ -86,11 +90,47 @@ defineProps<{
                         <InputError :message="errors.favicon" />
                     </div>
 
+                    <!-- Brand colour -->
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Brand colour</label>
+                        <div class="flex items-center gap-3">
+                            <!-- Native colour picker -->
+                            <div class="relative shrink-0">
+                                <input
+                                    v-model="brandColor"
+                                    type="color"
+                                    name="primary_color"
+                                    class="size-10 rounded-lg border-2 border-app cursor-pointer bg-transparent p-0.5"
+                                    title="Pick brand colour"
+                                />
+                            </div>
+                            <!-- Hex input -->
+                            <input
+                                v-model="brandColor"
+                                name="primary_color"
+                                type="text"
+                                maxlength="7"
+                                placeholder="#f7600d"
+                                class="input-app w-32 rounded-lg px-3 py-2 text-sm font-mono border transition-colors"
+                            />
+                            <!-- Live swatch -->
+                            <div
+                                class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-app text-xs font-semibold"
+                                :style="{ background: brandColor + '1a', color: brandColor, borderColor: brandColor + '33' }"
+                            >
+                                <div class="size-3 rounded-full" :style="{ background: brandColor }" />
+                                Active colour
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-600">Used for buttons, active states, and highlights across the app.</p>
+                        <InputError :message="errors.primary_color" />
+                    </div>
+
                     <div class="pt-2">
                         <button
                             type="submit"
                             :disabled="processing"
-                            class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                            class="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
                         >
                             <svg v-if="processing" class="size-4 animate-spin" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>

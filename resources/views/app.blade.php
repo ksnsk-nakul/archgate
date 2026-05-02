@@ -25,14 +25,35 @@
             })();
         </script>
 
-        {{-- Inline style to set the HTML background color based on our theme in app.css --}}
+        {{-- Brand primary color from app settings + light/dark base backgrounds --}}
         <style nonce="{{ Vite::cspNonce() }}">
-            html {
-                background-color: oklch(1 0 0);
+            :root {
+                --primary: {{ $appSettings['primary_color'] ?? '#f7600d' }};
+                --primary-hover: color-mix(in srgb, var(--primary) 85%, black);
+                --primary-dim:   color-mix(in srgb, var(--primary) 10%, transparent);
+                --primary-border: color-mix(in srgb, var(--primary) 20%, transparent);
+
+                /* Light mode app-surface tokens */
+                --app-bg:        #f8fafc;
+                --app-surface:   #ffffff;
+                --app-elevated:  #f1f5f9;
+                --app-text:      #0f172a;
+                --app-muted:     #64748b;
+                --app-border:    #e2e8f0;
             }
 
             html.dark {
-                background-color: oklch(0.145 0 0);
+                /* Dark mode app-surface tokens */
+                --app-bg:        #051424;
+                --app-surface:   #0d1c2d;
+                --app-elevated:  #0a1929;
+                --app-text:      #d4e4fa;
+                --app-muted:     #64748b;
+                --app-border:    #1e293b;
+            }
+
+            html {
+                background-color: var(--app-bg);
             }
         </style>
 

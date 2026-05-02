@@ -29,27 +29,27 @@ defineProps<{
 <template>
     <Head title="Third-party settings" />
 
-    <div class="flex flex-col min-h-full bg-[#051424] text-[#d4e4fa]" style="font-family: Inter, sans-serif;">
+    <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
         <!-- Toolbar -->
-        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-slate-800">
+        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
                 <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Admin</p>
-                <h1 class="text-xl font-bold text-white" style="font-family: Manrope, sans-serif;">Third-party Settings</h1>
+                <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">Third-party Settings</h1>
             </div>
         </div>
 
         <Form v-bind="update.form()" class="px-6 py-6 flex flex-col gap-6 max-w-3xl" v-slot="{ errors, processing }">
 
             <!-- Mail -->
-            <div class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-800 flex items-center gap-3">
+            <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                <div class="px-6 py-4 border-b border-app flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
                         <svg class="size-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
                     </div>
                     <div>
-                        <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">Mail</h2>
+                        <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Mail</h2>
                         <p class="text-xs text-slate-500">SMTP / transactional email configuration</p>
                     </div>
                 </div>
@@ -107,15 +107,15 @@ defineProps<{
             </div>
 
             <!-- SMS / Twilio -->
-            <div class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-800 flex items-center gap-3">
+            <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                <div class="px-6 py-4 border-b border-app flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
                         <svg class="size-4 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                         </svg>
                     </div>
                     <div>
-                        <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">SMS — Twilio</h2>
+                        <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">SMS — Twilio</h2>
                         <p class="text-xs text-slate-500">Twilio account credentials for SMS sending</p>
                     </div>
                 </div>
@@ -148,15 +148,15 @@ defineProps<{
             </div>
 
             <!-- Payments -->
-            <div class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-800 flex items-center gap-3">
+            <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                <div class="px-6 py-4 border-b border-app flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
                         <svg class="size-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                         </svg>
                     </div>
                     <div>
-                        <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">Payments</h2>
+                        <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Payments</h2>
                         <p class="text-xs text-slate-500">Stripe and Razorpay payment gateway credentials</p>
                     </div>
                 </div>
@@ -218,7 +218,7 @@ defineProps<{
                 <button
                     type="submit"
                     :disabled="processing"
-                    class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                    class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-app text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
                 >
                     <svg v-if="processing" class="size-4 animate-spin" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
