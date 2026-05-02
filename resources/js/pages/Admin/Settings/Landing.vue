@@ -32,15 +32,15 @@ const defaultEnabled: Record<PageKey, boolean> = {
     contact: true, 'library-preview': true, 'footer-nav': true,
 };
 
-const pageList = [
-    { key: 'home' as PageKey,            label: 'Home',            desc: 'Hero, services teaser, call-to-action', href: '/',                icon: 'home',   always: true },
-    { key: 'services' as PageKey,        label: 'Services',        desc: 'Feature / services grid',               href: '/services',         icon: 'grid' },
-    { key: 'about' as PageKey,           label: 'About',           desc: 'Rich text about section',               href: '/about',            icon: 'info' },
-    { key: 'careers' as PageKey,         label: 'Careers',         desc: 'Open job listings',                     href: '/careers',          icon: 'work' },
-    { key: 'contact' as PageKey,         label: 'Contact',         desc: 'Contact info + lead capture form',      href: '/contact',          icon: 'mail' },
-    { key: 'library-preview' as PageKey, label: 'Library Preview', desc: 'Public library item listing',           href: '/library-preview',  icon: 'book' },
-    { key: 'footer-nav' as PageKey,      label: 'Footer & Nav',    desc: 'Navigation links + footer text',        href: null,                icon: 'layout' },
-];
+const pageList = ref<PageDef[]>([
+    { key: 'home',            label: 'Home',            desc: 'Hero, services teaser, call-to-action', href: '/',                icon: 'home',   always: true },
+    { key: 'services',        label: 'Services',        desc: 'Feature / services grid',               href: '/services',         icon: 'grid' },
+    { key: 'about',           label: 'About',           desc: 'Rich text about section',               href: '/about',            icon: 'info' },
+    { key: 'careers',         label: 'Careers',         desc: 'Open job listings',                     href: '/careers',          icon: 'work' },
+    { key: 'contact',         label: 'Contact',         desc: 'Contact info + lead capture form',      href: '/contact',          icon: 'mail' },
+    { key: 'library-preview', label: 'Library Preview', desc: 'Public library item listing',           href: '/library-preview',  icon: 'book' },
+    { key: 'footer-nav',      label: 'Footer & Nav',    desc: 'Navigation links + footer text',        href: null,                icon: 'layout' },
+]);
 
 const pageEnabled = ref<Record<PageKey, boolean>>({
     'home': true,
