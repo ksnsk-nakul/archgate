@@ -299,52 +299,6 @@ const pageIconPaths: Record<string, string> = {
             </div>
         </div>
 
-        <!-- ── Toggle confirmation dialog ──────────────────────────────────── -->
-        <Teleport to="body">
-            <div v-if="confirmDialog" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-                <div class="bg-app-surface border border-app rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="size-10 rounded-xl flex items-center justify-center shrink-0"
-                             :class="confirmDialog.enabling ? 'bg-emerald-500/10' : 'bg-red-500/10'">
-                            <svg class="size-5" :class="confirmDialog.enabling ? 'text-emerald-400' : 'text-red-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path v-if="confirmDialog.enabling" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">
-                                {{ confirmDialog.enabling ? 'Enable page?' : 'Disable page?' }}
-                            </p>
-                            <p class="text-xs text-app-muted mt-0.5">
-                                {{ pageList.find((p) => p.key === confirmDialog.pageKey)?.label }} · {{ pageList.find((p) => p.key === confirmDialog.pageKey)?.href }}
-                            </p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-app-muted mb-6">
-                        {{ confirmDialog.enabling
-                            ? 'This page will become publicly accessible immediately.'
-                            : 'This page will be hidden from public visitors immediately.' }}
-                    </p>
-                    <div class="flex items-center gap-3">
-                        <button
-                            @click="confirmToggle"
-                            class="flex-1 text-sm font-semibold py-2.5 rounded-lg transition-colors"
-                            :class="confirmDialog.enabling
-                                ? 'bg-emerald-500 hover:bg-emerald-400 text-app'
-                                : 'bg-red-500/80 hover:bg-red-500 text-app'"
-                        >
-                            {{ confirmDialog.enabling ? 'Enable' : 'Disable' }}
-                        </button>
-                        <button
-                            @click="cancelToggle"
-                            class="flex-1 text-sm font-semibold py-2.5 rounded-lg border border-app text-app-muted hover:text-white hover:border-slate-500 transition-colors"
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </Teleport>
         <!-- ═══════════════════════════════════════════════════════════════════ -->
         <!-- PAGE EDITOR VIEW                                                    -->
         <!-- ═══════════════════════════════════════════════════════════════════ -->
