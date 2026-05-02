@@ -294,7 +294,27 @@ class ModulePageController extends Controller
             'subscriptions' => SubscriptionResource::collection(
                 $request->user()->subscriptions()->with('plan')->latest()->get()
             ),
+            'canCreate' => $request->user()?->hasRole('superadmin')
+                || $request->user()?->hasRole('admin')
+                || $request->user()?->hasPermission('library.create'),
         ]);
+    }
+
+    public function createLibraryItem(): Response
+    {
+        return Inertia::render('Library/Create');
+    }
+
+    public function storeLibraryItem(Request $request): RedirectResponse
+    {
+        LibraryContent::create($request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'type' => ['required', 'string', 'in:article,video,pdf,audio'],
+            'description' => ['nullable', 'string'],
+            'access_level' => ['sometimes', 'string', 'in:free,basic,premium'],
+        ]));
+
+        return to_route('app.library.index');
     }
 
     public function courses(Request $request): Response
@@ -309,7 +329,31 @@ class ModulePageController extends Controller
                     ->latest()
                     ->get()
             ),
+            'canCreate' => $request->user()?->hasRole('superadmin')
+                || $request->user()?->hasRole('admin')
+                || $request->user()?->hasPermission('courses.create'),
         ]);
+    }
+
+    public function createCourse(): Response
+    {
+        return Inertia::render('Courses/Create');
+    }
+
+    public function storeCourse(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'status' => ['sometimes', 'string', 'in:draft,published,archived'],
+        ]);
+
+        $course = Course::create([
+            ...$validated,
+            'instructor_id' => $request->user()->id,
+        ]);
+
+        return to_route('app.courses.show', $course);
     }
 
     public function showCourse(Request $request, Course $course): Response

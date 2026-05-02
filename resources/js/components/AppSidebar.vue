@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
 import {
-    BookOpen,
+    // BookOpen,
     BriefcaseBusiness,
     CircleDollarSign,
-    FolderGit2,
+    // FolderGit2,
     Globe,
     GraduationCap,
     LayoutGrid,
@@ -64,8 +64,8 @@ const adminNavItems: NavItem[] = [
 ];
 
 const footerNavItems: NavItem[] = [
-    { title: 'Repository', href: 'https://github.com/laravel/vue-starter-kit', icon: FolderGit2 },
-    { title: 'Documentation', href: 'https://laravel.com/docs/starter-kits#vue', icon: BookOpen },
+    // { title: 'Repository', href: 'https://github.com/laravel/vue-starter-kit', icon: FolderGit2 },
+    // { title: 'Documentation', href: 'https://laravel.com/docs/starter-kits#vue', icon: BookOpen },
 ];
 </script>
 

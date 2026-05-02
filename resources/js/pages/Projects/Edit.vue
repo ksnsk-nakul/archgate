@@ -1,57 +1,97 @@
 <script setup lang="ts">
 import { Form, Head, router } from '@inertiajs/vue3';
+import { ArrowLeft } from 'lucide-vue-next';
 import InputError from '@/components/InputError.vue';
-import PageHeader from '@/components/PageHeader.vue';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { update } from '@/routes/app/projects';
 import type { Project } from '@/stores/useProjectStore';
 
 defineProps<{
-    project: {
-        data: Project;
-    };
+    project: { data: Project };
 }>();
 </script>
 
 <template>
     <Head title="Edit project" />
 
-    <Form
-        v-bind="update.form(project.data)"
-        class="flex max-w-2xl flex-col gap-6 p-4"
-        v-slot="{ errors, processing }"
-    >
-        <PageHeader title="Edit project" description="Update status and project summary." />
-
-        <div class="grid gap-2">
-            <Label for="name">Name</Label>
-            <Input id="name" name="name" :default-value="project.data.name" required />
-            <InputError :message="errors.name" />
+    <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
+        <div class="flex items-center gap-3 px-6 py-4 border-b border-app">
+            <button
+                type="button"
+                class="flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-app border border-app hover:border-slate-600 px-3 py-2 rounded-lg transition-colors"
+                @click="router.visit(`/projects/${project.data.id}`)"
+            >
+                <ArrowLeft class="size-3.5" /> Back
+            </button>
+            <div>
+                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Projects</p>
+                <h1 class="text-xl font-bold text-app truncate max-w-sm" style="font-family: Manrope, sans-serif;">Edit: {{ project.data.name }}</h1>
+            </div>
         </div>
 
-        <div class="grid gap-2">
-            <Label for="description">Description</Label>
-            <Input id="description" name="description" :default-value="project.data.description ?? ''" />
-            <InputError :message="errors.description" />
-        </div>
+        <Form v-bind="update.form(project.data)" class="px-6 py-6 max-w-2xl flex flex-col gap-5" v-slot="{ errors, processing }">
+            <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                <div class="px-6 py-4 border-b border-app">
+                    <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Project details</h2>
+                </div>
+                <div class="px-6 py-5 flex flex-col gap-4">
+                    <div class="flex flex-col gap-2">
+                        <label for="name" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Name <span class="text-red-400">*</span></label>
+                        <input
+                            id="name"
+                            name="name"
+                            :default-value="project.data.name"
+                            required
+                            class="input-app rounded-lg px-4 py-2.5 text-sm border transition-colors"
+                            :class="{ 'border-red-500': errors.name }"
+                        />
+                        <InputError :message="errors.name" />
+                    </div>
 
-        <div class="grid gap-2">
-            <Label for="status">Status</Label>
-            <select id="status" name="status" class="h-10 rounded-md border bg-background px-3 text-sm">
-                <option value="active" :selected="project.data.status === 'active'">Active</option>
-                <option value="completed" :selected="project.data.status === 'completed'">Completed</option>
-                <option value="archived" :selected="project.data.status === 'archived'">Archived</option>
-            </select>
-            <InputError :message="errors.status" />
-        </div>
+                    <div class="flex flex-col gap-2">
+                        <label for="description" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Description</label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="3"
+                            :default-value="project.data.description ?? ''"
+                            class="input-app rounded-lg px-4 py-2.5 text-sm border transition-colors resize-none"
+                        />
+                        <InputError :message="errors.description" />
+                    </div>
 
-        <div class="flex gap-3">
-            <Button type="submit" :disabled="processing">Save project</Button>
-            <Button variant="outline" type="button" @click="router.visit(`/projects/${project.data.id}`)">
-                Cancel
-            </Button>
-        </div>
-    </Form>
+                    <div class="flex flex-col gap-2">
+                        <label for="status" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</label>
+                        <select
+                            id="status"
+                            name="status"
+                            class="input-app rounded-lg px-4 py-2.5 text-sm border transition-colors"
+                        >
+                            <option value="active" :selected="project.data.status === 'active'">Active</option>
+                            <option value="completed" :selected="project.data.status === 'completed'">Completed</option>
+                            <option value="archived" :selected="project.data.status === 'archived'">Archived</option>
+                        </select>
+                        <InputError :message="errors.status" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button
+                    type="submit"
+                    :disabled="processing"
+                    class="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                >
+                    <svg v-if="processing" class="size-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                    {{ processing ? 'Saving…' : 'Save project' }}
+                </button>
+                <button
+                    type="button"
+                    class="text-xs font-semibold text-slate-400 border border-app hover:text-app hover:border-slate-600 px-4 py-2.5 rounded-lg transition-colors"
+                    @click="router.visit(`/projects/${project.data.id}`)"
+                >
+                    Cancel
+                </button>
+            </div>
+        </Form>
+    </div>
 </template>
