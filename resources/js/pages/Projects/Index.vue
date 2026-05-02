@@ -132,8 +132,8 @@ async function deleteProject(id: number): Promise<void> {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                 </svg>
             </div>
-            <h3 class="text-lg font-bold text-app mb-2" style="font-family: Manrope, sans-serif;">No projects yet</h3>
-            <p class="text-app-muted text-sm mb-6 max-w-xs">Create your first project to start organising work and tracking progress.</p>
+            <h3 class="text-lg font-bold text-white mb-2" style="font-family: Manrope, sans-serif;">No projects yet</h3>
+            <p class="text-slate-500 text-sm mb-6 max-w-xs">Create your first project to start organising work and tracking progress.</p>
             <Link href="/projects/create" class="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
                 <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -172,7 +172,7 @@ async function deleteProject(id: number): Promise<void> {
                             <div class="flex flex-col gap-0.5 min-w-0 pr-4">
                                 <Link
                                     :href="`/projects/${project.id}`"
-                                    class="text-sm font-semibold text-app hover:text-[var(--primary)] transition-colors truncate"
+                                    class="text-sm font-semibold text-slate-100 hover:text-[var(--primary)] transition-colors truncate"
                                 >
                                     {{ project.name }}
                                 </Link>
@@ -205,7 +205,7 @@ async function deleteProject(id: number): Promise<void> {
                                 </button>
                                 <Link
                                     :href="`/projects/${project.id}`"
-                                    class="p-1.5 rounded text-app-muted hover:text-[var(--primary)] hover:bg-[var(--primary)]/10 transition-colors"
+                                    class="p-1.5 rounded text-slate-500 hover:text-[var(--primary)] hover:bg-orange-500/10 transition-colors"
                                     title="Open"
                                 >
                                     <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -237,7 +237,7 @@ async function deleteProject(id: number): Promise<void> {
                             <div class="flex items-start justify-between gap-2 mb-2">
                                 <Link
                                     :href="`/projects/${project.id}`"
-                                    class="text-sm font-semibold text-app hover:text-[var(--primary)] transition-colors leading-snug"
+                                    class="text-sm font-semibold text-slate-100 hover:text-[var(--primary)] transition-colors leading-snug"
                                 >
                                     {{ project.name }}
                                 </Link>

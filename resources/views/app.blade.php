@@ -25,9 +25,7 @@
             })();
         </script>
 
-        {{-- Stitch Vibrant Professionalism theme tokens + brand primary --}}
-        {{-- NOTE: useTheme composable overrides --primary at runtime so all  --}}
-        {{-- derived tokens (--accent, --ring, --sidebar-*) update reactively --}}
+        {{-- Inline style to set the HTML background color and primary theme colour --}}
         <style nonce="{{ Vite::cspNonce() }}">
             :root {
                 /* ── Brand primary (per-tenant from DB) ─────────────────── */
@@ -52,7 +50,12 @@
                 --app-border:    #1e293b;
             }
 
-            html { background-color: var(--app-bg); }
+            :root {
+                --primary: {{ $appSettings['primary_color'] ?? '#f7600d' }};
+                --primary-hover: color-mix(in srgb, var(--primary) 85%, black);
+                --primary-dim: color-mix(in srgb, var(--primary) 10%, transparent);
+                --primary-border: color-mix(in srgb, var(--primary) 20%, transparent);
+            }
         </style>
 
         <link rel="icon" href="{{ $appSettings['favicon_url'] ?? '/favicon.ico' }}" sizes="any">

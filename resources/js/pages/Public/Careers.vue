@@ -21,7 +21,7 @@ const careers = computed<Career[]>(() => {
     <!-- Hero -->
     <section class="py-20 px-6 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 60%, #051424 100%);">
         <div class="max-w-3xl mx-auto">
-            <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6" style="background-color: color-mix(in srgb, var(--primary) 10%, transparent); border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent); color: var(--primary);">Careers</span>
+            <span class="inline-flex items-center gap-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6">Careers</span>
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight" style="font-family: Manrope, sans-serif;">Join our team</h1>
             <p class="text-lg text-slate-400">Build something that matters. We're looking for passionate people.</p>
         </div>
@@ -46,15 +46,12 @@ const careers = computed<Career[]>(() => {
                 <div
                     v-for="(job, i) in careers"
                     :key="i"
-                    class="group rounded-2xl border border-slate-800 bg-[#0d1c2d] p-6 transition-colors"
-                    style="transition: border-color 0.15s;"
-                    @mouseover="($event.currentTarget as HTMLElement).style.borderColor='color-mix(in srgb, var(--primary) 30%, transparent)'"
-                    @mouseleave="($event.currentTarget as HTMLElement).style.borderColor=''"
+                    class="group rounded-2xl border border-slate-800 bg-[#0d1c2d] p-6 hover:border-[var(--primary)]/30 transition-colors"
                 >
                     <div class="flex items-start justify-between gap-4 mb-3">
                         <h3 class="text-lg font-bold text-white" style="font-family: Manrope, sans-serif;">{{ job.title }}</h3>
                         <div class="flex items-center gap-2 shrink-0">
-                            <span v-if="job.type" class="text-xs font-semibold px-2.5 py-1 rounded-full" style="color: var(--primary); background-color: color-mix(in srgb, var(--primary) 10%, transparent); border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);">{{ job.type }}</span>
+                            <span v-if="job.type" class="text-xs font-semibold text-[var(--primary)] bg-[var(--primary)]/10 border border-[var(--primary)]/20 px-2.5 py-1 rounded-full">{{ job.type }}</span>
                         </div>
                     </div>
                     <div class="flex items-center gap-3 mb-4">
@@ -64,7 +61,7 @@ const careers = computed<Career[]>(() => {
                         </span>
                     </div>
                     <p v-if="job.description" class="text-sm text-slate-400 leading-relaxed mb-5">{{ job.description }}</p>
-                    <a href="/contact" class="inline-flex items-center gap-2 text-sm font-semibold transition-colors" style="color: var(--primary);">
+                    <a href="/contact" class="inline-flex items-center gap-2 text-sm font-semibold text-[var(--primary)] hover:text-orange-400 transition-colors">
                         Apply for this role
                         <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                     </a>

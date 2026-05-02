@@ -116,7 +116,7 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
         <Form v-bind="update.form(role.data)" class="px-6 py-6 flex flex-col gap-5" v-slot="{ processing }">
 
             <!-- Role summary banner -->
-            <div class="rounded-xl border border-app bg-app-surface px-6 py-4 flex items-center gap-4">
+            <div class="rounded-xl border border-slate-800 bg-[#0d1c2d] px-6 py-4 flex items-center gap-4">
                 <div class="w-10 h-10 rounded-xl bg-[var(--primary)]/10 border border-[var(--primary)]/20 flex items-center justify-center shrink-0">
                     <svg class="size-5 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -144,7 +144,7 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                     <span class="ml-auto text-xs px-2 py-0.5 rounded-full transition-colors"
                           :class="group.permissions.some(p => checkedIds.has(p.id))
                               ? 'text-[var(--primary)]/80 bg-[var(--primary)]/10'
-                              : 'text-app-muted bg-app-elevated'">
+                              : 'text-slate-600 bg-slate-800'">
                         {{ group.permissions.filter(p => checkedIds.has(p.id)).length }} / {{ group.permissions.length }}
                     </span>
                 </div>
@@ -154,11 +154,9 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                         v-for="permission in group.permissions"
                         :key="permission.id"
                         class="flex items-start gap-3 rounded-lg border p-3.5 cursor-pointer transition-all select-none"
-                        :class="{
-                            'border-[var(--primary)]/30 bg-[var(--primary)]/5': checkState(permission.id) === 'checked',
-                            'border-app bg-app-elevated/20': checkState(permission.id) === 'was-on',
-                            'border-app hover:border-app hover:bg-app-elevated/30': checkState(permission.id) === 'unchecked',
-                        }"
+                        :class="checkedIds.has(permission.id)
+                            ? 'border-[var(--primary)]/30 bg-[var(--primary)]/5'
+                            : 'border-slate-800 hover:border-slate-700 hover:bg-slate-800/30'"
                         @click.prevent="togglePermission(permission.id)"
                     >
                         <!-- Hidden real checkbox for form submission -->
@@ -174,8 +172,10 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                         <div class="mt-0.5 shrink-0">
                             <!-- CHECKED: solid orange with tick -->
                             <div
-                                v-if="checkState(permission.id) === 'checked'"
-                                class="size-4 rounded border-2 bg-[var(--primary)] border-[var(--primary)] shadow-[0_0_8px_rgba(247,96,13,0.4)] flex items-center justify-center transition-all duration-150"
+                                class="size-4 rounded border-2 flex items-center justify-center transition-all duration-150"
+                                :class="checkedIds.has(permission.id)
+                                    ? 'bg-[var(--primary)] border-[var(--primary)] shadow-[0_0_8px_rgba(247,96,13,0.4)]'
+                                    : 'border-slate-600 bg-slate-900 hover:border-slate-500'"
                             >
                                 <svg class="size-2.5 text-app" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7" />
@@ -207,10 +207,7 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                                 {{ permission.name }}
                             </p>
                             <p class="text-xs font-mono mt-0.5"
-                               :class="{
-                                   'text-[var(--primary)]/70': checkState(permission.id) === 'checked',
-                                   'text-app-muted': checkState(permission.id) !== 'checked',
-                               }">
+                               :class="checkedIds.has(permission.id) ? 'text-[var(--primary)]/70' : 'text-slate-600'">
                                 {{ permission.slug }}
                             </p>
                             <!-- "Was enabled" hint -->
@@ -226,8 +223,8 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
             <div class="flex items-center gap-4 pb-4">
                 <button
                     type="submit"
-                    :disabled="processing || !hasChanges"
-                    class="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] disabled:opacity-40 disabled:cursor-not-allowed text-app text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                    :disabled="processing"
+                    class="flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
                 >
                     <svg v-if="processing" class="size-4 animate-spin" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>

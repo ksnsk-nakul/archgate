@@ -74,16 +74,25 @@ function confirmToggle() {
     });
 }
 
-// ── Page reordering ───────────────────────────────────────────────────────────
-function movePage(index: number, direction: -1 | 1) {
-    const target = index + direction;
-    if (target < 0 || target >= pageList.value.length) { return; }
-    if (pageList.value[index].always || pageList.value[index].key === 'footer-nav') { return; }
-    if (pageList.value[target].always || pageList.value[target].key === 'footer-nav') { return; }
-    const copy = [...pageList.value];
-    [copy[index], copy[target]] = [copy[target], copy[index]];
-    pageList.value = copy;
-}
+const pageList = [
+    { key: 'home' as PageKey,            label: 'Home',            desc: 'Hero, services teaser, call-to-action', href: '/',                icon: 'home',   always: true },
+    { key: 'services' as PageKey,        label: 'Services',        desc: 'Feature / services grid',               href: '/services',         icon: 'grid' },
+    { key: 'about' as PageKey,           label: 'About',           desc: 'Rich text about section',               href: '/about',            icon: 'info' },
+    { key: 'careers' as PageKey,         label: 'Careers',         desc: 'Open job listings',                     href: '/careers',          icon: 'work' },
+    { key: 'contact' as PageKey,         label: 'Contact',         desc: 'Contact info + lead capture form',      href: '/contact',          icon: 'mail' },
+    { key: 'library-preview' as PageKey, label: 'Library Preview', desc: 'Public library item listing',           href: '/library-preview',  icon: 'book' },
+    { key: 'footer-nav' as PageKey,      label: 'Footer & Nav',    desc: 'Navigation links + footer text',        href: null,                icon: 'layout' },
+];
+
+const pageEnabled = ref<Record<PageKey, boolean>>({
+    'home': true,
+    'services': props.settings.page_enabled?.['services'] ?? true,
+    'about': props.settings.page_enabled?.['about'] ?? true,
+    'careers': props.settings.page_enabled?.['careers'] ?? true,
+    'contact': props.settings.page_enabled?.['contact'] ?? true,
+    'library-preview': props.settings.page_enabled?.['library-preview'] ?? true,
+    'footer-nav': props.settings.page_enabled?.['footer-nav'] ?? true,
+});
 
 // Active page (null = show page list)
 const activePage = ref<PageKey | null>(null);
@@ -91,6 +100,36 @@ const showPreview = ref(true);
 
 const previewPages = new Set<PageKey>(['home', 'services', 'about', 'careers']);
 const hasPreview = computed(() => showPreview.value && activePage.value !== null && previewPages.has(activePage.value));
+
+// ── Confirmation dialog state ────────────────────────────────────────────────
+const confirmDialog = ref<{ open: boolean; pageKey: PageKey | null; enabling: boolean }>({
+    open: false, pageKey: null, enabling: false,
+});
+
+function requestToggle(key: PageKey): void {
+    confirmDialog.value = { open: true, pageKey: key, enabling: !pageEnabled.value[key] };
+}
+
+function cancelToggle(): void {
+    confirmDialog.value = { open: false, pageKey: null, enabling: false };
+}
+
+function confirmToggle(): void {
+    const key = confirmDialog.value.pageKey;
+    if (!key) { return; }
+
+    pageEnabled.value[key] = confirmDialog.value.enabling;
+    confirmDialog.value = { open: false, pageKey: null, enabling: false };
+
+    // Persist immediately to DB
+    router.put('/admin/settings/landing', {
+        page_enabled: { ...pageEnabled.value },
+    } as Record<string, unknown>, {
+        preserveScroll: true,
+        preserveState: true,
+        only: [],
+    });
+}
 
 // ── Field state ───────────────────────────────────────────────────────────────
 const heroTitle      = ref(props.settings.hero_title ?? '');
@@ -175,7 +214,7 @@ const pageIconPaths: Record<string, string> = {
                     v-if="activePage !== null && previewPages.has(activePage)"
                     @click="showPreview = !showPreview"
                     class="flex items-center gap-2 text-sm border px-4 py-2 rounded-lg transition-colors"
-                    :class="showPreview ? 'text-[var(--primary)] border-[var(--primary)]/40 bg-[var(--primary)]/5' : 'text-app-muted border-app hover:text-slate-200'"
+                    :class="showPreview ? 'text-[var(--primary)] border-[var(--primary)]/40 bg-[var(--primary)]/5' : 'text-slate-400 border-slate-700 hover:text-slate-200'"
                 >
                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -212,23 +251,32 @@ const pageIconPaths: Record<string, string> = {
                     :key="pg.key"
                     class="flex items-center gap-3 px-4 py-3 hover:bg-app-elevated/30 transition-colors group"
                 >
-                    <!-- Reorder arrows (only moveable pages) -->
-                    <div class="flex flex-col gap-0.5 shrink-0 w-5">
+                    <!-- Page icon + title -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="size-9 rounded-xl bg-slate-800 flex items-center justify-center shrink-0 group-hover:bg-[var(--primary)]/10 transition-colors">
+                                <svg class="size-4 text-slate-400 group-hover:text-[var(--primary)] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="pageIconPaths[pg.icon]" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">{{ pg.label }}</p>
+                                <p class="text-xs text-slate-500 mt-0.5">{{ pg.desc }}</p>
+                            </div>
+                        </div>
+                        <!-- Enabled toggle (not for Home) -->
                         <button
-                            v-if="!pg.always && pg.key !== 'footer-nav'"
-                            @click="movePage(index, -1)"
-                            :disabled="index <= 1"
-                            class="text-slate-700 hover:text-app-muted disabled:opacity-20 disabled:cursor-default transition-colors"
-                            title="Move up"
+                            v-if="!pg.always"
+                            @click="requestToggle(pg.key)"
+                            :title="pageEnabled[pg.key] ? 'Disable page' : 'Enable page'"
+                            class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200"
+                            :class="pageEnabled[pg.key] ? 'bg-[var(--primary)]' : 'bg-slate-700'"
                         >
                             <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" /></svg>
                         </button>
                         <button
-                            v-if="!pg.always && pg.key !== 'footer-nav'"
-                            @click="movePage(index, 1)"
-                            :disabled="index >= pageList.length - 2"
-                            class="text-slate-700 hover:text-app-muted disabled:opacity-20 disabled:cursor-default transition-colors"
-                            title="Move down"
+                            @click="activePage = pg.key"
+                            class="flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold text-[var(--primary)] border border-[var(--primary)]/30 hover:bg-[var(--primary)]/5 py-1.5 rounded-lg transition-colors"
                         >
                             <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
                         </button>
@@ -360,16 +408,16 @@ const pageIconPaths: Record<string, string> = {
                     </div>
                     <div class="px-6 py-6 flex flex-col gap-5">
                         <div class="flex flex-col gap-2">
-                            <label class="text-xs font-semibold text-app-muted uppercase tracking-wider">Headline</label>
-                            <input v-model="heroTitle" class="bg-app-elevated border border-app rounded-lg px-4 py-2.5 text-sm text-app placeholder:text-app-muted focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors" placeholder="Build, Learn & Grow..." />
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Headline</label>
+                            <input v-model="heroTitle" class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors" placeholder="Build, Learn & Grow..." />
                         </div>
                         <div class="flex flex-col gap-2">
                             <label class="text-xs font-semibold text-app-muted uppercase tracking-wider">Subheadline</label>
                             <RichEditor v-model="heroSubtitle" placeholder="The all-in-one platform..." minHeight="90px" />
                         </div>
                         <div class="flex flex-col gap-2">
-                            <label class="text-xs font-semibold text-app-muted uppercase tracking-wider">CTA Button Label</label>
-                            <input v-model="ctaLabel" class="bg-app-elevated border border-app rounded-lg px-4 py-2.5 text-sm text-app placeholder:text-app-muted focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors" placeholder="Get started free" />
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">CTA Button Label</label>
+                            <input v-model="ctaLabel" class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors" placeholder="Get started free" />
                         </div>
                     </div>
                 </div>
@@ -391,28 +439,18 @@ const pageIconPaths: Record<string, string> = {
                         <div v-for="(svc, i) in services" :key="i" class="rounded-lg border border-app p-4 flex flex-col gap-3">
                             <div class="flex items-center gap-3">
                                 <div class="flex flex-col gap-1 flex-1">
-                                    <label class="text-xs text-app-muted uppercase tracking-wider">Icon name</label>
-                                    <input v-model="svc.icon" placeholder="briefcase" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-app placeholder-slate-600 focus:outline-none focus:border-[var(--primary)]" />
+                                    <label class="text-xs text-slate-500 uppercase tracking-wider">Icon name</label>
+                                    <input v-model="svc.icon" placeholder="briefcase" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)]" />
                                 </div>
                                 <div class="flex flex-col gap-1 flex-1">
-                                    <label class="text-xs text-app-muted uppercase tracking-wider">Title</label>
-                                    <input v-model="svc.title" placeholder="Project Management" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-app placeholder-slate-600 focus:outline-none focus:border-[var(--primary)]" />
+                                    <label class="text-xs text-slate-500 uppercase tracking-wider">Title</label>
+                                    <input v-model="svc.title" placeholder="Project Management" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)]" />
                                 </div>
                                 <button @click="removeService(i)" class="self-end mb-1 text-app-muted hover:text-red-400 transition-colors">
                                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>
-                            <textarea v-model="svc.body" rows="2" placeholder="Description..." class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-app placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] resize-none" />
-                            <!-- Link to section -->
-                            <div class="flex items-center gap-3">
-                                <div class="flex flex-col gap-1 flex-1">
-                                    <label class="text-xs text-app-muted uppercase tracking-wider">Link to page (optional)</label>
-                                    <select v-model="svc.link_to" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-app focus:outline-none focus:border-[var(--primary)]">
-                                        <option v-for="opt in linkablePages" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
-                                    </select>
-                                </div>
-                                <p v-if="svc.link_to" class="text-xs text-[var(--primary)]/70 mt-4 font-mono">→ {{ svc.link_to }}</p>
-                            </div>
+                            <textarea v-model="svc.body" rows="2" placeholder="Description..." class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] resize-none" />
                         </div>
                     </div>
                 </div>
@@ -445,32 +483,22 @@ const pageIconPaths: Record<string, string> = {
                         <div v-for="(job, i) in careers" :key="i" class="rounded-lg border border-app p-4 flex flex-col gap-3">
                             <div class="flex items-start gap-3">
                                 <div class="flex flex-col gap-1 flex-1">
-                                    <label class="text-xs text-app-muted uppercase tracking-wider">Job title</label>
-                                    <input v-model="job.title" placeholder="Senior Developer" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-app placeholder-slate-600 focus:outline-none focus:border-[var(--primary)]" />
+                                    <label class="text-xs text-slate-500 uppercase tracking-wider">Job title</label>
+                                    <input v-model="job.title" placeholder="Senior Developer" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)]" />
                                 </div>
                                 <div class="flex flex-col gap-1 w-28">
-                                    <label class="text-xs text-app-muted uppercase tracking-wider">Location</label>
-                                    <input v-model="job.location" placeholder="Remote" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-app placeholder-slate-600 focus:outline-none focus:border-[var(--primary)]" />
+                                    <label class="text-xs text-slate-500 uppercase tracking-wider">Location</label>
+                                    <input v-model="job.location" placeholder="Remote" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)]" />
                                 </div>
                                 <div class="flex flex-col gap-1 w-24">
-                                    <label class="text-xs text-app-muted uppercase tracking-wider">Type</label>
-                                    <input v-model="job.type" placeholder="Full-time" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-app placeholder-slate-600 focus:outline-none focus:border-[var(--primary)]" />
+                                    <label class="text-xs text-slate-500 uppercase tracking-wider">Type</label>
+                                    <input v-model="job.type" placeholder="Full-time" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)]" />
                                 </div>
                                 <button @click="removeCareer(i)" class="self-end mb-1 text-app-muted hover:text-red-400 transition-colors">
                                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>
-                            <textarea v-model="job.description" rows="2" placeholder="Role description..." class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-app placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] resize-none" />
-                            <!-- Link to section -->
-                            <div class="flex items-center gap-3">
-                                <div class="flex flex-col gap-1 flex-1">
-                                    <label class="text-xs text-app-muted uppercase tracking-wider">Link to page (optional)</label>
-                                    <select v-model="job.link_to" class="bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-app focus:outline-none focus:border-[var(--primary)]">
-                                        <option v-for="opt in linkablePages" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
-                                    </select>
-                                </div>
-                                <p v-if="job.link_to" class="text-xs text-[var(--primary)]/70 mt-4 font-mono">→ {{ job.link_to }}</p>
-                            </div>
+                            <textarea v-model="job.description" rows="2" placeholder="Role description..." class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] resize-none" />
                         </div>
                     </div>
                 </div>
@@ -483,16 +511,16 @@ const pageIconPaths: Record<string, string> = {
                     </div>
                     <div class="px-6 py-6 flex flex-col gap-5">
                         <div class="flex flex-col gap-2">
-                            <label class="text-xs font-semibold text-app-muted uppercase tracking-wider">Email</label>
-                            <input v-model="contactEmail" type="email" placeholder="hello@fluxhaven.com" class="bg-app-elevated border border-app rounded-lg px-4 py-2.5 text-sm text-app placeholder:text-app-muted focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors" />
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Email</label>
+                            <input v-model="contactEmail" type="email" placeholder="hello@fluxhaven.com" class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors" />
                         </div>
                         <div class="flex flex-col gap-2">
-                            <label class="text-xs font-semibold text-app-muted uppercase tracking-wider">Phone</label>
-                            <input v-model="contactPhone" placeholder="+1 (555) 000-0000" class="bg-app-elevated border border-app rounded-lg px-4 py-2.5 text-sm text-app placeholder:text-app-muted focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors" />
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Phone</label>
+                            <input v-model="contactPhone" placeholder="+1 (555) 000-0000" class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors" />
                         </div>
                         <div class="flex flex-col gap-2">
-                            <label class="text-xs font-semibold text-app-muted uppercase tracking-wider">Address</label>
-                            <textarea v-model="contactAddress" rows="3" placeholder="123 Main St, City, Country" class="bg-app-elevated border border-app rounded-lg px-4 py-2.5 text-sm text-app placeholder:text-app-muted focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors resize-none" />
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Address</label>
+                            <textarea v-model="contactAddress" rows="3" placeholder="123 Main St, City, Country" class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors resize-none" />
                         </div>
                     </div>
                 </div>
@@ -507,7 +535,7 @@ const pageIconPaths: Record<string, string> = {
                         <div class="size-12 rounded-xl bg-app-elevated flex items-center justify-center">
                             <svg class="size-6 text-app-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="pageIconPaths.book" /></svg>
                         </div>
-                        <p class="text-sm text-app-muted">Library preview content is pulled automatically from your published library items. No manual editing needed here.</p>
+                        <p class="text-sm text-slate-400">Library preview content is pulled automatically from your published library items. No manual editing needed here.</p>
                         <a href="/library-preview" target="_blank" class="text-xs text-[var(--primary)] hover:underline">View live page →</a>
                     </div>
                 </div>
@@ -528,9 +556,9 @@ const pageIconPaths: Record<string, string> = {
                         <div class="px-6 py-4 flex flex-col gap-3">
                             <div v-if="navLinks.length === 0" class="text-center py-8 text-app-muted text-sm">No nav links yet. Add one above.</div>
                             <div v-for="(link, i) in navLinks" :key="i" class="flex items-center gap-3">
-                                <input v-model="link.label" placeholder="Label" class="flex-1 bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-app placeholder:text-app-muted focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
-                                <input v-model="link.href" placeholder="/path" class="flex-1 bg-app-elevated border border-app rounded-lg px-3 py-2 text-sm text-app placeholder:text-app-muted focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
-                                <button @click="removeNav(i)" class="text-app-muted hover:text-red-400 transition-colors">
+                                <input v-model="link.label" placeholder="Label" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
+                                <input v-model="link.href" placeholder="/path" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
+                                <button @click="removeNav(i)" class="text-slate-600 hover:text-red-400 transition-colors">
                                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>
@@ -542,7 +570,7 @@ const pageIconPaths: Record<string, string> = {
                             <p class="text-xs text-app-muted mt-0.5">Copyright line shown at the bottom of every public page.</p>
                         </div>
                         <div class="px-6 py-6">
-                            <input v-model="footerText" placeholder="© 2025 FluxHaven. All rights reserved." class="w-full bg-app-elevated border border-app rounded-lg px-4 py-2.5 text-sm text-app placeholder:text-app-muted focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors" />
+                            <input v-model="footerText" placeholder="© 2025 FluxHaven. All rights reserved." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors" />
                         </div>
                     </div>
                 </template>
@@ -570,9 +598,9 @@ const pageIconPaths: Record<string, string> = {
 
                 <!-- Home / Hero preview -->
                 <div v-if="activePage === 'home'" class="flex flex-col items-center justify-center min-h-[380px] px-10 py-16 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 50%, #051424 100%);">
-                    <h1 class="text-3xl font-extrabold text-app mb-4 leading-tight" style="font-family: Manrope, sans-serif;">{{ heroTitle || 'Your headline goes here' }}</h1>
-                    <div class="text-base text-app-muted max-w-md leading-relaxed mb-8 preview-richtext" v-html="heroSubtitle || '<p>Your subheadline goes here</p>'" />
-                    <button class="bg-[var(--primary)] text-app font-semibold px-6 py-3 rounded-xl text-sm shadow-lg">{{ ctaLabel || 'Get started free' }}</button>
+                    <h1 class="text-3xl font-extrabold text-white mb-4 leading-tight" style="font-family: Manrope, sans-serif;">{{ heroTitle || 'Your headline goes here' }}</h1>
+                    <div class="text-base text-slate-400 max-w-md leading-relaxed mb-8 preview-richtext" v-html="heroSubtitle || '<p>Your subheadline goes here</p>'" />
+                    <button class="bg-[var(--primary)] text-white font-semibold px-6 py-3 rounded-xl text-sm shadow-lg">{{ ctaLabel || 'Get started free' }}</button>
                 </div>
 
                 <!-- Services preview -->
@@ -580,7 +608,7 @@ const pageIconPaths: Record<string, string> = {
                     <h2 class="text-xl font-extrabold text-app text-center mb-8" style="font-family: Manrope, sans-serif;">Services</h2>
                     <div v-if="services.length === 0" class="text-center text-app-muted text-sm py-12">Add services to see a preview.</div>
                     <div v-else class="grid grid-cols-2 gap-4">
-                        <div v-for="(svc, i) in services" :key="i" class="rounded-xl border border-app bg-app-surface p-5">
+                        <div v-for="(svc, i) in services" :key="i" class="rounded-xl border border-slate-800 bg-[#0d1c2d] p-5">
                             <div class="size-10 rounded-lg bg-[var(--primary)]/10 flex items-center justify-center mb-4">
                                 <svg class="size-5 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="serviceIconPaths[svc.icon] ?? serviceIconPaths['briefcase']" /></svg>
                             </div>
@@ -604,7 +632,7 @@ const pageIconPaths: Record<string, string> = {
                     <div v-else class="flex flex-col gap-4">
                         <div v-for="(job, i) in careers" :key="i" class="rounded-xl border border-app bg-app-surface p-5">
                             <div class="flex items-start justify-between mb-2">
-                                <h3 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">{{ job.title || 'Job title' }}</h3>
+                                <h3 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">{{ job.title || 'Job title' }}</h3>
                                 <span v-if="job.type" class="text-xs text-[var(--primary)] bg-[var(--primary)]/10 border border-[var(--primary)]/20 px-2 py-0.5 rounded-full font-semibold">{{ job.type }}</span>
                             </div>
                             <p v-if="job.location" class="text-xs text-app-muted mb-3">📍 {{ job.location }}</p>
@@ -616,6 +644,56 @@ const pageIconPaths: Record<string, string> = {
         </div>
 
     </div>
+
+    <!-- Confirmation dialog -->
+    <Teleport to="body">
+        <div v-if="confirmDialog.open" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <!-- Backdrop -->
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="cancelToggle" />
+            <!-- Dialog -->
+            <div class="relative w-full max-w-sm rounded-2xl border border-slate-700 bg-[#0d1c2d] p-6 shadow-2xl" style="font-family: Inter, sans-serif;">
+                <div class="mb-4 flex items-start gap-3">
+                    <div class="size-10 rounded-xl flex items-center justify-center shrink-0"
+                        :class="confirmDialog.enabling ? 'bg-green-500/10 border border-green-500/20' : 'bg-red-500/10 border border-red-500/20'">
+                        <svg v-if="confirmDialog.enabling" class="size-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <svg v-else class="size-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">
+                            {{ confirmDialog.enabling ? 'Enable page?' : 'Disable page?' }}
+                        </h3>
+                        <p class="mt-1 text-xs text-slate-400 leading-relaxed">
+                            <span v-if="confirmDialog.enabling">
+                                The <strong class="text-slate-200">{{ pageList.find(p => p.key === confirmDialog.pageKey)?.label }}</strong> page will become publicly visible immediately.
+                            </span>
+                            <span v-else>
+                                The <strong class="text-slate-200">{{ pageList.find(p => p.key === confirmDialog.pageKey)?.label }}</strong> page will be hidden from visitors. This takes effect immediately.
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="flex gap-2 justify-end">
+                    <button
+                        @click="cancelToggle"
+                        class="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-lg transition-colors"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        @click="confirmToggle"
+                        class="px-4 py-2 text-xs font-semibold text-white rounded-lg transition-colors"
+                        :class="confirmDialog.enabling ? 'bg-green-600 hover:bg-green-500' : 'bg-red-600 hover:bg-red-500'"
+                    >
+                        {{ confirmDialog.enabling ? 'Enable' : 'Disable' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </Teleport>
 </template>
 
 <style scoped>

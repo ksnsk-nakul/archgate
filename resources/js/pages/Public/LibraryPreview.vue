@@ -28,7 +28,7 @@ const typeBadgeClass: Record<string, string> = {
     <!-- Hero -->
     <section class="py-20 px-6 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 60%, #051424 100%);">
         <div class="max-w-3xl mx-auto">
-            <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6" style="background-color: color-mix(in srgb, var(--primary) 10%, transparent); border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent); color: var(--primary);">Library</span>
+            <span class="inline-flex items-center gap-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6">Library</span>
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight" style="font-family: Manrope, sans-serif;">Explore our library</h1>
             <p class="text-lg text-slate-400">Books, articles, and resources to accelerate your learning.</p>
         </div>
@@ -45,7 +45,7 @@ const typeBadgeClass: Record<string, string> = {
                 </div>
                 <h3 class="text-lg font-bold text-white mb-2" style="font-family: Manrope, sans-serif;">Our library is being curated</h3>
                 <p class="text-slate-500 text-sm">Check back soon for books, articles, and more.</p>
-                <a v-if="!isAuthed" href="/register" class="btn-primary mt-6 px-6 py-2.5 rounded-xl">
+                <a v-if="!isAuthed" href="/register" class="inline-flex items-center gap-2 mt-6 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition-colors">
                     Create an account to get notified
                 </a>
             </div>
@@ -54,10 +54,7 @@ const typeBadgeClass: Record<string, string> = {
                 <div
                     v-for="item in items"
                     :key="item.id"
-                    class="group rounded-2xl border border-slate-800 bg-[#0d1c2d] overflow-hidden transition-colors flex flex-col"
-                    style="transition: border-color 0.15s;"
-                    @mouseover="($event.currentTarget as HTMLElement).style.borderColor='color-mix(in srgb, var(--primary) 30%, transparent)'"
-                    @mouseleave="($event.currentTarget as HTMLElement).style.borderColor=''"
+                    class="group rounded-2xl border border-slate-800 bg-[#0d1c2d] overflow-hidden hover:border-[var(--primary)]/30 transition-colors flex flex-col"
                 >
                     <!-- Cover -->
                     <div class="aspect-[3/2] bg-slate-800 flex items-center justify-center overflow-hidden">
@@ -71,7 +68,7 @@ const typeBadgeClass: Record<string, string> = {
                         <span class="text-xs font-semibold border px-2 py-0.5 rounded-full w-fit" :class="typeBadgeClass[item.type] ?? 'text-slate-400 bg-slate-800 border-slate-700'">{{ item.type }}</span>
                         <h3 class="text-sm font-bold text-white leading-snug" style="font-family: Manrope, sans-serif;">{{ item.title }}</h3>
                         <div class="mt-auto pt-2">
-                            <a :href="readHref(item)" class="read-btn flex items-center justify-center gap-1.5 w-full text-xs font-semibold px-3 py-2 rounded-lg transition-colors">
+                            <a :href="readHref(item)" class="flex items-center justify-center gap-1.5 w-full text-xs font-semibold border border-[var(--primary)]/30 text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white px-3 py-2 rounded-lg transition-colors">
                                 <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253" /></svg>
                                 {{ isAuthed ? 'Read' : 'Sign in to read' }}
                             </a>

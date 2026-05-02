@@ -30,7 +30,7 @@ const iconPaths: Record<string, string> = {
     <!-- Hero -->
     <section class="py-20 px-6 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 60%, #051424 100%);">
         <div class="max-w-3xl mx-auto">
-            <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6" style="background-color: color-mix(in srgb, var(--primary) 10%, transparent); border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent); color: var(--primary);">Our Services</span>
+            <span class="inline-flex items-center gap-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6">Our Services</span>
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight" style="font-family: Manrope, sans-serif;">Everything your team needs</h1>
             <p class="text-lg text-slate-400 leading-relaxed">A complete platform for managing projects, leads, learning, and more — all in one place.</p>
         </div>
@@ -44,13 +44,10 @@ const iconPaths: Record<string, string> = {
                 <div
                     v-for="(svc, i) in services"
                     :key="i"
-                    class="group rounded-2xl border border-slate-800 bg-[#0d1c2d] p-6 transition-colors"
-                    style="transition: border-color 0.15s;"
-                    @mouseover="($event.currentTarget as HTMLElement).style.borderColor='color-mix(in srgb, var(--primary) 30%, transparent)'"
-                    @mouseleave="($event.currentTarget as HTMLElement).style.borderColor=''"
+                    class="group rounded-2xl border border-slate-800 bg-[#0d1c2d] p-6 hover:border-[var(--primary)]/30 transition-colors"
                 >
-                    <div class="size-12 rounded-xl flex items-center justify-center mb-5 transition-colors" style="background-color: color-mix(in srgb, var(--primary) 10%, transparent); border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);">
-                        <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--primary);">
+                    <div class="size-12 rounded-xl bg-[var(--primary)]/10 border border-[var(--primary)]/20 flex items-center justify-center mb-5 group-hover:bg-[var(--primary)]/15 transition-colors">
+                        <svg class="size-6 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="iconPaths[svc.icon] ?? iconPaths.default" />
                         </svg>
                     </div>
@@ -66,7 +63,7 @@ const iconPaths: Record<string, string> = {
         <div class="max-w-2xl mx-auto">
             <h2 class="text-3xl font-extrabold text-white mb-4" style="font-family: Manrope, sans-serif;">Ready to get started?</h2>
             <p class="text-slate-400 mb-8">Join teams already using {{ appName }} to work smarter.</p>
-            <a href="/register" class="btn-primary px-8 py-3.5 rounded-xl text-base shadow-lg">
+            <a href="/register" class="inline-flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-semibold px-8 py-3.5 rounded-xl text-base transition-colors shadow-lg">
                 Start for free
                 <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </a>
