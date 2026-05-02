@@ -4,8 +4,8 @@ import { computed, ref } from 'vue';
 import RichEditor from '@/components/RichEditor.vue';
 
 type NavLink = { label: string; href: string };
-type Service  = { icon: string; title: string; body: string };
-type Career   = { title: string; location?: string; type?: string; description?: string };
+type Service  = { icon: string; title: string; body: string; link_to?: string };
+type Career   = { title: string; location?: string; type?: string; description?: string; link_to?: string };
 
 type LandingSettings = {
     hero_title: string; hero_subtitle: string; cta_label: string;
@@ -23,6 +23,14 @@ const parseJson = <T>(val: string | null | undefined, fallback: T): T => {
 
 // ── Page list definition ──────────────────────────────────────────────────────
 type PageKey = 'home' | 'services' | 'about' | 'careers' | 'contact' | 'library-preview' | 'footer-nav';
+type PageDef = { key: PageKey; label: string; desc: string; href: string | null; icon: string; always?: boolean };
+
+
+// Load enabled state from props (DB value), fallback all true
+const defaultEnabled: Record<PageKey, boolean> = {
+    home: true, services: true, about: true, careers: true,
+    contact: true, 'library-preview': true, 'footer-nav': true,
+};
 
 const pageList = [
     { key: 'home' as PageKey,            label: 'Home',            desc: 'Hero, services teaser, call-to-action', href: '/',                icon: 'home',   always: true },
@@ -74,10 +82,9 @@ function confirmToggle(): void {
     // Persist immediately to DB
     router.put('/admin/settings/landing', {
         page_enabled: { ...pageEnabled.value },
-    } as Record<string, unknown>, {
+    }, {
         preserveScroll: true,
-        preserveState: true,
-        only: [],
+        preserveState: true
     });
 }
 
@@ -94,12 +101,12 @@ const contactPhone   = ref(props.settings.contact_phone ?? '');
 const contactAddress = ref(props.settings.contact_address ?? '');
 const footerText     = ref(props.settings.footer_text ?? '');
 
-function addNav()              { navLinks.value.push({ label: '', href: '/' }); }
-function removeNav(i: number)  { navLinks.value.splice(i, 1); }
-function addService()          { services.value.push({ icon: 'briefcase', title: '', body: '' }); }
-function removeService(i: number) { services.value.splice(i, 1); }
-function addCareer()           { careers.value.push({ title: '', location: '', type: 'Full-time', description: '' }); }
-function removeCareer(i: number)  { careers.value.splice(i, 1); }
+function addNav()                  { navLinks.value.push({ label: '', href: '/' }); }
+function removeNav(i: number)      { navLinks.value.splice(i, 1); }
+function addService()              { services.value.push({ icon: 'briefcase', title: '', body: '', link_to: '' }); }
+function removeService(i: number)  { services.value.splice(i, 1); }
+function addCareer()               { careers.value.push({ title: '', location: '', type: 'Full-time', description: '', link_to: '' }); }
+function removeCareer(i: number)   { careers.value.splice(i, 1); }
 
 const saving = ref(false);
 function save() {
@@ -109,6 +116,7 @@ function save() {
         about_text: aboutText.value, footer_text: footerText.value,
         contact_email: contactEmail.value, contact_phone: contactPhone.value, contact_address: contactAddress.value,
         nav_links: navLinks.value, services: services.value, careers: careers.value,
+        page_enabled: pageEnabled.value,
     }, { onFinish: () => { saving.value = false; }, preserveScroll: true });
 }
 
@@ -136,24 +144,25 @@ const pageIconPaths: Record<string, string> = {
 <template>
     <Head title="Landing CMS" />
 
-    <div class="flex flex-col min-h-full bg-[#051424] text-[#d4e4fa]" style="font-family: Inter, sans-serif;">
+    <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
 
         <!-- Toolbar -->
-        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-slate-800 bg-[#051424]">
+        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app bg-app-bg">
             <div class="flex items-center gap-3">
                 <button
                     v-if="activePage !== null"
                     @click="activePage = null"
-                    class="flex items-center gap-1.5 text-sm text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 px-3 py-1.5 rounded-lg transition-colors"
+                    class="flex items-center gap-1.5 text-sm text-app-muted hover:text-white border border-app hover:border-slate-500 px-3 py-1.5 rounded-lg transition-colors"
                 >
                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     Pages
                 </button>
                 <div>
-                    <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Admin › Settings</p>
-                    <h1 class="text-xl font-bold text-white" style="font-family: Manrope, sans-serif;">
+                    <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Admin › Settings</p>
+                    <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">
                         {{ activePage === null ? 'Landing Site CMS' : pageList.find(p => p.key === activePage)?.label }}
                     </h1>
+
                 </div>
             </div>
             <div class="flex items-center gap-3">
@@ -172,15 +181,15 @@ const pageIconPaths: Record<string, string> = {
                 </button>
                 <!-- Live site link for active page -->
                 <a
-                    v-if="activePage !== null && pageList.find(p => p.key === activePage)?.href"
-                    :href="pageList.find(p => p.key === activePage)!.href!"
+                    v-if="activePage !== null && pageList.find((p) => p.key === activePage)?.href"
+                    :href="pageList.find((p) => p.key === activePage)!.href!"
                     target="_blank"
-                    class="flex items-center gap-2 text-sm text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 px-4 py-2 rounded-lg transition-colors"
+                    class="flex items-center gap-2 text-sm text-app-muted hover:text-white border border-app hover:border-slate-500 px-4 py-2 rounded-lg transition-colors"
                 >
                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                     View live
                 </a>
-                <a v-if="activePage === null" href="/" target="_blank" class="flex items-center gap-2 text-sm text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 px-4 py-2 rounded-lg transition-colors">
+                <a v-if="activePage === null" href="/" target="_blank" class="flex items-center gap-2 text-sm text-app-muted hover:text-white border border-app hover:border-slate-500 px-4 py-2 rounded-lg transition-colors">
                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                     Live site
                 </a>
@@ -188,15 +197,16 @@ const pageIconPaths: Record<string, string> = {
         </div>
 
         <!-- ═══════════════════════════════════════════════════════════════════ -->
-        <!-- PAGE LIST VIEW                                                      -->
+        <!-- PAGE LIST VIEW — compact nav-list style                             -->
         <!-- ═══════════════════════════════════════════════════════════════════ -->
-        <div v-if="activePage === null" class="px-6 py-8 max-w-5xl">
-            <p class="text-sm text-slate-500 mb-6">Select a page to edit its content sections. Changes are shared immediately after saving.</p>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div v-if="activePage === null" class="px-6 py-6 max-w-3xl">
+            <p class="text-xs text-app-muted uppercase tracking-widest font-semibold mb-4">Pages · matches public site navigation order</p>
+
+            <div class="rounded-xl border border-app bg-app-surface overflow-hidden divide-y divide-app">
                 <div
-                    v-for="pg in pageList"
+                    v-for="(pg, index) in pageList"
                     :key="pg.key"
-                    class="group rounded-2xl border border-slate-800 bg-[#0d1c2d] p-5 flex flex-col gap-4 hover:border-slate-700 transition-colors"
+                    class="flex items-center gap-3 px-4 py-3 hover:bg-app-elevated/30 transition-colors group"
                 >
                     <!-- Page icon + title -->
                     <div class="flex items-center justify-between">
@@ -219,44 +229,139 @@ const pageIconPaths: Record<string, string> = {
                             class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200"
                             :class="pageEnabled[pg.key] ? 'bg-[var(--primary)]' : 'bg-slate-700'"
                         >
-                            <span class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow transition duration-200" :class="pageEnabled[pg.key] ? 'translate-x-4' : 'translate-x-0'" />
+                            <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" /></svg>
                         </button>
-                    </div>
-                    <!-- Actions -->
-                    <div class="flex items-center gap-2 pt-1 border-t border-slate-800">
                         <button
                             @click="activePage = pg.key"
                             class="flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold text-[var(--primary)] border border-[var(--primary)]/30 hover:bg-[var(--primary)]/5 py-1.5 rounded-lg transition-colors"
                         >
-                            <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                            Edit
+                            <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
                         </button>
-                        <a
-                            v-if="pg.href"
-                            :href="pg.href"
-                            target="_blank"
-                            class="flex items-center justify-center gap-1.5 text-xs font-semibold text-slate-400 border border-slate-700 hover:border-slate-500 hover:text-white py-1.5 px-3 rounded-lg transition-colors"
-                        >
-                            <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                        </a>
                     </div>
+
+                    <!-- Page icon -->
+                    <div class="size-8 rounded-lg bg-app-elevated group-hover:bg-[var(--primary)]/10 flex items-center justify-center shrink-0 transition-colors">
+                        <svg class="size-3.5 text-app-muted group-hover:text-[var(--primary)] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="pageIconPaths[pg.icon]" />
+                        </svg>
+                    </div>
+
+                    <!-- Page name + slug -->
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-semibold text-app leading-tight" style="font-family: Manrope, sans-serif;">{{ pg.label }}</p>
+                        <p class="text-xs text-app-muted font-mono mt-0.5">{{ pg.href ?? '(no public route)' }}</p>
+                    </div>
+
+                    <!-- Enabled / Disabled badge -->
+                    <div class="shrink-0">
+                        <!-- Home always-on lock badge -->
+                        <span v-if="pg.always" class="flex items-center gap-1 text-xs text-app-muted bg-app-elevated px-2.5 py-1 rounded-full font-medium">
+                            <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                            Always on
+                        </span>
+                        <!-- Toggleable badge -->
+                        <button
+                            v-else
+                            @click="requestToggle(pg.key)"
+                            class="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-semibold border transition-colors"
+                            :class="pageEnabled[pg.key]
+                                ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20 hover:bg-emerald-500/20'
+                                : 'text-app-muted bg-app-elevated border-app hover:border-slate-500'"
+                        >
+                            <!-- Enabled: checkmark -->
+                            <svg v-if="pageEnabled[pg.key]" class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <!-- Disabled: dash -->
+                            <svg v-else class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 12H4" />
+                            </svg>
+                            {{ pageEnabled[pg.key] ? 'Enabled' : 'Disabled' }}
+                        </button>
+                    </div>
+
+                    <!-- Edit button -->
+                    <button
+                        @click="activePage = pg.key"
+                        class="flex items-center gap-1.5 text-xs font-semibold text-[var(--primary)] border border-[var(--primary)]/30 hover:bg-[var(--primary)]/5 px-3 py-1.5 rounded-lg transition-colors shrink-0"
+                    >
+                        <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                        Edit
+                    </button>
+
+                    <!-- View live link -->
+                    <a
+                        v-if="pg.href"
+                        :href="pg.href"
+                        target="_blank"
+                        class="flex items-center justify-center text-app-muted hover:text-app-muted transition-colors shrink-0"
+                        title="View live page"
+                    >
+                        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                    </a>
                 </div>
             </div>
         </div>
 
+        <!-- ── Toggle confirmation dialog ──────────────────────────────────── -->
+        <Teleport to="body">
+            <div v-if="confirmDialog" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+                <div class="bg-app-surface border border-app rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="size-10 rounded-xl flex items-center justify-center shrink-0"
+                             :class="confirmDialog.enabling ? 'bg-emerald-500/10' : 'bg-red-500/10'">
+                            <svg class="size-5" :class="confirmDialog.enabling ? 'text-emerald-400' : 'text-red-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path v-if="confirmDialog.enabling" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">
+                                {{ confirmDialog.enabling ? 'Enable page?' : 'Disable page?' }}
+                            </p>
+                            <p class="text-xs text-app-muted mt-0.5">
+                                {{ pageList.find((p) => p.key === confirmDialog.pageKey)?.label }} · {{ pageList.find((p) => p.key === confirmDialog.pageKey)?.href }}
+                            </p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-app-muted mb-6">
+                        {{ confirmDialog.enabling
+                            ? 'This page will become publicly accessible immediately.'
+                            : 'This page will be hidden from public visitors immediately.' }}
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <button
+                            @click="confirmToggle"
+                            class="flex-1 text-sm font-semibold py-2.5 rounded-lg transition-colors"
+                            :class="confirmDialog.enabling
+                                ? 'bg-emerald-500 hover:bg-emerald-400 text-app'
+                                : 'bg-red-500/80 hover:bg-red-500 text-app'"
+                        >
+                            {{ confirmDialog.enabling ? 'Enable' : 'Disable' }}
+                        </button>
+                        <button
+                            @click="cancelToggle"
+                            class="flex-1 text-sm font-semibold py-2.5 rounded-lg border border-app text-app-muted hover:text-white hover:border-slate-500 transition-colors"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </Teleport>
         <!-- ═══════════════════════════════════════════════════════════════════ -->
         <!-- PAGE EDITOR VIEW                                                    -->
         <!-- ═══════════════════════════════════════════════════════════════════ -->
-        <div v-else class="flex flex-1 min-h-0" :class="hasPreview ? 'divide-x divide-slate-800' : ''">
+        <div v-if="activePage !== null" class="flex flex-1 min-h-0" :class="hasPreview ? 'divide-x divide-app' : ''">
 
             <!-- Editor pane -->
             <div class="flex flex-col gap-6 px-6 py-6 overflow-y-auto" :class="hasPreview ? 'w-1/2' : 'w-full max-w-4xl'">
 
                 <!-- HOME: Hero section -->
-                <div v-if="activePage === 'home'" class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-800">
-                        <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">Hero Section</h2>
-                        <p class="text-xs text-slate-500 mt-0.5">Main headline shown to visitors on the landing page.</p>
+                <div v-if="activePage === 'home'" class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                    <div class="px-6 py-4 border-b border-app">
+                        <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Hero Section</h2>
+                        <p class="text-xs text-app-muted mt-0.5">Main headline shown to visitors on the landing page.</p>
                     </div>
                     <div class="px-6 py-6 flex flex-col gap-5">
                         <div class="flex flex-col gap-2">
@@ -264,7 +369,7 @@ const pageIconPaths: Record<string, string> = {
                             <input v-model="heroTitle" class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors" placeholder="Build, Learn & Grow..." />
                         </div>
                         <div class="flex flex-col gap-2">
-                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Subheadline</label>
+                            <label class="text-xs font-semibold text-app-muted uppercase tracking-wider">Subheadline</label>
                             <RichEditor v-model="heroSubtitle" placeholder="The all-in-one platform..." minHeight="90px" />
                         </div>
                         <div class="flex flex-col gap-2">
@@ -275,11 +380,11 @@ const pageIconPaths: Record<string, string> = {
                 </div>
 
                 <!-- SERVICES -->
-                <div v-if="activePage === 'services'" class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+                <div v-if="activePage === 'services'" class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                    <div class="px-6 py-4 border-b border-app flex items-center justify-between">
                         <div>
-                            <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">Services / Features</h2>
-                            <p class="text-xs text-slate-500 mt-0.5">Feature cards shown on the /services page.</p>
+                            <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Services / Features</h2>
+                            <p class="text-xs text-app-muted mt-0.5">Feature cards shown on the /services page.</p>
                         </div>
                         <button @click="addService" class="flex items-center gap-1.5 text-xs font-semibold text-[var(--primary)] border border-[var(--primary)]/30 hover:bg-[var(--primary)]/5 px-3 py-1.5 rounded-lg transition-colors">
                             <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
@@ -287,8 +392,8 @@ const pageIconPaths: Record<string, string> = {
                         </button>
                     </div>
                     <div class="px-6 py-4 flex flex-col gap-4">
-                        <div v-if="services.length === 0" class="text-center py-8 text-slate-600 text-sm">No services yet. Add one above.</div>
-                        <div v-for="(svc, i) in services" :key="i" class="rounded-lg border border-slate-700 p-4 flex flex-col gap-3">
+                        <div v-if="services.length === 0" class="text-center py-8 text-app-muted text-sm">No services yet. Add one above.</div>
+                        <div v-for="(svc, i) in services" :key="i" class="rounded-lg border border-app p-4 flex flex-col gap-3">
                             <div class="flex items-center gap-3">
                                 <div class="flex flex-col gap-1 flex-1">
                                     <label class="text-xs text-slate-500 uppercase tracking-wider">Icon name</label>
@@ -298,7 +403,7 @@ const pageIconPaths: Record<string, string> = {
                                     <label class="text-xs text-slate-500 uppercase tracking-wider">Title</label>
                                     <input v-model="svc.title" placeholder="Project Management" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)]" />
                                 </div>
-                                <button @click="removeService(i)" class="self-end mb-1 text-slate-600 hover:text-red-400 transition-colors">
+                                <button @click="removeService(i)" class="self-end mb-1 text-app-muted hover:text-red-400 transition-colors">
                                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>
@@ -308,10 +413,10 @@ const pageIconPaths: Record<string, string> = {
                 </div>
 
                 <!-- ABOUT -->
-                <div v-if="activePage === 'about'" class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-800">
-                        <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">About Page</h2>
-                        <p class="text-xs text-slate-500 mt-0.5">Content shown on the /about public page.</p>
+                <div v-if="activePage === 'about'" class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                    <div class="px-6 py-4 border-b border-app">
+                        <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">About Page</h2>
+                        <p class="text-xs text-app-muted mt-0.5">Content shown on the /about public page.</p>
                     </div>
                     <div class="px-6 py-6">
                         <RichEditor v-model="aboutText" placeholder="Write your about content here..." minHeight="200px" />
@@ -319,11 +424,11 @@ const pageIconPaths: Record<string, string> = {
                 </div>
 
                 <!-- CAREERS -->
-                <div v-if="activePage === 'careers'" class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+                <div v-if="activePage === 'careers'" class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                    <div class="px-6 py-4 border-b border-app flex items-center justify-between">
                         <div>
-                            <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">Careers / Open Roles</h2>
-                            <p class="text-xs text-slate-500 mt-0.5">Job listings shown on the /careers public page.</p>
+                            <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Careers / Open Roles</h2>
+                            <p class="text-xs text-app-muted mt-0.5">Job listings shown on the /careers public page.</p>
                         </div>
                         <button @click="addCareer" class="flex items-center gap-1.5 text-xs font-semibold text-[var(--primary)] border border-[var(--primary)]/30 hover:bg-[var(--primary)]/5 px-3 py-1.5 rounded-lg transition-colors">
                             <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
@@ -331,8 +436,8 @@ const pageIconPaths: Record<string, string> = {
                         </button>
                     </div>
                     <div class="px-6 py-4 flex flex-col gap-4">
-                        <div v-if="careers.length === 0" class="text-center py-8 text-slate-600 text-sm">No open roles yet. Add one above.</div>
-                        <div v-for="(job, i) in careers" :key="i" class="rounded-lg border border-slate-700 p-4 flex flex-col gap-3">
+                        <div v-if="careers.length === 0" class="text-center py-8 text-app-muted text-sm">No open roles yet. Add one above.</div>
+                        <div v-for="(job, i) in careers" :key="i" class="rounded-lg border border-app p-4 flex flex-col gap-3">
                             <div class="flex items-start gap-3">
                                 <div class="flex flex-col gap-1 flex-1">
                                     <label class="text-xs text-slate-500 uppercase tracking-wider">Job title</label>
@@ -346,7 +451,7 @@ const pageIconPaths: Record<string, string> = {
                                     <label class="text-xs text-slate-500 uppercase tracking-wider">Type</label>
                                     <input v-model="job.type" placeholder="Full-time" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)]" />
                                 </div>
-                                <button @click="removeCareer(i)" class="self-end mb-1 text-slate-600 hover:text-red-400 transition-colors">
+                                <button @click="removeCareer(i)" class="self-end mb-1 text-app-muted hover:text-red-400 transition-colors">
                                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>
@@ -356,10 +461,10 @@ const pageIconPaths: Record<string, string> = {
                 </div>
 
                 <!-- CONTACT -->
-                <div v-if="activePage === 'contact'" class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-800">
-                        <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">Contact Information</h2>
-                        <p class="text-xs text-slate-500 mt-0.5">Displayed on the /contact public page.</p>
+                <div v-if="activePage === 'contact'" class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                    <div class="px-6 py-4 border-b border-app">
+                        <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Contact Information</h2>
+                        <p class="text-xs text-app-muted mt-0.5">Displayed on the /contact public page.</p>
                     </div>
                     <div class="px-6 py-6 flex flex-col gap-5">
                         <div class="flex flex-col gap-2">
@@ -378,14 +483,14 @@ const pageIconPaths: Record<string, string> = {
                 </div>
 
                 <!-- LIBRARY PREVIEW -->
-                <div v-if="activePage === 'library-preview'" class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-800">
-                        <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">Library Preview Page</h2>
-                        <p class="text-xs text-slate-500 mt-0.5">Auto-generated from published library items. Manage items in the Library module.</p>
+                <div v-if="activePage === 'library-preview'" class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                    <div class="px-6 py-4 border-b border-app">
+                        <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Library Preview Page</h2>
+                        <p class="text-xs text-app-muted mt-0.5">Auto-generated from published library items. Manage items in the Library module.</p>
                     </div>
                     <div class="px-6 py-8 flex flex-col items-center gap-3 text-center">
-                        <div class="size-12 rounded-xl bg-slate-800 flex items-center justify-center">
-                            <svg class="size-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="pageIconPaths.book" /></svg>
+                        <div class="size-12 rounded-xl bg-app-elevated flex items-center justify-center">
+                            <svg class="size-6 text-app-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="pageIconPaths.book" /></svg>
                         </div>
                         <p class="text-sm text-slate-400">Library preview content is pulled automatically from your published library items. No manual editing needed here.</p>
                         <a href="/library-preview" target="_blank" class="text-xs text-[var(--primary)] hover:underline">View live page →</a>
@@ -394,11 +499,11 @@ const pageIconPaths: Record<string, string> = {
 
                 <!-- FOOTER & NAVIGATION -->
                 <template v-if="activePage === 'footer-nav'">
-                    <div class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                        <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+                    <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                        <div class="px-6 py-4 border-b border-app flex items-center justify-between">
                             <div>
-                                <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">Navigation Links</h2>
-                                <p class="text-xs text-slate-500 mt-0.5">Header nav links shown on all public pages.</p>
+                                <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Navigation Links</h2>
+                                <p class="text-xs text-app-muted mt-0.5">Header nav links shown on all public pages.</p>
                             </div>
                             <button @click="addNav" class="flex items-center gap-1.5 text-xs font-semibold text-[var(--primary)] border border-[var(--primary)]/30 hover:bg-[var(--primary)]/5 px-3 py-1.5 rounded-lg transition-colors">
                                 <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
@@ -406,7 +511,7 @@ const pageIconPaths: Record<string, string> = {
                             </button>
                         </div>
                         <div class="px-6 py-4 flex flex-col gap-3">
-                            <div v-if="navLinks.length === 0" class="text-center py-8 text-slate-600 text-sm">No nav links yet. Add one above.</div>
+                            <div v-if="navLinks.length === 0" class="text-center py-8 text-app-muted text-sm">No nav links yet. Add one above.</div>
                             <div v-for="(link, i) in navLinks" :key="i" class="flex items-center gap-3">
                                 <input v-model="link.label" placeholder="Label" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
                                 <input v-model="link.href" placeholder="/path" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20" />
@@ -416,10 +521,10 @@ const pageIconPaths: Record<string, string> = {
                             </div>
                         </div>
                     </div>
-                    <div class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                        <div class="px-6 py-4 border-b border-slate-800">
-                            <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">Footer</h2>
-                            <p class="text-xs text-slate-500 mt-0.5">Copyright line shown at the bottom of every public page.</p>
+                    <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                        <div class="px-6 py-4 border-b border-app">
+                            <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Footer</h2>
+                            <p class="text-xs text-app-muted mt-0.5">Copyright line shown at the bottom of every public page.</p>
                         </div>
                         <div class="px-6 py-6">
                             <input v-model="footerText" placeholder="© 2025 FluxHaven. All rights reserved." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-colors" />
@@ -434,16 +539,16 @@ const pageIconPaths: Record<string, string> = {
                         <svg v-else class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                         Save changes
                     </button>
-                    <button @click="activePage = null" class="text-sm text-slate-500 hover:text-slate-300 transition-colors">← Back to pages</button>
+                    <button @click="activePage = null" class="text-sm text-app-muted hover:text-app-muted transition-colors">← Back to pages</button>
                 </div>
             </div>
 
             <!-- Live preview pane -->
-            <div v-if="hasPreview" class="w-1/2 flex flex-col bg-[#051424] overflow-y-auto">
-                <div class="flex items-center justify-between px-5 py-3 border-b border-slate-800 bg-[#0a1929] sticky top-0 z-10">
+            <div v-if="hasPreview" class="w-1/2 flex flex-col bg-app-bg overflow-y-auto">
+                <div class="flex items-center justify-between px-5 py-3 border-b border-app bg-app-elevated sticky top-0 z-10">
                     <div class="flex items-center gap-2">
                         <div class="size-2.5 rounded-full bg-red-500/60" /><div class="size-2.5 rounded-full bg-yellow-500/60" /><div class="size-2.5 rounded-full bg-green-500/60" />
-                        <span class="text-xs text-slate-600 ml-2 font-mono">live preview</span>
+                        <span class="text-xs text-app-muted ml-2 font-mono">live preview</span>
                     </div>
                     <span class="text-xs text-[var(--primary)]/60 font-semibold uppercase tracking-wider">Live</span>
                 </div>
@@ -457,38 +562,38 @@ const pageIconPaths: Record<string, string> = {
 
                 <!-- Services preview -->
                 <div v-if="activePage === 'services'" class="px-6 py-10">
-                    <h2 class="text-xl font-extrabold text-white text-center mb-8" style="font-family: Manrope, sans-serif;">Services</h2>
-                    <div v-if="services.length === 0" class="text-center text-slate-600 text-sm py-12">Add services to see a preview.</div>
+                    <h2 class="text-xl font-extrabold text-app text-center mb-8" style="font-family: Manrope, sans-serif;">Services</h2>
+                    <div v-if="services.length === 0" class="text-center text-app-muted text-sm py-12">Add services to see a preview.</div>
                     <div v-else class="grid grid-cols-2 gap-4">
                         <div v-for="(svc, i) in services" :key="i" class="rounded-xl border border-slate-800 bg-[#0d1c2d] p-5">
                             <div class="size-10 rounded-lg bg-[var(--primary)]/10 flex items-center justify-center mb-4">
                                 <svg class="size-5 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="serviceIconPaths[svc.icon] ?? serviceIconPaths['briefcase']" /></svg>
                             </div>
-                            <h3 class="text-sm font-bold text-white mb-1" style="font-family: Manrope, sans-serif;">{{ svc.title || 'Service title' }}</h3>
-                            <p class="text-xs text-slate-400 leading-relaxed">{{ svc.body || 'Service description' }}</p>
+                            <h3 class="text-sm font-bold text-app mb-1" style="font-family: Manrope, sans-serif;">{{ svc.title || 'Service title' }}</h3>
+                            <p class="text-xs text-app-muted leading-relaxed">{{ svc.body || 'Service description' }}</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- About preview -->
                 <div v-if="activePage === 'about'" class="px-8 py-10">
-                    <h2 class="text-xl font-extrabold text-white mb-6" style="font-family: Manrope, sans-serif;">About Us</h2>
-                    <div v-if="aboutText" class="text-sm text-slate-300 leading-relaxed preview-richtext" v-html="aboutText" />
-                    <p v-else class="text-slate-600 text-sm italic">Start writing about content to see a preview.</p>
+                    <h2 class="text-xl font-extrabold text-app mb-6" style="font-family: Manrope, sans-serif;">About Us</h2>
+                    <div v-if="aboutText" class="text-sm text-app-muted leading-relaxed preview-richtext" v-html="aboutText" />
+                    <p v-else class="text-app-muted text-sm italic">Start writing about content to see a preview.</p>
                 </div>
 
                 <!-- Careers preview -->
                 <div v-if="activePage === 'careers'" class="px-6 py-10">
-                    <h2 class="text-xl font-extrabold text-white text-center mb-8" style="font-family: Manrope, sans-serif;">Open Roles</h2>
-                    <div v-if="careers.length === 0" class="text-center text-slate-600 text-sm py-12">Add open roles to see a preview.</div>
+                    <h2 class="text-xl font-extrabold text-app text-center mb-8" style="font-family: Manrope, sans-serif;">Open Roles</h2>
+                    <div v-if="careers.length === 0" class="text-center text-app-muted text-sm py-12">Add open roles to see a preview.</div>
                     <div v-else class="flex flex-col gap-4">
-                        <div v-for="(job, i) in careers" :key="i" class="rounded-xl border border-slate-800 bg-[#0d1c2d] p-5">
+                        <div v-for="(job, i) in careers" :key="i" class="rounded-xl border border-app bg-app-surface p-5">
                             <div class="flex items-start justify-between mb-2">
                                 <h3 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">{{ job.title || 'Job title' }}</h3>
                                 <span v-if="job.type" class="text-xs text-[var(--primary)] bg-[var(--primary)]/10 border border-[var(--primary)]/20 px-2 py-0.5 rounded-full font-semibold">{{ job.type }}</span>
                             </div>
-                            <p v-if="job.location" class="text-xs text-slate-500 mb-3">📍 {{ job.location }}</p>
-                            <p class="text-xs text-slate-400 leading-relaxed">{{ job.description || 'No description provided.' }}</p>
+                            <p v-if="job.location" class="text-xs text-app-muted mb-3">📍 {{ job.location }}</p>
+                            <p class="text-xs text-app-muted leading-relaxed">{{ job.description || 'No description provided.' }}</p>
                         </div>
                     </div>
                 </div>

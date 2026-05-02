@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
+import { useTheme } from '@/composables/useTheme';
 import { dashboard, login, register } from '@/routes';
+
+// Apply primary color CSS variable immediately (and reactively on change)
+useTheme();
 
 defineProps<{ canRegister: boolean }>();
 
+type AppDetails = { name: string; logoUrl?: string | null };
 type NavLink = { label: string; href: string };
 type Service = { icon: string; title: string; body: string };
 type Career  = { title: string; location?: string; type?: string; description?: string };
@@ -22,8 +27,10 @@ type LandingData = {
     careers: string;
 };
 
-const page    = usePage<{ landing: LandingData; auth: { user: unknown } }>();
+const page    = usePage<{ landing: LandingData; appDetails: AppDetails; auth: { user: unknown } }>();
 const landing = computed(() => page.props.landing);
+const appName = computed(() => page.props.appDetails?.name ?? 'FluxHaven');
+const logoUrl = computed(() => page.props.appDetails?.logoUrl ?? null);
 
 const parseJson = <T>(val: string | null | undefined, fallback: T): T => {
     try { return val ? JSON.parse(val) : fallback; } catch { return fallback; }
@@ -78,14 +85,14 @@ const serviceIcons: Record<string, string> = {
 </script>
 
 <template>
-    <Head :title="`${heroTitle} — FluxHaven`">
+    <Head :title="`${heroTitle} — ${appName}`">
         <meta name="description" :content="heroSubtitle" />
     </Head>
 
     <div class="min-h-screen bg-[#051424] text-[#d4e4fa]" style="font-family: Inter, sans-serif;">
 
         <!-- Nav -->
-        <header class="sticky top-0 z-50 border-b border-slate-800 bg-[#051424]/95 backdrop-blur">
+        <header class="sticky top-0 z-50 border-b border-white/10 bg-[#051424]/95 backdrop-blur">
             <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
                 <div class="flex items-center gap-2">
                     <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--primary)]">
@@ -100,7 +107,7 @@ const serviceIcons: Record<string, string> = {
                         v-for="link in navLinks"
                         :key="link.href"
                         :href="link.href"
-                        class="px-3 py-1.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/50 transition-colors"
+                        class="px-3 py-1.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors"
                     >
                         {{ link.label }}
                     </a>
@@ -138,14 +145,14 @@ const serviceIcons: Record<string, string> = {
                     Go to Dashboard
                     <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                 </Link>
-                <Link v-if="!$page.props.auth.user" :href="login()" class="rounded-xl border border-slate-700 px-7 py-3.5 text-sm font-semibold text-slate-300 hover:border-slate-500 hover:text-white transition-colors">
+                <Link v-if="!$page.props.auth.user" :href="login()" class="rounded-xl border border-white/20 px-7 py-3.5 text-sm font-semibold text-slate-300 hover:border-white/40 hover:text-white transition-colors">
                     Log in to your account
                 </Link>
             </div>
         </section>
 
         <!-- Services -->
-        <section v-if="services.length" class="border-t border-slate-800 bg-[#0a1929] py-20">
+        <section v-if="services.length" class="border-t border-white/10 bg-[#0a1929] py-20">
             <div class="mx-auto max-w-6xl px-4">
                 <div class="mb-12 text-center">
                     <h2 class="mb-3 text-2xl font-bold text-white sm:text-3xl" style="font-family: Manrope, sans-serif;">Everything in one place</h2>
@@ -175,14 +182,14 @@ const serviceIcons: Record<string, string> = {
         </section>
 
         <!-- Careers -->
-        <section v-if="careers.length" class="border-t border-slate-800 bg-[#0a1929] py-20">
+        <section v-if="careers.length" class="border-t border-white/10 bg-[#0a1929] py-20">
             <div class="mx-auto max-w-4xl px-4">
                 <div class="mb-10 text-center">
                     <h2 class="mb-3 text-2xl font-bold text-white sm:text-3xl" style="font-family: Manrope, sans-serif;">Open Roles</h2>
                     <p class="text-slate-400 text-sm">Join us and help build the future of team productivity.</p>
                 </div>
                 <div class="flex flex-col gap-4">
-                    <div v-for="job in careers" :key="job.title" class="rounded-xl border border-slate-800 bg-[#0d1c2d] px-6 py-5 flex items-start justify-between gap-4">
+                    <div v-for="job in careers" :key="job.title" class="rounded-xl border border-white/10 bg-[#0d1c2d] px-6 py-5 flex items-start justify-between gap-4">
                         <div>
                             <p class="font-bold text-white text-sm">{{ job.title }}</p>
                             <p v-if="job.description" class="text-xs text-slate-500 mt-1 leading-relaxed">{{ job.description }}</p>
@@ -197,7 +204,7 @@ const serviceIcons: Record<string, string> = {
         </section>
 
         <!-- Contact -->
-        <section v-if="contactEmail || contactPhone || contactAddress" class="py-20 border-t border-slate-800">
+        <section v-if="contactEmail || contactPhone || contactAddress" class="py-20 border-t border-white/10">
             <div class="mx-auto max-w-2xl px-4 text-center">
                 <h2 class="mb-6 text-2xl font-bold text-white sm:text-3xl" style="font-family: Manrope, sans-serif;">Get in touch</h2>
                 <div class="flex flex-col gap-3 items-center">
@@ -215,7 +222,7 @@ const serviceIcons: Record<string, string> = {
         </section>
 
         <!-- Lead capture form -->
-        <section class="border-t border-slate-800 py-20 bg-[#0a1929]">
+        <section class="border-t border-white/10 py-20 bg-[#0a1929]">
             <div class="mx-auto max-w-xl px-4">
                 <div class="text-center mb-10">
                     <span class="inline-flex items-center gap-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-4">Get Started</span>
@@ -233,7 +240,7 @@ const serviceIcons: Record<string, string> = {
                 </div>
 
                 <!-- Form -->
-                <form v-else @submit.prevent="submitLead" class="rounded-2xl border border-slate-800 bg-[#0d1c2d] p-6 flex flex-col gap-4">
+                <form v-else @submit.prevent="submitLead" class="rounded-2xl border border-white/10 bg-[#0d1c2d] p-6 flex flex-col gap-4">
                     <!-- Honeypot -->
                     <input v-model="leadForm.website" type="text" name="website" class="hidden" tabindex="-1" autocomplete="off" />
 
@@ -296,7 +303,7 @@ const serviceIcons: Record<string, string> = {
         </section>
 
         <!-- Footer -->
-        <footer class="border-t border-slate-800 py-6">
+        <footer class="border-t border-white/10 py-6">
             <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 text-xs text-slate-600 sm:flex-row">
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <span v-html="footerText" />

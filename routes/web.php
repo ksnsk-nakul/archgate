@@ -52,8 +52,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('deals/{deal}', [ModulePageController::class, 'destroyDeal'])->name('app.deals.destroy');
 
     Route::get('library', [ModulePageController::class, 'library'])->name('app.library.index');
+    Route::get('library/create', [ModulePageController::class, 'createLibraryItem'])->name('app.library.create');
+    Route::post('library', [ModulePageController::class, 'storeLibraryItem'])->name('app.library.store');
 
     Route::get('courses', [ModulePageController::class, 'courses'])->name('app.courses.index');
+    Route::get('courses/create', [ModulePageController::class, 'createCourse'])->name('app.courses.create');
+    Route::post('courses', [ModulePageController::class, 'storeCourse'])->name('app.courses.store');
     Route::get('courses/{course}', [ModulePageController::class, 'showCourse'])->name('app.courses.show');
     Route::get('lessons/{lesson}', [ModulePageController::class, 'showLesson'])->name('app.lessons.show');
 

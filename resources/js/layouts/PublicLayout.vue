@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import { useTheme } from '@/composables/useTheme';
+
+useTheme();
 
 type NavLink = { label: string; href: string };
 type AppDetails = { name: string; logoUrl: string | null };

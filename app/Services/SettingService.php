@@ -69,6 +69,10 @@ class SettingService
         if (($attributes['favicon'] ?? null) instanceof UploadedFile) {
             $this->set('app', 'favicon_path', $attributes['favicon']->store('settings', 'public'));
         }
+
+        if (! empty($attributes['primary_color'])) {
+            $this->set('app', 'primary_color', $attributes['primary_color']);
+        }
     }
 
     /**

@@ -1,22 +1,6 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
-import { BookOpen, BriefcaseBusiness, ListChecks, Plus, UsersRound } from 'lucide-vue-next';
-import PageHeader from '@/components/PageHeader.vue';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { dashboard } from '@/routes';
-
-defineOptions({
-    layout: {
-        breadcrumbs: [
-            {
-                title: 'Dashboard',
-                href: dashboard(),
-            },
-        ],
-    },
-});
+import { BookOpen, BriefcaseBusiness, ListChecks, Plus, TrendingUp, UsersRound } from 'lucide-vue-next';
 
 const props = defineProps<{
     stats: {
@@ -30,139 +14,169 @@ const props = defineProps<{
 }>();
 
 const statCards = [
-    { label: 'Active projects', key: 'projects' as const, icon: BriefcaseBusiness, href: '/projects' },
-    { label: 'Open tasks', key: 'tasks' as const, icon: ListChecks, href: '/tasks' },
-    { label: 'CRM contacts', key: 'contacts' as const, icon: UsersRound, href: '/contacts' },
-    { label: 'Courses', key: 'courses' as const, icon: BookOpen, href: '/courses' },
+    { label: 'Active projects', key: 'projects' as const, icon: BriefcaseBusiness, href: '/projects', color: 'text-blue-400', bg: 'bg-blue-500/10' },
+    { label: 'Open tasks', key: 'tasks' as const, icon: ListChecks, href: '/tasks', color: 'text-amber-400', bg: 'bg-amber-500/10' },
+    { label: 'CRM contacts', key: 'contacts' as const, icon: UsersRound, href: '/contacts', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+    { label: 'Courses', key: 'courses' as const, icon: BookOpen, href: '/courses', color: 'text-purple-400', bg: 'bg-purple-500/10' },
 ];
 
-const priorityVariant: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-    high: 'destructive',
-    medium: 'secondary',
-    low: 'outline',
+const priorityColor: Record<string, string> = {
+    high: 'text-red-400 bg-red-500/10 border-red-500/20',
+    medium: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
+    low: 'text-app-muted bg-app-elevated border-app',
 };
 
-const statusVariant: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-    active: 'default',
-    completed: 'secondary',
-    archived: 'outline',
-    pending: 'outline',
-    in_progress: 'secondary',
+const statusColor: Record<string, string> = {
+    active: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+    completed: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
+    archived: 'text-app-muted bg-app-elevated border-app',
+    pending: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
+    in_progress: 'text-purple-400 bg-purple-500/10 border-purple-500/20',
 };
 </script>
 
 <template>
     <Head title="Dashboard" />
 
-    <div class="flex h-full flex-1 flex-col gap-6 p-4">
-        <PageHeader
-            title="Dashboard"
-            description="Operational overview for projects, tasks, CRM, library, and learning activity."
-        />
-
-        <!-- Stats grid -->
-        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
+        <!-- Toolbar -->
+        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
+            <div>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Workspace</p>
+                <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">Dashboard</h1>
+            </div>
             <Link
-                v-for="card in statCards"
-                :key="card.label"
-                :href="card.href"
-                class="group"
+                href="/projects/create"
+                class="flex items-center gap-1.5 text-xs font-semibold bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white px-3 py-2 rounded-lg transition-colors"
             >
-                <Card class="rounded-lg transition-shadow group-hover:shadow-md">
-                    <CardHeader>
-                        <CardTitle class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                            <component :is="card.icon" class="size-4" />
-                            {{ card.label }}
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p class="text-3xl font-semibold">{{ props.stats[card.key] }}</p>
-                    </CardContent>
-                </Card>
+                <Plus class="size-3.5" />
+                New project
             </Link>
         </div>
 
-        <!-- Recent activity grid -->
-        <div class="grid gap-4 lg:grid-cols-2">
-            <!-- Recent projects -->
-            <Card class="rounded-lg">
-                <CardHeader class="flex flex-row items-center justify-between">
-                    <CardTitle class="text-base">Recent projects</CardTitle>
-                    <Button size="sm" as-child>
-                        <Link href="/projects/create">
-                            <Plus class="size-3.5" />
-                            New
-                        </Link>
-                    </Button>
-                </CardHeader>
-                <CardContent class="flex flex-col gap-2">
-                    <div
-                        v-for="project in recentProjects"
-                        :key="project.id"
-                        class="flex items-center justify-between rounded-md border px-3 py-2 text-sm"
-                    >
-                        <Link :href="`/projects/${project.id}`" class="font-medium hover:underline">
-                            {{ project.name }}
-                        </Link>
-                        <Badge :variant="statusVariant[project.status] ?? 'outline'">{{ project.status }}</Badge>
-                    </div>
-                    <p v-if="recentProjects.length === 0" class="text-sm text-muted-foreground">
-                        No projects yet. <Link href="/projects/create" class="underline">Create one</Link>.
-                    </p>
-                </CardContent>
-            </Card>
-
-            <!-- Recent tasks -->
-            <Card class="rounded-lg">
-                <CardHeader class="flex flex-row items-center justify-between">
-                    <CardTitle class="text-base">Recent tasks</CardTitle>
-                    <Button size="sm" as-child>
-                        <Link href="/tasks/create">
-                            <Plus class="size-3.5" />
-                            New
-                        </Link>
-                    </Button>
-                </CardHeader>
-                <CardContent class="flex flex-col gap-2">
-                    <div
-                        v-for="task in recentTasks"
-                        :key="task.id"
-                        class="flex items-center justify-between rounded-md border px-3 py-2 text-sm"
-                    >
-                        <Link :href="`/tasks/${task.id}`" class="font-medium hover:underline">
-                            {{ task.title }}
-                        </Link>
-                        <div class="flex items-center gap-1.5">
-                            <Badge :variant="priorityVariant[task.priority] ?? 'outline'" class="text-xs">{{ task.priority }}</Badge>
-                            <Badge :variant="statusVariant[task.status] ?? 'outline'" class="text-xs">{{ task.status }}</Badge>
+        <div class="flex flex-col gap-6 px-6 py-6">
+            <!-- Stats grid -->
+            <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <Link
+                    v-for="card in statCards"
+                    :key="card.label"
+                    :href="card.href"
+                    class="group rounded-xl border border-app bg-app-surface p-5 hover:border-[var(--primary)]/30 transition-colors"
+                >
+                    <div class="flex items-center justify-between mb-3">
+                        <p class="text-xs font-semibold text-app-muted uppercase tracking-wider">{{ card.label }}</p>
+                        <div :class="[card.bg, card.color, 'size-8 rounded-lg flex items-center justify-center']">
+                            <component :is="card.icon" class="size-4" />
                         </div>
                     </div>
-                    <p v-if="recentTasks.length === 0" class="text-sm text-muted-foreground">
-                        No tasks yet. <Link href="/tasks/create" class="underline">Create one</Link>.
-                    </p>
-                </CardContent>
-            </Card>
-        </div>
+                    <p class="text-3xl font-bold text-app" style="font-family: Manrope, sans-serif;">{{ props.stats[card.key] }}</p>
+                </Link>
+            </div>
 
-        <!-- Quick actions -->
-        <Card class="rounded-lg">
-            <CardHeader>
-                <CardTitle>Quick actions</CardTitle>
-            </CardHeader>
-            <CardContent class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                <Button variant="outline" as-child>
-                    <Link href="/projects">View all projects</Link>
-                </Button>
-                <Button variant="outline" as-child>
-                    <Link href="/tasks">View all tasks</Link>
-                </Button>
-                <Button variant="outline" as-child>
-                    <Link href="/contacts">Open CRM</Link>
-                </Button>
-                <Button variant="outline" as-child>
-                    <Link href="/courses">Browse courses</Link>
-                </Button>
-            </CardContent>
-        </Card>
+            <!-- Recent activity -->
+            <div class="grid gap-4 lg:grid-cols-2">
+                <!-- Recent projects -->
+                <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                    <div class="flex items-center justify-between px-5 py-4 border-b border-app">
+                        <div class="flex items-center gap-2">
+                            <BriefcaseBusiness class="size-4 text-blue-400" />
+                            <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Recent projects</h2>
+                        </div>
+                        <Link
+                            href="/projects/create"
+                            class="flex items-center gap-1 text-xs font-semibold text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors"
+                        >
+                            <Plus class="size-3.5" /> New
+                        </Link>
+                    </div>
+                    <div class="divide-y divide-app">
+                        <div
+                            v-for="project in recentProjects"
+                            :key="project.id"
+                            class="flex items-center justify-between px-5 py-3 hover:bg-app-elevated transition-colors"
+                        >
+                            <Link :href="`/projects/${project.id}`" class="text-sm font-medium text-app hover:text-[var(--primary)] transition-colors">
+                                {{ project.name }}
+                            </Link>
+                            <span
+                                class="text-xs font-semibold px-2 py-0.5 rounded-full border"
+                                :class="statusColor[project.status] ?? 'text-app-muted bg-app-elevated border-app'"
+                            >{{ project.status }}</span>
+                        </div>
+                        <div v-if="recentProjects.length === 0" class="px-5 py-8 text-center">
+                            <BriefcaseBusiness class="mx-auto mb-2 size-7 text-app-muted" />
+                            <p class="text-sm text-app-muted">No projects yet.</p>
+                            <Link href="/projects/create" class="text-xs text-[var(--primary)] hover:underline mt-1 inline-block">Create one</Link>
+                        </div>
+                    </div>
+                    <div class="px-5 py-3 border-t border-app">
+                        <Link href="/projects" class="text-xs font-semibold text-app-muted hover:text-app transition-colors">View all projects →</Link>
+                    </div>
+                </div>
+
+                <!-- Recent tasks -->
+                <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                    <div class="flex items-center justify-between px-5 py-4 border-b border-app">
+                        <div class="flex items-center gap-2">
+                            <ListChecks class="size-4 text-amber-400" />
+                            <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Recent tasks</h2>
+                        </div>
+                        <Link
+                            href="/tasks/create"
+                            class="flex items-center gap-1 text-xs font-semibold text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors"
+                        >
+                            <Plus class="size-3.5" /> New
+                        </Link>
+                    </div>
+                    <div class="divide-y divide-app">
+                        <div
+                            v-for="task in recentTasks"
+                            :key="task.id"
+                            class="flex items-center justify-between gap-3 px-5 py-3 hover:bg-app-elevated transition-colors"
+                        >
+                            <Link :href="`/tasks/${task.id}`" class="text-sm font-medium text-app hover:text-[var(--primary)] transition-colors truncate">
+                                {{ task.title }}
+                            </Link>
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <span class="text-xs font-semibold px-2 py-0.5 rounded-full border" :class="priorityColor[task.priority] ?? 'text-app-muted bg-app-elevated border-app'">{{ task.priority }}</span>
+                                <span class="text-xs font-semibold px-2 py-0.5 rounded-full border" :class="statusColor[task.status] ?? 'text-app-muted bg-app-elevated border-app'">{{ task.status }}</span>
+                            </div>
+                        </div>
+                        <div v-if="recentTasks.length === 0" class="px-5 py-8 text-center">
+                            <ListChecks class="mx-auto mb-2 size-7 text-app-muted" />
+                            <p class="text-sm text-app-muted">No tasks yet.</p>
+                            <Link href="/tasks/create" class="text-xs text-[var(--primary)] hover:underline mt-1 inline-block">Create one</Link>
+                        </div>
+                    </div>
+                    <div class="px-5 py-3 border-t border-app">
+                        <Link href="/tasks" class="text-xs font-semibold text-app-muted hover:text-app transition-colors">View all tasks →</Link>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick actions -->
+            <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                <div class="px-5 py-4 border-b border-app">
+                    <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Quick actions</h2>
+                </div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-app">
+                    <Link
+                        v-for="item in [
+                            { label: 'All projects', href: '/projects', icon: BriefcaseBusiness, color: 'text-blue-400' },
+                            { label: 'All tasks', href: '/tasks', icon: ListChecks, color: 'text-amber-400' },
+                            { label: 'CRM contacts', href: '/contacts', icon: UsersRound, color: 'text-emerald-400' },
+                            { label: 'Browse courses', href: '/courses', icon: BookOpen, color: 'text-purple-400' },
+                        ]"
+                        :key="item.label"
+                        :href="item.href"
+                        class="flex items-center gap-3 px-5 py-4 hover:bg-app-elevated transition-colors group"
+                    >
+                        <component :is="item.icon" :class="[item.color, 'size-4']" />
+                        <span class="text-sm font-medium text-app-muted group-hover:text-app transition-colors">{{ item.label }}</span>
+                        <TrendingUp class="size-3.5 text-slate-700 group-hover:text-app-muted ml-auto transition-colors" />
+                    </Link>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
