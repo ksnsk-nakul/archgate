@@ -56,6 +56,13 @@
                 --primary-dim: color-mix(in srgb, var(--primary) 10%, transparent);
                 --primary-border: color-mix(in srgb, var(--primary) 20%, transparent);
             }
+
+            :root {
+                --primary: {{ $appSettings['primary_color'] ?? '#f7600d' }};
+                --primary-hover: color-mix(in srgb, var(--primary) 85%, black);
+                --primary-dim: color-mix(in srgb, var(--primary) 10%, transparent);
+                --primary-border: color-mix(in srgb, var(--primary) 20%, transparent);
+            }
         </style>
 
         <link rel="icon" href="{{ $appSettings['favicon_url'] ?? '/favicon.ico' }}" sizes="any">

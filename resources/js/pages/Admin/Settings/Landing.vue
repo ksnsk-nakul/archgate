@@ -82,9 +82,10 @@ function confirmToggle(): void {
     // Persist immediately to DB
     router.put('/admin/settings/landing', {
         page_enabled: { ...pageEnabled.value },
-    }, {
+    } as Record<string, unknown>, {
         preserveScroll: true,
-        preserveState: true
+        preserveState: true,
+        only: [],
     });
 }
 

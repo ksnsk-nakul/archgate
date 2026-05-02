@@ -1,4 +1,5 @@
 import { createInertiaApp, router } from '@inertiajs/vue3';
+
 import { createPinia } from 'pinia';
 import { initializeTheme } from '@/composables/useAppearance';
 import AppLayout from '@/layouts/AppLayout.vue';
