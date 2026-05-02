@@ -201,73 +201,52 @@ const pageIconPaths: Record<string, string> = {
                 <div
                     v-for="pg in pageList"
                     :key="pg.key"
-                    class="flex items-center gap-3 px-4 py-3 hover:bg-app-elevated/30 transition-colors group"
+                    class="flex items-center gap-4 px-5 py-3.5 hover:bg-app-elevated/40 transition-colors group"
                 >
-                    <!-- Page icon + title -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="size-9 rounded-xl bg-slate-800 flex items-center justify-center shrink-0 group-hover:bg-[var(--primary)]/10 transition-colors">
-                                <svg class="size-4 text-slate-400 group-hover:text-[var(--primary)] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="pageIconPaths[pg.icon]" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">{{ pg.label }}</p>
-                                <p class="text-xs text-slate-500 mt-0.5">{{ pg.desc }}</p>
-                            </div>
-                        </div>
-                        <!-- Enabled toggle (not for Home) -->
-                        <button
-                            v-if="!pg.always"
-                            @click="requestToggle(pg.key)"
-                            :title="pageEnabled[pg.key] ? 'Disable page' : 'Enable page'"
-                            class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200"
-                            :class="pageEnabled[pg.key] ? 'bg-[var(--primary)]' : 'bg-slate-700'"
-                        >
-                            <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" /></svg>
-                        </button>
-                        <button
-                            @click="activePage = pg.key"
-                            class="flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold text-[var(--primary)] border border-[var(--primary)]/30 hover:bg-[var(--primary)]/5 py-1.5 rounded-lg transition-colors"
-                        >
-                            <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
-                        </button>
-                    </div>
-
-                    <!-- Page icon -->
-                    <div class="size-8 rounded-lg bg-app-elevated group-hover:bg-[var(--primary)]/10 flex items-center justify-center shrink-0 transition-colors">
-                        <svg class="size-3.5 text-app-muted group-hover:text-[var(--primary)] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <!-- Icon -->
+                    <div class="size-9 rounded-lg bg-app-elevated flex items-center justify-center shrink-0 group-hover:bg-[var(--primary)]/10 transition-colors">
+                        <svg class="size-4 text-app-muted group-hover:text-[var(--primary)] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="pageIconPaths[pg.icon]" />
                         </svg>
                     </div>
 
-                    <!-- Page name + slug -->
+                    <!-- Label + slug -->
                     <div class="flex-1 min-w-0">
                         <p class="text-sm font-semibold text-app leading-tight" style="font-family: Manrope, sans-serif;">{{ pg.label }}</p>
                         <p class="text-xs text-app-muted font-mono mt-0.5">{{ pg.href ?? '(no public route)' }}</p>
                     </div>
 
-                    <!-- Enabled / Disabled badge -->
-                    <div class="shrink-0">
-                        <!-- Home always-on lock badge -->
-                        <span v-if="pg.always" class="flex items-center gap-1 text-xs text-app-muted bg-app-elevated px-2.5 py-1 rounded-full font-medium">
+                    <!-- Reorder buttons -->
+                    <div class="flex flex-col gap-0.5 shrink-0">
+                        <button @click="pageList.splice(pageList.indexOf(pg) - 1, 0, pageList.splice(pageList.indexOf(pg), 1)[0])"
+                            :disabled="pageList.indexOf(pg) === 0"
+                            class="size-5 flex items-center justify-center rounded text-app-muted hover:text-app hover:bg-app-elevated disabled:opacity-20 disabled:cursor-not-allowed transition-colors">
+                            <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" /></svg>
+                        </button>
+                        <button @click="pageList.splice(pageList.indexOf(pg) + 1, 0, pageList.splice(pageList.indexOf(pg), 1)[0])"
+                            :disabled="pageList.indexOf(pg) === pageList.length - 1"
+                            class="size-5 flex items-center justify-center rounded text-app-muted hover:text-app hover:bg-app-elevated disabled:opacity-20 disabled:cursor-not-allowed transition-colors">
+                            <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+                        </button>
+                    </div>
+
+                    <!-- Status badge -->
+                    <div class="w-28 shrink-0 flex justify-center">
+                        <span v-if="pg.always" class="inline-flex items-center gap-1.5 text-xs text-app-muted bg-app-elevated border border-app px-3 py-1.5 rounded-full font-medium">
                             <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                             Always on
                         </span>
-                        <!-- Toggleable badge -->
                         <button
                             v-else
                             @click="requestToggle(pg.key)"
-                            class="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-semibold border transition-colors"
+                            class="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full font-semibold border transition-colors w-full justify-center"
                             :class="pageEnabled[pg.key]
                                 ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20 hover:bg-emerald-500/20'
-                                : 'text-app-muted bg-app-elevated border-app hover:border-slate-500'"
+                                : 'text-slate-500 bg-app-elevated border-app hover:border-slate-600'"
                         >
-                            <!-- Enabled: checkmark -->
                             <svg v-if="pageEnabled[pg.key]" class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                             </svg>
-                            <!-- Disabled: dash -->
                             <svg v-else class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 12H4" />
                             </svg>
@@ -278,7 +257,7 @@ const pageIconPaths: Record<string, string> = {
                     <!-- Edit button -->
                     <button
                         @click="activePage = pg.key"
-                        class="flex items-center gap-1.5 text-xs font-semibold text-[var(--primary)] border border-[var(--primary)]/30 hover:bg-[var(--primary)]/5 px-3 py-1.5 rounded-lg transition-colors shrink-0"
+                        class="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--primary)] border border-[var(--primary)]/30 hover:bg-[var(--primary)]/5 px-3 py-1.5 rounded-lg transition-colors shrink-0"
                     >
                         <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                         Edit
@@ -289,11 +268,12 @@ const pageIconPaths: Record<string, string> = {
                         v-if="pg.href"
                         :href="pg.href"
                         target="_blank"
-                        class="flex items-center justify-center text-app-muted hover:text-app-muted transition-colors shrink-0"
+                        class="size-7 flex items-center justify-center rounded-lg text-app-muted hover:text-app hover:bg-app-elevated transition-colors shrink-0"
                         title="View live page"
                     >
                         <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                     </a>
+                    <div v-else class="size-7 shrink-0" />
                 </div>
             </div>
         </div>
