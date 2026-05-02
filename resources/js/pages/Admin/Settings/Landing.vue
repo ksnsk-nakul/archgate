@@ -26,11 +26,6 @@ type PageKey = 'home' | 'services' | 'about' | 'careers' | 'contact' | 'library-
 type PageDef = { key: PageKey; label: string; desc: string; href: string | null; icon: string; always?: boolean };
 
 
-// Load enabled state from props (DB value), fallback all true
-const defaultEnabled: Record<PageKey, boolean> = {
-    home: true, services: true, about: true, careers: true,
-    contact: true, 'library-preview': true, 'footer-nav': true,
-};
 
 const pageList = ref<PageDef[]>([
     { key: 'home',            label: 'Home',            desc: 'Hero, services teaser, call-to-action', href: '/',                icon: 'home',   always: true },
@@ -204,7 +199,7 @@ const pageIconPaths: Record<string, string> = {
 
             <div class="rounded-xl border border-app bg-app-surface overflow-hidden divide-y divide-app">
                 <div
-                    v-for="(pg, index) in pageList"
+                    v-for="pg in pageList"
                     :key="pg.key"
                     class="flex items-center gap-3 px-4 py-3 hover:bg-app-elevated/30 transition-colors group"
                 >

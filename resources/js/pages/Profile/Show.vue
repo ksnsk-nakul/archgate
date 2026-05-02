@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
-import { Pencil, User } from 'lucide-vue-next';
+import { Pencil } from 'lucide-vue-next';
 import { useUserStore } from '@/stores/useUserStore';
 
 const page = usePage();

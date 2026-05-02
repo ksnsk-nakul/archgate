@@ -9,7 +9,6 @@ useTheme();
 
 defineProps<{ canRegister: boolean }>();
 
-type AppDetails = { name: string; logoUrl?: string | null };
 type NavLink = { label: string; href: string };
 type Service = { icon: string; title: string; body: string };
 type Career  = { title: string; location?: string; type?: string; description?: string };
@@ -27,10 +26,9 @@ type LandingData = {
     careers: string;
 };
 
-const page    = usePage<{ landing: LandingData; appDetails: AppDetails; auth: { user: unknown } }>();
+const page    = usePage<{ landing: LandingData; appDetails: { name: string }; auth: { user: unknown } }>();
 const landing = computed(() => page.props.landing);
 const appName = computed(() => page.props.appDetails?.name ?? 'FluxHaven');
-const logoUrl = computed(() => page.props.appDetails?.logoUrl ?? null);
 
 const parseJson = <T>(val: string | null | undefined, fallback: T): T => {
     try { return val ? JSON.parse(val) : fallback; } catch { return fallback; }
