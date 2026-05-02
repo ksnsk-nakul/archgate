@@ -183,7 +183,7 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                             </div>
                             <!-- WAS-ON: greyed-out tick (was previously enabled, now deselected) -->
                             <div
-                                v-else-if="checkState(permission.id) === 'was-on'"
+                                v-if="checkState(permission.id) === 'was-on'"
                                 class="size-4 rounded border-2 border-app bg-app-elevated flex items-center justify-center transition-all duration-150"
                                 title="Previously enabled — will be removed on save"
                             >

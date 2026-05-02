@@ -25,54 +25,12 @@ const parseJson = <T>(val: string | null | undefined, fallback: T): T => {
 type PageKey = 'home' | 'services' | 'about' | 'careers' | 'contact' | 'library-preview' | 'footer-nav';
 type PageDef = { key: PageKey; label: string; desc: string; href: string | null; icon: string; always?: boolean };
 
-/** Canonical order — drives both the CMS list and public nav */
-const pageList = ref<PageDef[]>([
-    { key: 'home',            label: 'Home',            desc: 'Hero, services teaser, CTA',       href: '/',               icon: 'home',   always: true },
-    { key: 'services',        label: 'Services',        desc: 'Feature / services grid',          href: '/services',        icon: 'grid' },
-    { key: 'about',           label: 'About',           desc: 'Rich text about section',          href: '/about',           icon: 'info' },
-    { key: 'careers',         label: 'Careers',         desc: 'Open job listings',                href: '/careers',         icon: 'work' },
-    { key: 'contact',         label: 'Contact',         desc: 'Contact info + lead capture form', href: '/contact',         icon: 'mail' },
-    { key: 'library-preview', label: 'Library Preview', desc: 'Public library item listing',      href: '/library-preview', icon: 'book' },
-    { key: 'footer-nav',      label: 'Footer & Nav',    desc: 'Navigation links + footer text',   href: null,               icon: 'layout' },
-]);
-
-/** Options for section link_to dropdowns */
-const linkablePages = computed(() => [
-    { label: 'None', value: '' },
-    ...pageList.value
-        .filter((p) => p.href !== null && p.key !== 'footer-nav')
-        .map((p) => ({ label: p.label, value: p.href as string })),
-]);
 
 // Load enabled state from props (DB value), fallback all true
 const defaultEnabled: Record<PageKey, boolean> = {
     home: true, services: true, about: true, careers: true,
     contact: true, 'library-preview': true, 'footer-nav': true,
 };
-const pageEnabled = ref<Record<PageKey, boolean>>(
-    Object.assign({}, defaultEnabled, props.settings.page_enabled ?? {}),
-);
-
-// ── Confirmation dialog for toggle ───────────────────────────────────────────
-const confirmDialog = ref<{ key: PageKey; enabling: boolean } | null>(null);
-
-function requestToggle(key: PageKey) {
-    if (key === 'home') { return; }
-    confirmDialog.value = { key, enabling: !pageEnabled.value[key] };
-}
-
-function cancelToggle() { confirmDialog.value = null; }
-
-function confirmToggle() {
-    if (!confirmDialog.value) { return; }
-    const { key, enabling } = confirmDialog.value;
-    pageEnabled.value[key] = enabling;
-    confirmDialog.value = null;
-    router.put('/admin/settings/landing', { page_enabled: pageEnabled.value }, {
-        preserveScroll: true,
-        preserveState: true,
-    });
-}
 
 const pageList = [
     { key: 'home' as PageKey,            label: 'Home',            desc: 'Hero, services teaser, call-to-action', href: '/',                icon: 'home',   always: true },
@@ -124,10 +82,9 @@ function confirmToggle(): void {
     // Persist immediately to DB
     router.put('/admin/settings/landing', {
         page_enabled: { ...pageEnabled.value },
-    } as Record<string, unknown>, {
+    }, {
         preserveScroll: true,
-        preserveState: true,
-        only: [],
+        preserveState: true
     });
 }
 
@@ -363,7 +320,7 @@ const pageIconPaths: Record<string, string> = {
                                 {{ confirmDialog.enabling ? 'Enable page?' : 'Disable page?' }}
                             </p>
                             <p class="text-xs text-app-muted mt-0.5">
-                                {{ pageList.find((p) => p.key === confirmDialog!.key)?.label }} · {{ pageList.find((p) => p.key === confirmDialog!.key)?.href }}
+                                {{ pageList.find((p) => p.key === confirmDialog.pageKey)?.label }} · {{ pageList.find((p) => p.key === confirmDialog.pageKey)?.href }}
                             </p>
                         </div>
                     </div>
