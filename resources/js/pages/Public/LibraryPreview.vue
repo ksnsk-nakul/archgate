@@ -79,3 +79,14 @@ const typeBadgeClass: Record<string, string> = {
         </div>
     </section>
 </template>
+
+<style scoped>
+.read-btn {
+    border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+    color: var(--primary);
+}
+.read-btn:hover {
+    background-color: var(--primary);
+    color: white;
+}
+</style>

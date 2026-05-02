@@ -32,29 +32,29 @@ const systemRoleBadge: Record<string, string> = {
     admin: 'bg-amber-500/15 text-amber-400 border-amber-500/25',
     author: 'bg-blue-500/15 text-blue-400 border-blue-500/25',
     tutor: 'bg-violet-500/15 text-violet-400 border-violet-500/25',
-    user: 'bg-slate-500/15 text-slate-400 border-slate-500/25',
+    user: 'bg-slate-500/15 text-app-muted border-slate-500/25',
 };
 </script>
 
 <template>
     <Head title="Roles" />
 
-    <div class="flex flex-col min-h-full bg-[#051424] text-[#d4e4fa]" style="font-family: Inter, sans-serif;">
+    <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
         <!-- Toolbar -->
-        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-slate-800">
+        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Admin</p>
-                <h1 class="text-xl font-bold text-white" style="font-family: Manrope, sans-serif;">Roles & Permissions</h1>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Admin</p>
+                <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">Roles & Permissions</h1>
             </div>
         </div>
 
         <div class="px-6 py-6 flex flex-col gap-6">
 
             <!-- Create subadmin card -->
-            <div class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-800">
-                    <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">Create subadmin role</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Custom roles can be assigned tailored permission policies.</p>
+            <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                <div class="px-6 py-4 border-b border-app">
+                    <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Create subadmin role</h2>
+                    <p class="text-xs text-app-muted mt-0.5">Custom roles can be assigned tailored permission policies.</p>
                 </div>
                 <div class="px-6 py-5">
                     <Form
@@ -63,7 +63,7 @@ const systemRoleBadge: Record<string, string> = {
                         v-slot="{ errors, processing }"
                     >
                         <div class="flex flex-col gap-1.5">
-                            <label for="name" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Name</label>
+                            <label for="name" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Name</label>
                             <input
                                 id="name"
                                 name="name"
@@ -74,7 +74,7 @@ const systemRoleBadge: Record<string, string> = {
                             <InputError :message="errors.name" />
                         </div>
                         <div class="flex flex-col gap-1.5">
-                            <label for="description" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Description</label>
+                            <label for="description" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Description</label>
                             <input
                                 id="description"
                                 name="description"
@@ -98,14 +98,14 @@ const systemRoleBadge: Record<string, string> = {
             </div>
 
             <!-- Role list -->
-            <div class="rounded-xl border border-slate-800 bg-[#0d1c2d] overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-800">
-                    <h2 class="text-sm font-bold text-white" style="font-family: Manrope, sans-serif;">Role list</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Open the policy page to update a role's permissions. Superadmin is locked.</p>
+            <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                <div class="px-6 py-4 border-b border-app">
+                    <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Role list</h2>
+                    <p class="text-xs text-app-muted mt-0.5">Open the policy page to update a role's permissions. Superadmin is locked.</p>
                 </div>
 
                 <!-- Column headers -->
-                <div class="hidden md:grid grid-cols-[1fr_100px_60px_80px_120px] px-6 py-2.5 bg-slate-900/50 border-b border-slate-800 text-xs text-slate-600 font-semibold uppercase tracking-wider gap-4">
+                <div class="hidden md:grid grid-cols-[1fr_100px_60px_80px_120px] px-6 py-2.5 bg-app-elevated/50 border-b border-app text-xs text-app-muted font-semibold uppercase tracking-wider gap-4">
                     <span>Role</span>
                     <span>Type</span>
                     <span class="text-center">Users</span>
@@ -113,22 +113,22 @@ const systemRoleBadge: Record<string, string> = {
                     <span class="text-right">Policy</span>
                 </div>
 
-                <div class="divide-y divide-slate-800/60">
+                <div class="divide-y divide-app/60">
                     <div
                         v-for="role in roles.data"
                         :key="role.id"
-                        class="grid grid-cols-1 md:grid-cols-[1fr_100px_60px_80px_120px] items-center px-6 py-4 hover:bg-slate-800/20 transition-colors gap-4 group"
+                        class="grid grid-cols-1 md:grid-cols-[1fr_100px_60px_80px_120px] items-center px-6 py-4 hover:bg-app-elevated/20 transition-colors gap-4 group"
                     >
                         <!-- Name + description -->
                         <div>
-                            <p class="text-sm font-semibold text-slate-100">{{ role.name }}</p>
-                            <p class="text-xs text-slate-500">{{ role.description || role.slug }}</p>
+                            <p class="text-sm font-semibold text-app">{{ role.name }}</p>
+                            <p class="text-xs text-app-muted">{{ role.description || role.slug }}</p>
                         </div>
 
                         <!-- Type badge -->
                         <div>
                             <span
-                                :class="role.is_system ? (systemRoleBadge[role.slug] ?? 'bg-slate-500/15 text-slate-400 border-slate-500/25') : 'bg-slate-800 text-slate-400 border-slate-700'"
+                                :class="role.is_system ? (systemRoleBadge[role.slug] ?? 'bg-slate-500/15 text-app-muted border-slate-500/25') : 'bg-app-elevated text-app-muted border-app'"
                                 class="inline-flex items-center text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border"
                             >
                                 {{ role.is_system ? role.slug === 'superadmin' ? 'Super' : 'System' : 'Custom' }}
@@ -137,12 +137,12 @@ const systemRoleBadge: Record<string, string> = {
 
                         <!-- Users count -->
                         <div class="text-center">
-                            <span class="text-sm text-slate-300 font-medium">{{ role.users_count ?? 0 }}</span>
+                            <span class="text-sm text-app-muted font-medium">{{ role.users_count ?? 0 }}</span>
                         </div>
 
                         <!-- Permissions count -->
                         <div class="text-center">
-                            <span class="text-sm text-slate-300 font-medium">{{ role.permissions?.length ?? 0 }}</span>
+                            <span class="text-sm text-app-muted font-medium">{{ role.permissions?.length ?? 0 }}</span>
                         </div>
 
                         <!-- Policy action -->

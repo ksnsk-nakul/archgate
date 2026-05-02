@@ -2,9 +2,6 @@
 import { Head, Link } from '@inertiajs/vue3';
 import { ArrowLeft, ArrowRight, BookOpen, ChevronRight } from 'lucide-vue-next';
 import { computed } from 'vue';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 type Lesson = {
     id: number;
@@ -49,15 +46,10 @@ const props = defineProps<{
 
 function lessonsFor(section: Section): SectionLesson[] {
     const val = section.lessons;
-
-    if (!val) {
-return [];
-}
-
+    if (!val) { return []; }
     return Array.isArray(val) ? val : (val as { data: SectionLesson[] }).data;
 }
 
-// Flatten all lessons across all sections in order
 const allLessons = computed<SectionLesson[]>(() =>
     props.sections.data.flatMap((s) => lessonsFor(s)),
 );
@@ -81,108 +73,128 @@ const currentSection = computed(() =>
         lessonsFor(s).some((l) => l.id === props.lesson.data.id),
     ),
 );
+
+const typeColor: Record<string, string> = {
+    video: 'text-purple-400 bg-purple-500/10 border-purple-500/20',
+    article: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
+    quiz: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
+};
 </script>
 
 <template>
     <Head :title="lesson.data.title" />
 
-    <div class="flex flex-col gap-6 p-4">
-        <!-- Breadcrumb nav -->
-        <div class="flex items-center gap-2 text-sm text-muted-foreground">
-            <Link :href="`/courses/${course.data.id}`" class="hover:text-foreground">
+    <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
+        <!-- Breadcrumb toolbar -->
+        <div class="flex items-center gap-2 px-6 py-4 border-b border-app text-sm">
+            <Link :href="`/courses/${course.data.id}`" class="text-app-muted hover:text-app transition-colors font-semibold">
                 {{ course.data.title }}
             </Link>
-            <ChevronRight class="size-3" />
-            <span v-if="currentSection">{{ currentSection.title }}</span>
-            <ChevronRight class="size-3" />
-            <span class="text-foreground">{{ lesson.data.title }}</span>
+            <ChevronRight class="size-3.5 text-app-muted" />
+            <span v-if="currentSection" class="text-app-muted">{{ currentSection.title }}</span>
+            <ChevronRight v-if="currentSection" class="size-3.5 text-app-muted" />
+            <span class="text-app font-semibold truncate max-w-xs">{{ lesson.data.title }}</span>
         </div>
 
-        <div class="grid gap-4 lg:grid-cols-4">
+        <div class="px-6 py-6 grid gap-4 lg:grid-cols-4">
             <!-- Lesson content -->
             <div class="flex flex-col gap-4 lg:col-span-3">
-                <div class="rounded-lg border bg-card p-6">
-                    <div class="mb-4 flex flex-wrap items-center gap-2">
-                        <h1 class="text-xl font-semibold">{{ lesson.data.title }}</h1>
-                        <Badge v-if="lesson.data.type" variant="outline">{{ lesson.data.type }}</Badge>
+                <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                    <div class="px-6 py-4 border-b border-app flex items-center gap-3">
+                        <h1 class="text-lg font-bold text-app flex-1" style="font-family: Manrope, sans-serif;">{{ lesson.data.title }}</h1>
+                        <span
+                            v-if="lesson.data.type"
+                            class="text-xs font-semibold px-2 py-0.5 rounded-full border"
+                            :class="typeColor[lesson.data.type] ?? 'text-app-muted bg-app-elevated border-app'"
+                        >
+                            {{ lesson.data.type }}
+                        </span>
                     </div>
-                    <article class="prose prose-sm dark:prose-invert max-w-none">
-                        <p v-if="lesson.data.content" class="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">
+                    <div class="px-6 py-5">
+                        <p v-if="lesson.data.content" class="text-sm text-app-muted leading-relaxed whitespace-pre-wrap">
                             {{ lesson.data.content }}
                         </p>
-                        <p v-else class="text-sm text-muted-foreground">
+                        <p v-else class="text-sm text-app-muted italic">
                             No content has been added to this lesson yet.
                         </p>
-                    </article>
+                    </div>
                 </div>
 
                 <!-- Prev / Next navigation -->
                 <div class="flex items-center justify-between gap-4">
-                    <Button v-if="prevLesson" variant="outline" as-child>
-                        <Link :href="`/lessons/${prevLesson.id}`">
-                            <ArrowLeft class="size-4" />
-                            {{ prevLesson.title }}
-                        </Link>
-                    </Button>
+                    <Link
+                        v-if="prevLesson"
+                        :href="`/lessons/${prevLesson.id}`"
+                        class="flex items-center gap-1.5 text-xs font-semibold text-app-muted hover:text-app border border-app hover:border-app px-3 py-2 rounded-lg transition-colors"
+                    >
+                        <ArrowLeft class="size-3.5" /> {{ prevLesson.title }}
+                    </Link>
                     <div v-else />
-                    <Button v-if="nextLesson" as-child>
-                        <Link :href="`/lessons/${nextLesson.id}`">
-                            {{ nextLesson.title }}
-                            <ArrowRight class="size-4" />
-                        </Link>
-                    </Button>
-                    <Button v-else variant="outline" as-child>
-                        <Link :href="`/courses/${course.data.id}`">
-                            Back to course
-                        </Link>
-                    </Button>
+
+                    <Link
+                        v-if="nextLesson"
+                        :href="`/lessons/${nextLesson.id}`"
+                        class="flex items-center gap-1.5 text-xs font-semibold bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white px-3 py-2 rounded-lg transition-colors"
+                    >
+                        {{ nextLesson.title }} <ArrowRight class="size-3.5" />
+                    </Link>
+                    <Link
+                        v-else
+                        :href="`/courses/${course.data.id}`"
+                        class="flex items-center gap-1.5 text-xs font-semibold text-app-muted hover:text-app border border-app hover:border-app px-3 py-2 rounded-lg transition-colors"
+                    >
+                        Back to course
+                    </Link>
                 </div>
             </div>
 
             <!-- Sidebar: course outline -->
-            <div class="lg:col-span-1">
-                <Card class="rounded-lg">
-                    <CardHeader>
-                        <CardTitle class="flex items-center gap-2 text-sm">
-                            <BookOpen class="size-4" />
-                            Course outline
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent class="flex flex-col gap-3 pt-0">
+            <div class="flex flex-col gap-3 lg:col-span-1">
+                <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                    <div class="px-4 py-3 border-b border-app flex items-center gap-2">
+                        <BookOpen class="size-4 text-app-muted" />
+                        <h2 class="text-xs font-bold text-app uppercase tracking-wider" style="font-family: Manrope, sans-serif;">Course outline</h2>
+                    </div>
+                    <div class="px-3 py-3 flex flex-col gap-3">
                         <div v-for="section in sections.data" :key="section.id">
-                            <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                            <p class="mb-1 px-2 text-xs font-semibold uppercase tracking-wider text-app-muted">
                                 {{ section.title }}
                             </p>
-                            <div class="flex flex-col gap-1">
+                            <div class="flex flex-col gap-0.5">
                                 <Link
                                     v-for="l in lessonsFor(section)"
                                     :key="l.id"
                                     :href="`/lessons/${l.id}`"
-                                    class="rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-muted/50"
-                                    :class="l.id === lesson.data.id ? 'bg-muted font-medium' : 'text-muted-foreground'"
+                                    class="rounded-lg px-2 py-1.5 text-xs transition-colors"
+                                    :class="l.id === lesson.data.id
+                                        ? 'bg-[var(--primary)]/10 text-[var(--primary)] font-semibold'
+                                        : 'text-app-muted hover:text-app hover:bg-app-elevated'"
                                 >
                                     {{ l.title }}
                                 </Link>
                             </div>
                         </div>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
 
                 <!-- Progress card if enrolled -->
-                <Card v-if="enrollment" class="mt-3 rounded-lg">
-                    <CardContent class="pt-4">
-                        <div class="mb-1 flex justify-between text-sm">
-                            <span class="text-muted-foreground">Progress</span>
-                            <span class="font-medium">{{ enrollment.progress }}%</span>
+                <div v-if="enrollment" class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                    <div class="px-4 py-3 border-b border-app">
+                        <h2 class="text-xs font-bold text-app uppercase tracking-wider">Progress</h2>
+                    </div>
+                    <div class="px-4 py-3">
+                        <div class="mb-2 flex justify-between text-sm">
+                            <span class="text-app-muted">{{ enrollment.status }}</span>
+                            <span class="font-semibold text-app">{{ enrollment.progress }}%</span>
                         </div>
-                        <div class="h-2 overflow-hidden rounded-full bg-muted">
+                        <div class="h-2 overflow-hidden rounded-full bg-app-elevated">
                             <div
-                                class="h-full rounded-full bg-primary transition-all"
+                                class="h-full rounded-full bg-[var(--primary)] transition-all"
                                 :style="{ width: `${enrollment.progress}%` }"
                             />
                         </div>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

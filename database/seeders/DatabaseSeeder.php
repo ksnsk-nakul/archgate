@@ -23,5 +23,11 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
         ]);
+
+        $this->call([
+            LibrarySeeder::class,
+            CoursesSeeder::class,
+            ContactsAndDealsSeeder::class,
+        ]);
     }
 }

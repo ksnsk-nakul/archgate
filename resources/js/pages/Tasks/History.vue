@@ -1,26 +1,18 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
-import PageHeader from '@/components/PageHeader.vue';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeft, Clock } from 'lucide-vue-next';
 import { show } from '@/routes/app/tasks';
 import type { Task } from '@/stores/useTaskStore';
 
 defineProps<{
-    task: {
-        data: Task;
-    };
+    task: { data: Task };
     logs: {
         data: Array<{
             id: number;
             action: string;
             changes: Record<string, unknown> | null;
             created_at: string;
-            user?: {
-                data?: {
-                    name: string;
-                };
-            };
+            user?: { data?: { name: string } };
         }>;
     };
 }>();
@@ -29,31 +21,46 @@ defineProps<{
 <template>
     <Head title="Task history" />
 
-    <div class="flex flex-col gap-6 p-4">
-        <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-            <PageHeader title="Task history" :description="task.data.title" />
-            <Button variant="outline" as-child>
-                <Link :href="show(task.data)">Back to task</Link>
-            </Button>
+    <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
+        <div class="flex items-center gap-3 px-6 py-4 border-b border-app">
+            <Link
+                :href="show(task.data)"
+                class="flex items-center gap-1.5 text-xs font-semibold text-app-muted hover:text-app border border-app hover:border-app px-3 py-2 rounded-lg transition-colors"
+            >
+                <ArrowLeft class="size-3.5" /> Back to task
+            </Link>
+            <div>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Tasks</p>
+                <h1 class="text-xl font-bold text-app truncate max-w-sm" style="font-family: Manrope, sans-serif;">History: {{ task.data.title }}</h1>
+            </div>
         </div>
 
-        <Card class="rounded-lg">
-            <CardHeader>
-                <CardTitle>Activity log</CardTitle>
-            </CardHeader>
-            <CardContent class="flex flex-col gap-3">
-                <div v-for="log in logs.data" :key="log.id" class="rounded-md border p-3 text-sm">
-                    <div class="flex flex-col justify-between gap-1 sm:flex-row">
-                        <p class="font-medium">{{ log.action }}</p>
-                        <p class="text-muted-foreground">{{ log.created_at }}</p>
-                    </div>
-                    <pre class="mt-2 overflow-x-auto rounded bg-muted p-2 text-xs">{{ log.changes }}</pre>
+        <div class="px-6 py-6 max-w-3xl">
+            <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
+                <div class="px-6 py-4 border-b border-app flex items-center gap-2">
+                    <Clock class="size-4 text-purple-400" />
+                    <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Activity log</h2>
+                    <span class="ml-auto text-xs text-app-muted">{{ logs.data.length }} event{{ logs.data.length !== 1 ? 's' : '' }}</span>
                 </div>
 
-                <p v-if="logs.data.length === 0" class="text-sm text-muted-foreground">
-                    No task activity has been logged yet.
-                </p>
-            </CardContent>
-        </Card>
+                <div class="divide-y divide-app">
+                    <div v-for="log in logs.data" :key="log.id" class="px-6 py-4">
+                        <div class="flex items-start justify-between gap-4 mb-2">
+                            <div>
+                                <p class="text-sm font-semibold text-app">{{ log.action }}</p>
+                                <p v-if="log.user?.data?.name" class="text-xs text-app-muted mt-0.5">by {{ log.user.data.name }}</p>
+                            </div>
+                            <p class="text-xs text-app-muted shrink-0">{{ log.created_at }}</p>
+                        </div>
+                        <pre v-if="log.changes" class="text-xs text-app-muted bg-app-elevated rounded-lg px-3 py-2 overflow-x-auto whitespace-pre-wrap">{{ JSON.stringify(log.changes, null, 2) }}</pre>
+                    </div>
+
+                    <div v-if="logs.data.length === 0" class="px-6 py-12 text-center">
+                        <Clock class="mx-auto mb-2 size-7 text-app-muted" />
+                        <p class="text-sm text-app-muted">No activity logged yet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>

@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
+import { useTheme } from '@/composables/useTheme';
 import { dashboard, login, register } from '@/routes';
+
+// Apply primary color CSS variable immediately (and reactively on change)
+useTheme();
 
 defineProps<{ canRegister: boolean }>();
 
@@ -27,8 +31,13 @@ type LandingData = {
     careers: string;
 };
 
-const page = usePage<{ landing: LandingData; auth: { user: unknown } }>();
+const page = usePage<{
+    landing: LandingData;
+    appDetails: { name: string };
+    auth: { user: unknown };
+}>();
 const landing = computed(() => page.props.landing);
+const appName = computed(() => page.props.appDetails?.name ?? 'FluxHaven');
 
 const parseJson = <T,>(val: string | null | undefined, fallback: T): T => {
     try {
@@ -129,7 +138,7 @@ const serviceIcons: Record<string, string> = {
 </script>
 
 <template>
-    <Head :title="`${heroTitle} — FluxHaven`">
+    <Head :title="`${heroTitle} — ${appName}`">
         <meta name="description" :content="heroSubtitle" />
     </Head>
 

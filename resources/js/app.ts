@@ -1,5 +1,5 @@
-import { router } from '@inertiajs/vue3';
-import { createInertiaApp } from '@inertiajs/vue3';
+import { createInertiaApp, router } from '@inertiajs/vue3';
+
 import { createPinia } from 'pinia';
 import { initializeTheme } from '@/composables/useAppearance';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -62,3 +62,10 @@ initializeTheme();
 
 // This will listen for flash toast data from the server...
 initializeFlashToast();
+
+
+router.on('navigate', (event) => {
+    const color = (event.detail.page.props as Record<string, unknown> & { appDetails?: { primaryColor?: string } })
+        .appDetails?.primaryColor;
+    applyPrimaryColor(color);
+});
