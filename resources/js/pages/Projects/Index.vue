@@ -20,7 +20,7 @@ const searchQuery = ref('');
 const statusColor: Record<string, string> = {
     active: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/25',
     completed: 'bg-blue-500/15 text-blue-400 border-blue-500/25',
-    archived: 'bg-slate-500/15 text-slate-400 border-slate-500/25',
+    archived: 'bg-slate-500/15 text-app-muted border-slate-500/25',
 };
 
 const statusDot: Record<string, string> = {
@@ -65,29 +65,29 @@ async function deleteProject(id: number): Promise<void> {
         <!-- Page toolbar -->
         <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Workspace</p>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Workspace</p>
                 <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">Projects</h1>
             </div>
 
             <div class="flex items-center gap-3">
                 <!-- Search -->
                 <div class="relative hidden sm:block">
-                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-app-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                     <input
                         v-model="searchQuery"
                         type="text"
                         placeholder="Search projects..."
-                        class="bg-slate-900 border border-app text-sm rounded-lg pl-9 pr-4 py-2 w-52 text-slate-300 placeholder-slate-600 focus:outline-none focus:border-orange-500 transition-colors"
+                        class="bg-app-elevated border border-app text-sm rounded-lg pl-9 pr-4 py-2 w-52 text-app-muted placeholder-slate-600 focus:outline-none focus:border-orange-500 transition-colors"
                     />
                 </div>
 
                 <!-- View toggle -->
-                <div class="flex items-center bg-slate-900 border border-app rounded-lg p-1">
+                <div class="flex items-center bg-app-elevated border border-app rounded-lg p-1">
                     <button
                         @click="viewMode = 'list'"
-                        :class="viewMode === 'list' ? 'bg-slate-700 text-app' : 'text-slate-500 hover:text-slate-300'"
+                        :class="viewMode === 'list' ? 'bg-slate-700 text-app' : 'text-app-muted hover:text-app-muted'"
                         class="px-3 py-1.5 rounded text-xs font-medium transition-all flex items-center gap-1.5"
                     >
                         <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,7 +97,7 @@ async function deleteProject(id: number): Promise<void> {
                     </button>
                     <button
                         @click="viewMode = 'board'"
-                        :class="viewMode === 'board' ? 'bg-slate-700 text-app' : 'text-slate-500 hover:text-slate-300'"
+                        :class="viewMode === 'board' ? 'bg-slate-700 text-app' : 'text-app-muted hover:text-app-muted'"
                         class="px-3 py-1.5 rounded text-xs font-medium transition-all flex items-center gap-1.5"
                     >
                         <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,7 +133,7 @@ async function deleteProject(id: number): Promise<void> {
                 </svg>
             </div>
             <h3 class="text-lg font-bold text-app mb-2" style="font-family: Manrope, sans-serif;">No projects yet</h3>
-            <p class="text-slate-500 text-sm mb-6 max-w-xs">Create your first project to start organising work and tracking progress.</p>
+            <p class="text-app-muted text-sm mb-6 max-w-xs">Create your first project to start organising work and tracking progress.</p>
             <Link href="/projects/create" class="flex items-center gap-2 bg-[#f7600d] hover:bg-orange-600 text-app text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
                 <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -144,7 +144,7 @@ async function deleteProject(id: number): Promise<void> {
 
         <!-- No search results -->
         <div v-else-if="filteredProjects.length === 0 && searchQuery" class="flex flex-col items-center justify-center flex-1 py-16 text-center">
-            <p class="text-slate-500 text-sm">No projects match <span class="text-slate-300 font-medium">"{{ searchQuery }}"</span></p>
+            <p class="text-app-muted text-sm">No projects match <span class="text-app-muted font-medium">"{{ searchQuery }}"</span></p>
         </div>
 
         <!-- LIST VIEW -->
@@ -153,12 +153,12 @@ async function deleteProject(id: number): Promise<void> {
                 <div v-if="group.length > 0">
                     <div class="flex items-center gap-2 mb-3">
                         <span :class="statusDot[key]" class="inline-block size-2 rounded-full"></span>
-                        <span class="text-xs font-bold uppercase tracking-widest text-slate-500">{{ statusLabel[key] }}</span>
-                        <span class="ml-1 text-xs text-slate-600">{{ group.length }}</span>
+                        <span class="text-xs font-bold uppercase tracking-widest text-app-muted">{{ statusLabel[key] }}</span>
+                        <span class="ml-1 text-xs text-app-muted">{{ group.length }}</span>
                     </div>
                     <div class="rounded-xl border border-app overflow-hidden">
                         <!-- Column headers -->
-                        <div class="grid grid-cols-[1fr_120px_108px] px-4 py-2 bg-slate-900/60 border-b border-app text-xs text-slate-600 font-semibold uppercase tracking-wider">
+                        <div class="grid grid-cols-[1fr_120px_108px] px-4 py-2 bg-app-elevated/60 border-b border-app text-xs text-app-muted font-semibold uppercase tracking-wider">
                             <span>Project</span>
                             <span class="text-right">Status</span>
                             <span class="text-right">Actions</span>
@@ -167,7 +167,7 @@ async function deleteProject(id: number): Promise<void> {
                         <div
                             v-for="project in group"
                             :key="project.id"
-                            class="grid grid-cols-[1fr_120px_108px] items-center px-4 py-3.5 border-b last:border-0 border-app/60 hover:bg-slate-800/30 transition-colors group"
+                            class="grid grid-cols-[1fr_120px_108px] items-center px-4 py-3.5 border-b last:border-0 border-app/60 hover:bg-app-elevated/30 transition-colors group"
                         >
                             <div class="flex flex-col gap-0.5 min-w-0 pr-4">
                                 <Link
@@ -176,7 +176,7 @@ async function deleteProject(id: number): Promise<void> {
                                 >
                                     {{ project.name }}
                                 </Link>
-                                <p v-if="project.description" class="text-xs text-slate-500 truncate">{{ project.description }}</p>
+                                <p v-if="project.description" class="text-xs text-app-muted truncate">{{ project.description }}</p>
                             </div>
                             <div class="flex justify-end">
                                 <span :class="statusColor[project.status]" class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border">
@@ -187,7 +187,7 @@ async function deleteProject(id: number): Promise<void> {
                             <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <Link
                                     :href="`/projects/${project.id}/edit`"
-                                    class="p-1.5 rounded text-slate-500 hover:text-slate-200 hover:bg-slate-700 transition-colors"
+                                    class="p-1.5 rounded text-app-muted hover:text-slate-200 hover:bg-slate-700 transition-colors"
                                     title="Edit"
                                 >
                                     <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -196,7 +196,7 @@ async function deleteProject(id: number): Promise<void> {
                                 </Link>
                                 <button
                                     @click="deleteProject(project.id)"
-                                    class="p-1.5 rounded text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                                    class="p-1.5 rounded text-app-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"
                                     title="Delete"
                                 >
                                     <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -205,7 +205,7 @@ async function deleteProject(id: number): Promise<void> {
                                 </button>
                                 <Link
                                     :href="`/projects/${project.id}`"
-                                    class="p-1.5 rounded text-slate-500 hover:text-[#f7600d] hover:bg-orange-500/10 transition-colors"
+                                    class="p-1.5 rounded text-app-muted hover:text-[#f7600d] hover:bg-orange-500/10 transition-colors"
                                     title="Open"
                                 >
                                     <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -225,8 +225,8 @@ async function deleteProject(id: number): Promise<void> {
                 <div class="flex-shrink-0 w-72">
                     <div class="flex items-center gap-2 mb-3">
                         <span :class="statusDot[key]" class="size-2 rounded-full"></span>
-                        <span class="text-xs font-bold uppercase tracking-widest text-slate-500">{{ statusLabel[key] }}</span>
-                        <span class="ml-auto text-xs font-semibold text-slate-600 bg-slate-800 px-2 py-0.5 rounded-full">{{ group.length }}</span>
+                        <span class="text-xs font-bold uppercase tracking-widest text-app-muted">{{ statusLabel[key] }}</span>
+                        <span class="ml-auto text-xs font-semibold text-app-muted bg-app-elevated px-2 py-0.5 rounded-full">{{ group.length }}</span>
                     </div>
                     <div class="flex flex-col gap-3">
                         <div
@@ -245,7 +245,7 @@ async function deleteProject(id: number): Promise<void> {
                                     {{ statusLabel[key] }}
                                 </span>
                             </div>
-                            <p class="text-xs text-slate-500 mb-4 line-clamp-2">{{ project.description || 'No description.' }}</p>
+                            <p class="text-xs text-app-muted mb-4 line-clamp-2">{{ project.description || 'No description.' }}</p>
                             <div class="flex items-center justify-between">
                                 <Link :href="`/projects/${project.id}`" class="text-xs text-[#f7600d] font-semibold hover:underline">
                                     Open →
@@ -253,7 +253,7 @@ async function deleteProject(id: number): Promise<void> {
                                 <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                     <Link
                                         :href="`/projects/${project.id}/edit`"
-                                        class="p-1 rounded text-slate-600 hover:text-slate-200 hover:bg-slate-700 transition-colors"
+                                        class="p-1 rounded text-app-muted hover:text-slate-200 hover:bg-slate-700 transition-colors"
                                     >
                                         <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -261,7 +261,7 @@ async function deleteProject(id: number): Promise<void> {
                                     </Link>
                                     <button
                                         @click="deleteProject(project.id)"
-                                        class="p-1 rounded text-slate-600 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                                        class="p-1 rounded text-app-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"
                                     >
                                         <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -273,7 +273,7 @@ async function deleteProject(id: number): Promise<void> {
 
                         <!-- Empty column placeholder -->
                         <div v-if="group.length === 0" class="border border-dashed border-app rounded-xl p-6 text-center">
-                            <p class="text-xs text-slate-600">No {{ statusLabel[key].toLowerCase() }} projects</p>
+                            <p class="text-xs text-app-muted">No {{ statusLabel[key].toLowerCase() }} projects</p>
                         </div>
                     </div>
                 </div>

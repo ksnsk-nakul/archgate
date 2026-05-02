@@ -11,7 +11,7 @@ defineProps<{
 const statusColor: Record<string, string> = {
     active: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
     completed: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
-    archived: 'text-slate-400 bg-slate-500/10 border-slate-500/20',
+    archived: 'text-app-muted bg-app-elevated border-app',
 };
 </script>
 
@@ -22,7 +22,7 @@ const statusColor: Record<string, string> = {
         <!-- Toolbar -->
         <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Projects</p>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Projects</p>
                 <h1 class="text-xl font-bold text-app truncate max-w-md" style="font-family: Manrope, sans-serif;">{{ project.data.name }}</h1>
             </div>
             <div class="flex items-center gap-2 shrink-0">
@@ -34,7 +34,7 @@ const statusColor: Record<string, string> = {
                 </Link>
                 <Link
                     href="/tasks"
-                    class="flex items-center gap-1.5 text-xs font-semibold text-slate-400 border border-app hover:text-app hover:border-slate-600 px-3 py-2 rounded-lg transition-colors"
+                    class="flex items-center gap-1.5 text-xs font-semibold text-app-muted border border-app hover:text-app hover:border-app px-3 py-2 rounded-lg transition-colors"
                 >
                     <ClipboardList class="size-3.5" /> View tasks
                 </Link>
@@ -49,25 +49,25 @@ const statusColor: Record<string, string> = {
                 </div>
                 <div class="px-6 py-5 flex flex-col gap-4">
                     <div>
-                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Status</p>
+                        <p class="text-xs text-app-muted uppercase tracking-wider font-semibold mb-1">Status</p>
                         <span
                             class="text-xs font-semibold px-2 py-0.5 rounded-full border"
-                            :class="statusColor[project.data.status ?? 'active'] ?? 'text-slate-400 bg-slate-500/10 border-slate-500/20'"
+                            :class="statusColor[project.data.status ?? 'active'] ?? 'text-app-muted bg-app-elevated border-app'"
                         >
                             {{ project.data.status ?? 'active' }}
                         </span>
                     </div>
                     <div>
-                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Name</p>
+                        <p class="text-xs text-app-muted uppercase tracking-wider font-semibold mb-1">Name</p>
                         <p class="text-sm font-medium text-app">{{ project.data.name }}</p>
                     </div>
                     <div v-if="project.data.description">
-                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Description</p>
-                        <p class="text-sm text-slate-400 leading-relaxed">{{ project.data.description }}</p>
+                        <p class="text-xs text-app-muted uppercase tracking-wider font-semibold mb-1">Description</p>
+                        <p class="text-sm text-app-muted leading-relaxed">{{ project.data.description }}</p>
                     </div>
                     <div v-else>
-                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Description</p>
-                        <p class="text-sm text-slate-600 italic">No description yet.</p>
+                        <p class="text-xs text-app-muted uppercase tracking-wider font-semibold mb-1">Description</p>
+                        <p class="text-sm text-app-muted italic">No description yet.</p>
                     </div>
                 </div>
             </div>

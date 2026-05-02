@@ -30,7 +30,7 @@ function isEnrolled(courseId: number): boolean {
         <!-- Toolbar -->
         <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Learning</p>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Learning</p>
                 <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">Courses</h1>
             </div>
             <Link
@@ -68,11 +68,11 @@ function isEnrolled(courseId: number): boolean {
                                 class="text-sm font-bold text-app hover:text-[var(--primary)] transition-colors leading-snug"
                                 style="font-family: Manrope, sans-serif;"
                             >{{ course.title }}</Link>
-                            <p class="text-xs text-slate-500 mt-1 line-clamp-2">{{ course.description || 'No description.' }}</p>
+                            <p class="text-xs text-app-muted mt-1 line-clamp-2">{{ course.description || 'No description.' }}</p>
                         </div>
 
                         <div v-if="isEnrolled(course.id)" class="space-y-1.5">
-                            <div class="flex justify-between text-xs text-slate-500">
+                            <div class="flex justify-between text-xs text-app-muted">
                                 <span>Progress</span>
                                 <span>{{ progressFor(course.id) }}%</span>
                             </div>
@@ -101,7 +101,7 @@ function isEnrolled(courseId: number): boolean {
                     <BookOpen class="size-7 text-purple-400" />
                 </div>
                 <h3 class="text-base font-bold text-app mb-1" style="font-family: Manrope, sans-serif;">No courses yet</h3>
-                <p class="text-sm text-slate-500 mb-4">Check back later — courses will appear here when published.</p>
+                <p class="text-sm text-app-muted mb-4">Check back later — courses will appear here when published.</p>
                 <Link
                     v-if="props.canCreate"
                     href="/courses/create"

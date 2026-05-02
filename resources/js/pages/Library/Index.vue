@@ -43,7 +43,7 @@ const accessColor: Record<string, string> = {
         <!-- Toolbar -->
         <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Knowledge</p>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Knowledge</p>
                 <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">Library</h1>
             </div>
             <div class="flex items-center gap-3">
@@ -84,14 +84,14 @@ const accessColor: Record<string, string> = {
                         </div>
                         <Lock
                             v-if="item.access_level && item.access_level !== 'free'"
-                            class="size-3.5 text-slate-600 mt-1 shrink-0"
+                            class="size-3.5 text-app-muted mt-1 shrink-0"
                         />
                     </div>
 
                     <div class="px-5 py-4 flex flex-col gap-3">
                         <p class="text-sm font-bold text-app leading-snug" style="font-family: Manrope, sans-serif;">{{ item.title }}</p>
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-semibold px-2 py-0.5 rounded-full border border-app text-slate-400 bg-app-elevated capitalize">
+                            <span class="text-xs font-semibold px-2 py-0.5 rounded-full border border-app text-app-muted bg-app-elevated capitalize">
                                 {{ item.type ?? 'Content' }}
                             </span>
                             <span
@@ -111,7 +111,7 @@ const accessColor: Record<string, string> = {
                     <BookMarked class="size-7 text-blue-400" />
                 </div>
                 <h3 class="text-base font-bold text-app mb-1" style="font-family: Manrope, sans-serif;">No content found</h3>
-                <p class="text-sm text-slate-500 mb-4">
+                <p class="text-sm text-app-muted mb-4">
                     {{ accessFilter !== 'all' ? 'No content matches this access level.' : 'The library is empty.' }}
                 </p>
                 <Link
@@ -125,7 +125,7 @@ const accessColor: Record<string, string> = {
 
             <!-- Subscription plans -->
             <div v-if="learningStore.subscriptions.length > 0">
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-3">Your subscriptions</p>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-3">Your subscriptions</p>
                 <div class="grid gap-4 md:grid-cols-3">
                     <div
                         v-for="plan in learningStore.subscriptions"
@@ -134,7 +134,7 @@ const accessColor: Record<string, string> = {
                     >
                         <div>
                             <p class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">{{ plan.name }}</p>
-                            <p class="text-xs text-slate-500 mt-0.5">
+                            <p class="text-xs text-app-muted mt-0.5">
                                 {{ plan.price != null ? `$${Number(plan.price).toLocaleString()}` : 'Free' }}
                             </p>
                         </div>

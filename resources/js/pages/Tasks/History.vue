@@ -25,12 +25,12 @@ defineProps<{
         <div class="flex items-center gap-3 px-6 py-4 border-b border-app">
             <Link
                 :href="show(task.data)"
-                class="flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-app border border-app hover:border-slate-600 px-3 py-2 rounded-lg transition-colors"
+                class="flex items-center gap-1.5 text-xs font-semibold text-app-muted hover:text-app border border-app hover:border-app px-3 py-2 rounded-lg transition-colors"
             >
                 <ArrowLeft class="size-3.5" /> Back to task
             </Link>
             <div>
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Tasks</p>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Tasks</p>
                 <h1 class="text-xl font-bold text-app truncate max-w-sm" style="font-family: Manrope, sans-serif;">History: {{ task.data.title }}</h1>
             </div>
         </div>
@@ -40,7 +40,7 @@ defineProps<{
                 <div class="px-6 py-4 border-b border-app flex items-center gap-2">
                     <Clock class="size-4 text-purple-400" />
                     <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Activity log</h2>
-                    <span class="ml-auto text-xs text-slate-500">{{ logs.data.length }} event{{ logs.data.length !== 1 ? 's' : '' }}</span>
+                    <span class="ml-auto text-xs text-app-muted">{{ logs.data.length }} event{{ logs.data.length !== 1 ? 's' : '' }}</span>
                 </div>
 
                 <div class="divide-y divide-app">
@@ -48,16 +48,16 @@ defineProps<{
                         <div class="flex items-start justify-between gap-4 mb-2">
                             <div>
                                 <p class="text-sm font-semibold text-app">{{ log.action }}</p>
-                                <p v-if="log.user?.data?.name" class="text-xs text-slate-500 mt-0.5">by {{ log.user.data.name }}</p>
+                                <p v-if="log.user?.data?.name" class="text-xs text-app-muted mt-0.5">by {{ log.user.data.name }}</p>
                             </div>
-                            <p class="text-xs text-slate-600 shrink-0">{{ log.created_at }}</p>
+                            <p class="text-xs text-app-muted shrink-0">{{ log.created_at }}</p>
                         </div>
-                        <pre v-if="log.changes" class="text-xs text-slate-500 bg-app-elevated rounded-lg px-3 py-2 overflow-x-auto whitespace-pre-wrap">{{ JSON.stringify(log.changes, null, 2) }}</pre>
+                        <pre v-if="log.changes" class="text-xs text-app-muted bg-app-elevated rounded-lg px-3 py-2 overflow-x-auto whitespace-pre-wrap">{{ JSON.stringify(log.changes, null, 2) }}</pre>
                     </div>
 
                     <div v-if="logs.data.length === 0" class="px-6 py-12 text-center">
-                        <Clock class="mx-auto mb-2 size-7 text-slate-600" />
-                        <p class="text-sm text-slate-500">No activity logged yet.</p>
+                        <Clock class="mx-auto mb-2 size-7 text-app-muted" />
+                        <p class="text-sm text-app-muted">No activity logged yet.</p>
                     </div>
                 </div>
             </div>

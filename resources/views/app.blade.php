@@ -25,36 +25,53 @@
             })();
         </script>
 
-        {{-- Brand primary color from app settings + light/dark base backgrounds --}}
+        {{-- Stitch Vibrant Professionalism theme tokens + brand primary --}}
         <style nonce="{{ Vite::cspNonce() }}">
             :root {
-                --primary: {{ $appSettings['primary_color'] ?? '#f7600d' }};
-                --primary-hover: color-mix(in srgb, var(--primary) 85%, black);
-                --primary-dim:   color-mix(in srgb, var(--primary) 10%, transparent);
-                --primary-border: color-mix(in srgb, var(--primary) 20%, transparent);
+                /* ── Brand primary (per-tenant from DB) ─────────────────── */
+                --primary:        {{ $appSettings['primary_color'] ?? '#EC5800' }};
+                --primary-hover:  color-mix(in srgb, var(--primary) 85%, black);
+                --primary-dim:    color-mix(in srgb, var(--primary) 12%, transparent);
+                --primary-border: color-mix(in srgb, var(--primary) 25%, transparent);
 
-                /* Light mode app-surface tokens */
-                --app-bg:        #f8fafc;
-                --app-surface:   #ffffff;
-                --app-elevated:  #f1f5f9;
-                --app-text:      #0f172a;
-                --app-muted:     #64748b;
-                --app-border:    #e2e8f0;
+                /* ── Light mode — Stitch white & slate surface system ────── */
+                --app-bg:        #f8fafc;   /* slate-50  — page background   */
+                --app-surface:   #ffffff;   /* white     — card / panel bg   */
+                --app-elevated:  #f1f5f9;   /* slate-100 — input / hover bg  */
+                --app-text:      #0f172a;   /* slate-900 — primary text      */
+                --app-muted:     #64748b;   /* slate-500 — secondary text    */
+                --app-border:    #e2e8f0;   /* slate-200 — borders & dividers */
+
+                /* ── shadcn Sidebar tokens → match stitch sidebar ─────────  */
+                --sidebar-background:           #ffffff;
+                --sidebar-foreground:           #475569;
+                --sidebar-border:               #e2e8f0;
+                --sidebar-accent:               #fff7ed;
+                --sidebar-accent-foreground:    {{ $appSettings['primary_color'] ?? '#EC5800' }};
+                --sidebar-primary:              {{ $appSettings['primary_color'] ?? '#EC5800' }};
+                --sidebar-primary-foreground:   #ffffff;
             }
 
             html.dark {
-                /* Dark mode app-surface tokens */
-                --app-bg:        #051424;
-                --app-surface:   #0d1c2d;
-                --app-elevated:  #0a1929;
-                --app-text:      #d4e4fa;
-                --app-muted:     #64748b;
-                --app-border:    #1e293b;
+                /* ── Dark mode — Stitch Obsidian Ink surface system ──────── */
+                --app-bg:        #020617;   /* slate-950 — page background   */
+                --app-surface:   #0f172a;   /* slate-900 — card / panel bg   */
+                --app-elevated:  #1e293b;   /* slate-800 — input / hover bg  */
+                --app-text:      #f1f5f9;   /* slate-100 — primary text      */
+                --app-muted:     #94a3b8;   /* slate-400 — secondary text    */
+                --app-border:    #1e293b;   /* slate-800 — borders & dividers */
+
+                /* ── shadcn Sidebar tokens → dark stitch sidebar ──────────  */
+                --sidebar-background:           #020617;
+                --sidebar-foreground:           #94a3b8;
+                --sidebar-border:               #1e293b;
+                --sidebar-accent:               rgba(236,88,0,0.15);
+                --sidebar-accent-foreground:    {{ $appSettings['primary_color'] ?? '#EC5800' }};
+                --sidebar-primary:              {{ $appSettings['primary_color'] ?? '#EC5800' }};
+                --sidebar-primary-foreground:   #ffffff;
             }
 
-            html {
-                background-color: var(--app-bg);
-            }
+            html { background-color: var(--app-bg); }
         </style>
 
         <link rel="icon" href="{{ $appSettings['favicon_url'] ?? '/favicon.ico' }}" sizes="any">
@@ -64,7 +81,7 @@
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600|inter:400,500,600,700|manrope:600,700,800" rel="stylesheet" />
 
         @vite(['resources/css/app.css', 'resources/js/app.ts'])
         <x-inertia::head>

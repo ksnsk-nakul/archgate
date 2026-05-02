@@ -17,13 +17,13 @@ defineProps<{
         <div class="flex items-center gap-3 px-6 py-4 border-b border-app">
             <button
                 type="button"
-                class="flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-app border border-app hover:border-slate-600 px-3 py-2 rounded-lg transition-colors"
+                class="flex items-center gap-1.5 text-xs font-semibold text-app-muted hover:text-app border border-app hover:border-app px-3 py-2 rounded-lg transition-colors"
                 @click="router.visit(`/projects/${project.data.id}`)"
             >
                 <ArrowLeft class="size-3.5" /> Back
             </button>
             <div>
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Projects</p>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Projects</p>
                 <h1 class="text-xl font-bold text-app truncate max-w-sm" style="font-family: Manrope, sans-serif;">Edit: {{ project.data.name }}</h1>
             </div>
         </div>
@@ -35,7 +35,7 @@ defineProps<{
                 </div>
                 <div class="px-6 py-5 flex flex-col gap-4">
                     <div class="flex flex-col gap-2">
-                        <label for="name" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Name <span class="text-red-400">*</span></label>
+                        <label for="name" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Name <span class="text-red-400">*</span></label>
                         <input
                             id="name"
                             name="name"
@@ -48,7 +48,7 @@ defineProps<{
                     </div>
 
                     <div class="flex flex-col gap-2">
-                        <label for="description" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Description</label>
+                        <label for="description" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Description</label>
                         <textarea
                             id="description"
                             name="description"
@@ -60,7 +60,7 @@ defineProps<{
                     </div>
 
                     <div class="flex flex-col gap-2">
-                        <label for="status" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</label>
+                        <label for="status" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Status</label>
                         <select
                             id="status"
                             name="status"
@@ -86,7 +86,7 @@ defineProps<{
                 </button>
                 <button
                     type="button"
-                    class="text-xs font-semibold text-slate-400 border border-app hover:text-app hover:border-slate-600 px-4 py-2.5 rounded-lg transition-colors"
+                    class="text-xs font-semibold text-app-muted border border-app hover:text-app hover:border-app px-4 py-2.5 rounded-lg transition-colors"
                     @click="router.visit(`/projects/${project.data.id}`)"
                 >
                     Cancel

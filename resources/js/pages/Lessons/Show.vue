@@ -87,12 +87,12 @@ const typeColor: Record<string, string> = {
     <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
         <!-- Breadcrumb toolbar -->
         <div class="flex items-center gap-2 px-6 py-4 border-b border-app text-sm">
-            <Link :href="`/courses/${course.data.id}`" class="text-slate-400 hover:text-app transition-colors font-semibold">
+            <Link :href="`/courses/${course.data.id}`" class="text-app-muted hover:text-app transition-colors font-semibold">
                 {{ course.data.title }}
             </Link>
-            <ChevronRight class="size-3.5 text-slate-600" />
-            <span v-if="currentSection" class="text-slate-500">{{ currentSection.title }}</span>
-            <ChevronRight v-if="currentSection" class="size-3.5 text-slate-600" />
+            <ChevronRight class="size-3.5 text-app-muted" />
+            <span v-if="currentSection" class="text-app-muted">{{ currentSection.title }}</span>
+            <ChevronRight v-if="currentSection" class="size-3.5 text-app-muted" />
             <span class="text-app font-semibold truncate max-w-xs">{{ lesson.data.title }}</span>
         </div>
 
@@ -105,16 +105,16 @@ const typeColor: Record<string, string> = {
                         <span
                             v-if="lesson.data.type"
                             class="text-xs font-semibold px-2 py-0.5 rounded-full border"
-                            :class="typeColor[lesson.data.type] ?? 'text-slate-400 bg-slate-500/10 border-slate-500/20'"
+                            :class="typeColor[lesson.data.type] ?? 'text-app-muted bg-app-elevated border-app'"
                         >
                             {{ lesson.data.type }}
                         </span>
                     </div>
                     <div class="px-6 py-5">
-                        <p v-if="lesson.data.content" class="text-sm text-slate-400 leading-relaxed whitespace-pre-wrap">
+                        <p v-if="lesson.data.content" class="text-sm text-app-muted leading-relaxed whitespace-pre-wrap">
                             {{ lesson.data.content }}
                         </p>
-                        <p v-else class="text-sm text-slate-500 italic">
+                        <p v-else class="text-sm text-app-muted italic">
                             No content has been added to this lesson yet.
                         </p>
                     </div>
@@ -125,7 +125,7 @@ const typeColor: Record<string, string> = {
                     <Link
                         v-if="prevLesson"
                         :href="`/lessons/${prevLesson.id}`"
-                        class="flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-app border border-app hover:border-slate-600 px-3 py-2 rounded-lg transition-colors"
+                        class="flex items-center gap-1.5 text-xs font-semibold text-app-muted hover:text-app border border-app hover:border-app px-3 py-2 rounded-lg transition-colors"
                     >
                         <ArrowLeft class="size-3.5" /> {{ prevLesson.title }}
                     </Link>
@@ -141,7 +141,7 @@ const typeColor: Record<string, string> = {
                     <Link
                         v-else
                         :href="`/courses/${course.data.id}`"
-                        class="flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-app border border-app hover:border-slate-600 px-3 py-2 rounded-lg transition-colors"
+                        class="flex items-center gap-1.5 text-xs font-semibold text-app-muted hover:text-app border border-app hover:border-app px-3 py-2 rounded-lg transition-colors"
                     >
                         Back to course
                     </Link>
@@ -152,12 +152,12 @@ const typeColor: Record<string, string> = {
             <div class="flex flex-col gap-3 lg:col-span-1">
                 <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
                     <div class="px-4 py-3 border-b border-app flex items-center gap-2">
-                        <BookOpen class="size-4 text-slate-500" />
+                        <BookOpen class="size-4 text-app-muted" />
                         <h2 class="text-xs font-bold text-app uppercase tracking-wider" style="font-family: Manrope, sans-serif;">Course outline</h2>
                     </div>
                     <div class="px-3 py-3 flex flex-col gap-3">
                         <div v-for="section in sections.data" :key="section.id">
-                            <p class="mb-1 px-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                            <p class="mb-1 px-2 text-xs font-semibold uppercase tracking-wider text-app-muted">
                                 {{ section.title }}
                             </p>
                             <div class="flex flex-col gap-0.5">
@@ -168,7 +168,7 @@ const typeColor: Record<string, string> = {
                                     class="rounded-lg px-2 py-1.5 text-xs transition-colors"
                                     :class="l.id === lesson.data.id
                                         ? 'bg-[var(--primary)]/10 text-[var(--primary)] font-semibold'
-                                        : 'text-slate-400 hover:text-app hover:bg-app-elevated'"
+                                        : 'text-app-muted hover:text-app hover:bg-app-elevated'"
                                 >
                                     {{ l.title }}
                                 </Link>
@@ -184,7 +184,7 @@ const typeColor: Record<string, string> = {
                     </div>
                     <div class="px-4 py-3">
                         <div class="mb-2 flex justify-between text-sm">
-                            <span class="text-slate-500">{{ enrollment.status }}</span>
+                            <span class="text-app-muted">{{ enrollment.status }}</span>
                             <span class="font-semibold text-app">{{ enrollment.progress }}%</span>
                         </div>
                         <div class="h-2 overflow-hidden rounded-full bg-app-elevated">

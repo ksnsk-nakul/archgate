@@ -22,7 +22,7 @@ const subtasks = computed(() => {
 const priorityColor: Record<string, string> = {
     high: 'text-red-400 bg-red-500/10 border-red-500/20',
     medium: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
-    low: 'text-slate-400 bg-slate-500/10 border-slate-500/20',
+    low: 'text-app-muted bg-app-elevated border-app',
 };
 const statusColor: Record<string, string> = {
     pending: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
@@ -38,13 +38,13 @@ const statusColor: Record<string, string> = {
         <!-- Toolbar -->
         <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Tasks</p>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Tasks</p>
                 <h1 class="text-xl font-bold text-app truncate max-w-md" style="font-family: Manrope, sans-serif;">{{ task.data.title }}</h1>
             </div>
             <div class="flex items-center gap-2 shrink-0">
                 <Link
                     :href="history(task.data)"
-                    class="flex items-center gap-1.5 text-xs font-semibold text-slate-400 border border-app hover:text-app hover:border-slate-600 px-3 py-2 rounded-lg transition-colors"
+                    class="flex items-center gap-1.5 text-xs font-semibold text-app-muted border border-app hover:text-app hover:border-app px-3 py-2 rounded-lg transition-colors"
                 >
                     <History class="size-3.5" /> History
                 </Link>
@@ -67,25 +67,25 @@ const statusColor: Record<string, string> = {
                 <div class="px-6 py-5 flex flex-col gap-4">
                     <div class="grid grid-cols-3 gap-4">
                         <div>
-                            <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Status</p>
-                            <span class="text-xs font-semibold px-2 py-0.5 rounded-full border" :class="statusColor[task.data.status] ?? 'text-slate-400 bg-slate-500/10 border-slate-500/20'">
+                            <p class="text-xs text-app-muted uppercase tracking-wider font-semibold mb-1">Status</p>
+                            <span class="text-xs font-semibold px-2 py-0.5 rounded-full border" :class="statusColor[task.data.status] ?? 'text-app-muted bg-app-elevated border-app'">
                                 {{ task.data.status }}
                             </span>
                         </div>
                         <div>
-                            <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Priority</p>
-                            <span class="text-xs font-semibold px-2 py-0.5 rounded-full border" :class="priorityColor[task.data.priority] ?? 'text-slate-400 bg-slate-500/10 border-slate-500/20'">
+                            <p class="text-xs text-app-muted uppercase tracking-wider font-semibold mb-1">Priority</p>
+                            <span class="text-xs font-semibold px-2 py-0.5 rounded-full border" :class="priorityColor[task.data.priority] ?? 'text-app-muted bg-app-elevated border-app'">
                                 {{ task.data.priority }}
                             </span>
                         </div>
                         <div>
-                            <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Due date</p>
+                            <p class="text-xs text-app-muted uppercase tracking-wider font-semibold mb-1">Due date</p>
                             <p class="text-sm font-medium text-app">{{ task.data.converted_due_date || '—' }}</p>
                         </div>
                     </div>
                     <div v-if="task.data.description">
-                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Description</p>
-                        <p class="text-sm text-slate-400 leading-relaxed">{{ task.data.description }}</p>
+                        <p class="text-xs text-app-muted uppercase tracking-wider font-semibold mb-1">Description</p>
+                        <p class="text-sm text-app-muted leading-relaxed">{{ task.data.description }}</p>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@ const statusColor: Record<string, string> = {
                 <div class="px-6 py-4 border-b border-app flex items-center gap-2">
                     <Plus class="size-4 text-[var(--primary)]" />
                     <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Subtasks</h2>
-                    <span class="ml-auto text-xs text-slate-500">{{ subtasks.length }} item{{ subtasks.length !== 1 ? 's' : '' }}</span>
+                    <span class="ml-auto text-xs text-app-muted">{{ subtasks.length }} item{{ subtasks.length !== 1 ? 's' : '' }}</span>
                 </div>
 
                 <div class="px-6 py-5 flex flex-col gap-3">
@@ -148,7 +148,7 @@ const statusColor: Record<string, string> = {
                             <button type="submit" class="text-xs font-semibold text-[var(--primary)] hover:text-[var(--primary-hover)] shrink-0 transition-colors">Save</button>
                         </Form>
                     </div>
-                    <p v-else class="text-sm text-slate-600 italic">No subtasks yet.</p>
+                    <p v-else class="text-sm text-app-muted italic">No subtasks yet.</p>
                 </div>
             </div>
         </div>

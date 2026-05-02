@@ -20,12 +20,12 @@ function submit(): void {
         <div class="flex items-center gap-3 px-6 py-4 border-b border-app">
             <Link
                 href="/contacts"
-                class="flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-app border border-app hover:border-slate-600 px-3 py-2 rounded-lg transition-colors"
+                class="flex items-center gap-1.5 text-xs font-semibold text-app-muted hover:text-app border border-app hover:border-app px-3 py-2 rounded-lg transition-colors"
             >
                 <ArrowLeft class="size-3.5" /> Contacts
             </Link>
             <div>
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">CRM</p>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">CRM</p>
                 <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">New contact</h1>
             </div>
         </div>
@@ -37,7 +37,7 @@ function submit(): void {
                 </div>
                 <div class="px-6 py-5 flex flex-col gap-4">
                     <div class="flex flex-col gap-2">
-                        <label for="name" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Name <span class="text-red-400">*</span></label>
+                        <label for="name" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Name <span class="text-red-400">*</span></label>
                         <input
                             id="name"
                             v-model="form.name"
@@ -50,7 +50,7 @@ function submit(): void {
                     </div>
 
                     <div class="flex flex-col gap-2">
-                        <label for="email" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Email</label>
+                        <label for="email" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Email</label>
                         <input
                             id="email"
                             v-model="form.email"
@@ -63,7 +63,7 @@ function submit(): void {
                     </div>
 
                     <div class="flex flex-col gap-2">
-                        <label for="phone" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Phone</label>
+                        <label for="phone" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Phone</label>
                         <input
                             id="phone"
                             v-model="form.phone"
@@ -87,7 +87,7 @@ function submit(): void {
                 </button>
                 <Link
                     href="/contacts"
-                    class="text-xs font-semibold text-slate-400 border border-app hover:text-app hover:border-slate-600 px-4 py-2.5 rounded-lg transition-colors"
+                    class="text-xs font-semibold text-app-muted border border-app hover:text-app hover:border-app px-4 py-2.5 rounded-lg transition-colors"
                 >
                     Cancel
                 </Link>

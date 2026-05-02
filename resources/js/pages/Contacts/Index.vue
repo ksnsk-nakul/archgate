@@ -32,7 +32,7 @@ function deleteContact(id: number): void {
         <!-- Toolbar -->
         <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">CRM</p>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">CRM</p>
                 <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">Contacts</h1>
             </div>
             <Link
@@ -66,11 +66,11 @@ function deleteContact(id: number): void {
 
                     <!-- Body -->
                     <div class="px-5 py-4 flex flex-col gap-2">
-                        <div class="flex items-center gap-2 text-xs text-slate-500">
+                        <div class="flex items-center gap-2 text-xs text-app-muted">
                             <Mail class="size-3.5 shrink-0" />
                             <span class="truncate">{{ contact.email || 'No email' }}</span>
                         </div>
-                        <div class="flex items-center gap-2 text-xs text-slate-500">
+                        <div class="flex items-center gap-2 text-xs text-app-muted">
                             <Phone class="size-3.5 shrink-0" />
                             <span>{{ contact.phone || 'No phone' }}</span>
                         </div>
@@ -86,7 +86,7 @@ function deleteContact(id: number): void {
                         </Link>
                         <Link
                             :href="`/contacts/${contact.id}/edit`"
-                            class="flex-1 flex items-center justify-center text-xs font-semibold text-slate-400 border border-app hover:text-app hover:border-slate-600 px-3 py-1.5 rounded-lg transition-colors"
+                            class="flex-1 flex items-center justify-center text-xs font-semibold text-app-muted border border-app hover:text-app hover:border-app px-3 py-1.5 rounded-lg transition-colors"
                         >
                             Edit
                         </Link>
@@ -106,7 +106,7 @@ function deleteContact(id: number): void {
                     <UserRound class="size-7 text-emerald-400" />
                 </div>
                 <h3 class="text-base font-bold text-app mb-1" style="font-family: Manrope, sans-serif;">No contacts yet</h3>
-                <p class="text-sm text-slate-500 mb-4">Start building your CRM by adding your first contact.</p>
+                <p class="text-sm text-app-muted mb-4">Start building your CRM by adding your first contact.</p>
                 <Link
                     href="/contacts/create"
                     class="flex items-center gap-1.5 text-xs font-semibold bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white px-4 py-2 rounded-lg transition-colors"

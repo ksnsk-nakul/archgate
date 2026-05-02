@@ -22,13 +22,13 @@ function submit(): void {
             <div class="flex items-center gap-3">
                 <Link
                     href="/courses"
-                    class="flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-app border border-app hover:border-slate-600 px-3 py-2 rounded-lg transition-colors"
+                    class="flex items-center gap-1.5 text-xs font-semibold text-app-muted hover:text-app border border-app hover:border-app px-3 py-2 rounded-lg transition-colors"
                 >
                     <ArrowLeft class="size-3.5" />
                     Back
                 </Link>
                 <div>
-                    <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Learning</p>
+                    <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Learning</p>
                     <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">New Course</h1>
                 </div>
             </div>
@@ -43,7 +43,7 @@ function submit(): void {
                     </div>
                     <div>
                         <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Course details</h2>
-                        <p class="text-xs text-slate-500 mt-0.5">Fill in the basic details to create the course.</p>
+                        <p class="text-xs text-app-muted mt-0.5">Fill in the basic details to create the course.</p>
                     </div>
                 </div>
 
@@ -51,7 +51,7 @@ function submit(): void {
                 <form class="px-6 py-6 flex flex-col gap-5" @submit.prevent="submit">
                     <!-- Title -->
                     <div class="flex flex-col gap-2">
-                        <label for="title" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                        <label for="title" class="text-xs font-semibold text-app-muted uppercase tracking-wider">
                             Title <span class="text-red-400">*</span>
                         </label>
                         <input
@@ -68,7 +68,7 @@ function submit(): void {
 
                     <!-- Description -->
                     <div class="flex flex-col gap-2">
-                        <label for="description" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Description</label>
+                        <label for="description" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Description</label>
                         <textarea
                             id="description"
                             v-model="form.description"
@@ -81,7 +81,7 @@ function submit(): void {
 
                     <!-- Status -->
                     <div class="flex flex-col gap-2">
-                        <label for="status" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</label>
+                        <label for="status" class="text-xs font-semibold text-app-muted uppercase tracking-wider">Status</label>
                         <select
                             id="status"
                             v-model="form.status"
@@ -98,7 +98,7 @@ function submit(): void {
                     <div class="flex items-center justify-end gap-3 pt-2">
                         <Link
                             href="/courses"
-                            class="text-xs font-semibold text-slate-400 border border-app hover:text-app hover:border-slate-600 px-4 py-2.5 rounded-lg transition-colors"
+                            class="text-xs font-semibold text-app-muted border border-app hover:text-app hover:border-app px-4 py-2.5 rounded-lg transition-colors"
                         >
                             Cancel
                         </Link>

@@ -23,13 +23,13 @@ const statCards = [
 const priorityColor: Record<string, string> = {
     high: 'text-red-400 bg-red-500/10 border-red-500/20',
     medium: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
-    low: 'text-slate-400 bg-slate-500/10 border-slate-500/20',
+    low: 'text-app-muted bg-app-elevated border-app',
 };
 
 const statusColor: Record<string, string> = {
     active: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
     completed: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
-    archived: 'text-slate-400 bg-slate-500/10 border-slate-500/20',
+    archived: 'text-app-muted bg-app-elevated border-app',
     pending: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
     in_progress: 'text-purple-400 bg-purple-500/10 border-purple-500/20',
 };
@@ -42,7 +42,7 @@ const statusColor: Record<string, string> = {
         <!-- Toolbar -->
         <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Workspace</p>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Workspace</p>
                 <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">Dashboard</h1>
             </div>
             <Link
@@ -64,7 +64,7 @@ const statusColor: Record<string, string> = {
                     class="group rounded-xl border border-app bg-app-surface p-5 hover:border-[var(--primary)]/30 transition-colors"
                 >
                     <div class="flex items-center justify-between mb-3">
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ card.label }}</p>
+                        <p class="text-xs font-semibold text-app-muted uppercase tracking-wider">{{ card.label }}</p>
                         <div :class="[card.bg, card.color, 'size-8 rounded-lg flex items-center justify-center']">
                             <component :is="card.icon" class="size-4" />
                         </div>
@@ -100,17 +100,17 @@ const statusColor: Record<string, string> = {
                             </Link>
                             <span
                                 class="text-xs font-semibold px-2 py-0.5 rounded-full border"
-                                :class="statusColor[project.status] ?? 'text-slate-400 bg-slate-500/10 border-slate-500/20'"
+                                :class="statusColor[project.status] ?? 'text-app-muted bg-app-elevated border-app'"
                             >{{ project.status }}</span>
                         </div>
                         <div v-if="recentProjects.length === 0" class="px-5 py-8 text-center">
-                            <BriefcaseBusiness class="mx-auto mb-2 size-7 text-slate-600" />
-                            <p class="text-sm text-slate-500">No projects yet.</p>
+                            <BriefcaseBusiness class="mx-auto mb-2 size-7 text-app-muted" />
+                            <p class="text-sm text-app-muted">No projects yet.</p>
                             <Link href="/projects/create" class="text-xs text-[var(--primary)] hover:underline mt-1 inline-block">Create one</Link>
                         </div>
                     </div>
                     <div class="px-5 py-3 border-t border-app">
-                        <Link href="/projects" class="text-xs font-semibold text-slate-500 hover:text-app transition-colors">View all projects →</Link>
+                        <Link href="/projects" class="text-xs font-semibold text-app-muted hover:text-app transition-colors">View all projects →</Link>
                     </div>
                 </div>
 
@@ -138,18 +138,18 @@ const statusColor: Record<string, string> = {
                                 {{ task.title }}
                             </Link>
                             <div class="flex items-center gap-1.5 shrink-0">
-                                <span class="text-xs font-semibold px-2 py-0.5 rounded-full border" :class="priorityColor[task.priority] ?? 'text-slate-400 bg-slate-500/10 border-slate-500/20'">{{ task.priority }}</span>
-                                <span class="text-xs font-semibold px-2 py-0.5 rounded-full border" :class="statusColor[task.status] ?? 'text-slate-400 bg-slate-500/10 border-slate-500/20'">{{ task.status }}</span>
+                                <span class="text-xs font-semibold px-2 py-0.5 rounded-full border" :class="priorityColor[task.priority] ?? 'text-app-muted bg-app-elevated border-app'">{{ task.priority }}</span>
+                                <span class="text-xs font-semibold px-2 py-0.5 rounded-full border" :class="statusColor[task.status] ?? 'text-app-muted bg-app-elevated border-app'">{{ task.status }}</span>
                             </div>
                         </div>
                         <div v-if="recentTasks.length === 0" class="px-5 py-8 text-center">
-                            <ListChecks class="mx-auto mb-2 size-7 text-slate-600" />
-                            <p class="text-sm text-slate-500">No tasks yet.</p>
+                            <ListChecks class="mx-auto mb-2 size-7 text-app-muted" />
+                            <p class="text-sm text-app-muted">No tasks yet.</p>
                             <Link href="/tasks/create" class="text-xs text-[var(--primary)] hover:underline mt-1 inline-block">Create one</Link>
                         </div>
                     </div>
                     <div class="px-5 py-3 border-t border-app">
-                        <Link href="/tasks" class="text-xs font-semibold text-slate-500 hover:text-app transition-colors">View all tasks →</Link>
+                        <Link href="/tasks" class="text-xs font-semibold text-app-muted hover:text-app transition-colors">View all tasks →</Link>
                     </div>
                 </div>
             </div>
@@ -172,8 +172,8 @@ const statusColor: Record<string, string> = {
                         class="flex items-center gap-3 px-5 py-4 hover:bg-app-elevated transition-colors group"
                     >
                         <component :is="item.icon" :class="[item.color, 'size-4']" />
-                        <span class="text-sm font-medium text-slate-500 group-hover:text-app transition-colors">{{ item.label }}</span>
-                        <TrendingUp class="size-3.5 text-slate-700 group-hover:text-slate-500 ml-auto transition-colors" />
+                        <span class="text-sm font-medium text-app-muted group-hover:text-app transition-colors">{{ item.label }}</span>
+                        <TrendingUp class="size-3.5 text-slate-700 group-hover:text-app-muted ml-auto transition-colors" />
                     </Link>
                 </div>
             </div>

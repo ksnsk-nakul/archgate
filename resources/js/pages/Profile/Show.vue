@@ -28,7 +28,7 @@ userStore.hydrateUser(props.profile.data);
         <!-- Toolbar -->
         <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Account</p>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Account</p>
                 <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">Profile</h1>
             </div>
             <Link
@@ -51,17 +51,17 @@ userStore.hydrateUser(props.profile.data);
                         <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">
                             {{ userStore.user?.name ?? currentUser.name }}
                         </h2>
-                        <p class="text-xs text-slate-500">{{ userStore.user?.email ?? currentUser.email }}</p>
+                        <p class="text-xs text-app-muted">{{ userStore.user?.email ?? currentUser.email }}</p>
                     </div>
                 </div>
                 <div class="px-5 py-4 flex flex-col gap-3">
                     <div class="flex items-center justify-between gap-4 text-sm py-1.5 border-b border-app">
-                        <span class="text-slate-500 font-medium">Email</span>
+                        <span class="text-app-muted font-medium">Email</span>
                         <span class="text-app font-semibold">{{ userStore.user?.email ?? currentUser.email }}</span>
                     </div>
                     <div class="flex items-center justify-between gap-4 text-sm py-1.5">
-                        <span class="text-slate-500 font-medium">Role</span>
-                        <span class="text-xs font-semibold px-2 py-0.5 rounded-full border border-app text-slate-400 bg-app-elevated capitalize">
+                        <span class="text-app-muted font-medium">Role</span>
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded-full border border-app text-app-muted bg-app-elevated capitalize">
                             {{ userStore.role ?? 'user' }}
                         </span>
                     </div>

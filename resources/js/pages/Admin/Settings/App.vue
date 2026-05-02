@@ -23,7 +23,7 @@ const brandColor = ref(props.settings.primary_color ?? '#f7600d');
         <!-- Toolbar -->
         <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Admin</p>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Admin</p>
                 <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">App Settings</h1>
             </div>
         </div>
@@ -32,7 +32,7 @@ const brandColor = ref(props.settings.primary_color ?? '#f7600d');
             <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
                 <div class="px-6 py-4 border-b border-app">
                     <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">App details</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Public app identity displayed across the platform.</p>
+                    <p class="text-xs text-app-muted mt-0.5">Public app identity displayed across the platform.</p>
                 </div>
 
                 <Form
@@ -43,7 +43,7 @@ const brandColor = ref(props.settings.primary_color ?? '#f7600d');
                 >
                     <!-- App name -->
                     <div class="flex flex-col gap-2">
-                        <label for="app_name" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">App name</label>
+                        <label for="app_name" class="text-xs font-semibold text-app-muted uppercase tracking-wider">App name</label>
                         <input
                             id="app_name"
                             name="app_name"
@@ -56,43 +56,43 @@ const brandColor = ref(props.settings.primary_color ?? '#f7600d');
 
                     <!-- Logo -->
                     <div class="flex flex-col gap-2">
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Logo</label>
-                        <div v-if="settings.logo_url" class="flex items-center gap-3 rounded-lg border border-slate-700 bg-slate-900/50 p-3">
+                        <label class="text-xs font-semibold text-app-muted uppercase tracking-wider">Logo</label>
+                        <div v-if="settings.logo_url" class="flex items-center gap-3 rounded-lg border border-app bg-app-elevated/50 p-3">
                             <img :src="settings.logo_url" alt="Current logo" class="h-10 max-w-48 object-contain" />
-                            <span class="text-xs text-slate-500">Current logo</span>
+                            <span class="text-xs text-app-muted">Current logo</span>
                         </div>
                         <input
                             id="logo"
                             name="logo"
                             type="file"
                             accept="image/*"
-                            class="text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-300 hover:file:bg-slate-700 file:cursor-pointer cursor-pointer"
+                            class="text-sm text-app-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-app-elevated file:text-app-muted hover:file:bg-slate-700 file:cursor-pointer cursor-pointer"
                         />
-                        <p class="text-xs text-slate-600">PNG, JPG, SVG or WebP — max 2 MB</p>
+                        <p class="text-xs text-app-muted">PNG, JPG, SVG or WebP — max 2 MB</p>
                         <InputError :message="errors.logo" />
                     </div>
 
                     <!-- Favicon -->
                     <div class="flex flex-col gap-2">
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Favicon</label>
-                        <div v-if="settings.favicon_url" class="flex items-center gap-3 rounded-lg border border-slate-700 bg-slate-900/50 p-3">
+                        <label class="text-xs font-semibold text-app-muted uppercase tracking-wider">Favicon</label>
+                        <div v-if="settings.favicon_url" class="flex items-center gap-3 rounded-lg border border-app bg-app-elevated/50 p-3">
                             <img :src="settings.favicon_url" alt="Current favicon" class="size-8 object-contain" />
-                            <span class="text-xs text-slate-500">Current favicon</span>
+                            <span class="text-xs text-app-muted">Current favicon</span>
                         </div>
                         <input
                             id="favicon"
                             name="favicon"
                             type="file"
                             accept=".ico,image/*"
-                            class="text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-300 hover:file:bg-slate-700 file:cursor-pointer cursor-pointer"
+                            class="text-sm text-app-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-app-elevated file:text-app-muted hover:file:bg-slate-700 file:cursor-pointer cursor-pointer"
                         />
-                        <p class="text-xs text-slate-600">ICO, PNG, JPG — max 1 MB</p>
+                        <p class="text-xs text-app-muted">ICO, PNG, JPG — max 1 MB</p>
                         <InputError :message="errors.favicon" />
                     </div>
 
                     <!-- Brand colour -->
                     <div class="flex flex-col gap-2">
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Brand colour</label>
+                        <label class="text-xs font-semibold text-app-muted uppercase tracking-wider">Brand colour</label>
                         <div class="flex items-center gap-3">
                             <!-- Native colour picker -->
                             <div class="relative shrink-0">
@@ -122,7 +122,7 @@ const brandColor = ref(props.settings.primary_color ?? '#f7600d');
                                 Active colour
                             </div>
                         </div>
-                        <p class="text-xs text-slate-600">Used for buttons, active states, and highlights across the app.</p>
+                        <p class="text-xs text-app-muted">Used for buttons, active states, and highlights across the app.</p>
                         <InputError :message="errors.primary_color" />
                     </div>
 

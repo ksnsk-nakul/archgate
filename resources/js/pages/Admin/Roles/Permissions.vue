@@ -97,14 +97,14 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
         <!-- Toolbar -->
         <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
             <div>
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-0.5">Admin › Roles</p>
+                <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Admin › Roles</p>
                 <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">
                     {{ role.data.name }} — Policy
                 </h1>
             </div>
             <Link
                 :href="index()"
-                class="flex items-center gap-2 text-sm text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 px-4 py-2 rounded-lg transition-colors"
+                class="flex items-center gap-2 text-sm text-app-muted hover:text-white border border-app hover:border-slate-500 px-4 py-2 rounded-lg transition-colors"
             >
                 <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -124,7 +124,7 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                 </div>
                 <div>
                     <p class="text-sm font-bold text-app">{{ role.data.name }}</p>
-                    <p class="text-xs text-slate-500">{{ role.data.description || role.data.slug }} · {{ selectedPermissionIds.length }} permissions selected</p>
+                    <p class="text-xs text-app-muted">{{ role.data.description || role.data.slug }} · {{ selectedPermissionIds.length }} permissions selected</p>
                 </div>
             </div>
 
@@ -135,8 +135,8 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                 class="rounded-xl border border-app bg-app-surface overflow-hidden"
             >
                 <div class="px-6 py-4 border-b border-app flex items-center gap-3">
-                    <div class="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center shrink-0">
-                        <svg class="size-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-7 h-7 rounded-lg bg-app-elevated flex items-center justify-center shrink-0">
+                        <svg class="size-4 text-app-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="groupIcon[group.group] ?? defaultIcon" />
                         </svg>
                     </div>
@@ -144,7 +144,7 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                     <span class="ml-auto text-xs px-2 py-0.5 rounded-full transition-colors"
                           :class="group.permissions.some(p => checkedIds.has(p.id))
                               ? 'text-[#f7600d]/80 bg-[#f7600d]/10'
-                              : 'text-slate-600 bg-slate-800'">
+                              : 'text-app-muted bg-app-elevated'">
                         {{ group.permissions.filter(p => checkedIds.has(p.id)).length }} / {{ group.permissions.length }}
                     </span>
                 </div>
@@ -156,8 +156,8 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                         class="flex items-start gap-3 rounded-lg border p-3.5 cursor-pointer transition-all select-none"
                         :class="{
                             'border-[var(--primary)]/30 bg-[var(--primary)]/5': checkState(permission.id) === 'checked',
-                            'border-slate-700 bg-slate-800/20': checkState(permission.id) === 'was-on',
-                            'border-slate-800 hover:border-slate-700 hover:bg-slate-800/30': checkState(permission.id) === 'unchecked',
+                            'border-app bg-app-elevated/20': checkState(permission.id) === 'was-on',
+                            'border-app hover:border-app hover:bg-app-elevated/30': checkState(permission.id) === 'unchecked',
                         }"
                         @click.prevent="togglePermission(permission.id)"
                     >
@@ -187,29 +187,29 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                                 class="size-4 rounded border-2 border-slate-500 bg-slate-700 flex items-center justify-center transition-all duration-150"
                                 title="Previously enabled — will be removed on save"
                             >
-                                <svg class="size-2.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="size-2.5 text-app-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <!-- UNCHECKED: empty box -->
                             <div
                                 v-else
-                                class="size-4 rounded border-2 border-slate-600 bg-slate-900 hover:border-slate-500 flex items-center justify-center transition-all duration-150"
+                                class="size-4 rounded border-2 border-slate-600 bg-app-elevated hover:border-slate-500 flex items-center justify-center transition-all duration-150"
                             />
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium leading-tight"
                                :class="{
                                    'text-white': checkState(permission.id) === 'checked',
-                                   'text-slate-400 line-through decoration-slate-600': checkState(permission.id) === 'was-on',
-                                   'text-slate-300': checkState(permission.id) === 'unchecked',
+                                   'text-app-muted line-through decoration-slate-600': checkState(permission.id) === 'was-on',
+                                   'text-app-muted': checkState(permission.id) === 'unchecked',
                                }">
                                 {{ permission.name }}
                             </p>
                             <p class="text-xs font-mono mt-0.5"
                                :class="{
                                    'text-[var(--primary)]/70': checkState(permission.id) === 'checked',
-                                   'text-slate-600': checkState(permission.id) !== 'checked',
+                                   'text-app-muted': checkState(permission.id) !== 'checked',
                                }">
                                 {{ permission.slug }}
                             </p>
@@ -238,7 +238,7 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                     </svg>
                     {{ hasChanges ? 'Update permissions' : 'No changes' }}
                 </button>
-                <Link :href="index()" class="text-sm text-slate-500 hover:text-slate-300 transition-colors">
+                <Link :href="index()" class="text-sm text-app-muted hover:text-app-muted transition-colors">
                     Cancel
                 </Link>
                 <!-- Change summary pill -->
