@@ -228,8 +228,12 @@ const pageIconPaths: Record<string, string> = {
                             <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" /></svg>
                         </button>
                         <button
-                            @click="activePage = pg.key"
-                            class="flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold text-[var(--primary)] border border-[var(--primary)]/30 hover:bg-[var(--primary)]/5 py-1.5 rounded-lg transition-colors"
+                            v-else
+                            @click="requestToggle(pg.key)"
+                            class="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full font-semibold border transition-colors w-full justify-center"
+                            :class="pageEnabled[pg.key]
+                                ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20 hover:bg-emerald-500/20'
+                                : 'text-slate-500 bg-app-elevated border-app hover:border-slate-600'"
                         >
                             <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
                         </button>
