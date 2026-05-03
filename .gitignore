@@ -26,3 +26,5 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+.claude/worktrees/
+.claude/settings.local.json

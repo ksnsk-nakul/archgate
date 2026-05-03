@@ -95,7 +95,7 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
 
     <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
         <!-- Toolbar -->
-        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
+        <div class="flex flex-wrap items-center justify-between gap-3 px-4 py-4 md:px-6 border-b border-app">
             <div>
                 <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Admin › Roles</p>
                 <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">
@@ -113,10 +113,10 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
             </Link>
         </div>
 
-        <Form v-bind="update.form(role.data)" class="px-6 py-6 flex flex-col gap-5" v-slot="{ processing }">
+        <Form v-bind="update.form(role.data)" class="px-4 py-6 md:px-6 flex flex-col gap-5" v-slot="{ processing }">
 
             <!-- Role summary banner -->
-            <div class="rounded-xl border border-slate-800 bg-[#0d1c2d] px-6 py-4 flex items-center gap-4">
+            <div class="rounded-xl border border-slate-800 bg-[#0d1c2d] px-4 py-4 md:px-6 flex items-center gap-4">
                 <div class="w-10 h-10 rounded-xl bg-[var(--primary)]/10 border border-[var(--primary)]/20 flex items-center justify-center shrink-0">
                     <svg class="size-5 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -134,7 +134,7 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                 :key="group.group"
                 class="rounded-xl border border-app bg-app-surface overflow-hidden"
             >
-                <div class="px-6 py-4 border-b border-app flex items-center gap-3">
+                <div class="px-4 py-4 md:px-6 border-b border-app flex items-center gap-3">
                     <div class="w-7 h-7 rounded-lg bg-app-elevated flex items-center justify-center shrink-0">
                         <svg class="size-4 text-app-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="groupIcon[group.group] ?? defaultIcon" />
@@ -149,11 +149,11 @@ const defaultIcon = 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955
                     </span>
                 </div>
 
-                <div class="px-6 py-4 grid gap-3 md:grid-cols-2">
+                <div class="px-4 py-4 md:px-6 grid gap-2 md:gap-3 sm:grid-cols-2">
                     <label
                         v-for="permission in group.permissions"
                         :key="permission.id"
-                        class="flex items-start gap-3 rounded-lg border p-3.5 cursor-pointer transition-all select-none"
+                        class="flex items-start gap-2 md:gap-3 rounded-lg border p-3 md:p-3.5 cursor-pointer transition-all select-none"
                         :class="checkedIds.has(permission.id)
                             ? 'border-[var(--primary)]/30 bg-[var(--primary)]/5'
                             : 'border-slate-800 hover:border-slate-700 hover:bg-slate-800/30'"

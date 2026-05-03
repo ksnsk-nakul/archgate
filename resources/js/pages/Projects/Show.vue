@@ -20,7 +20,7 @@ const statusColor: Record<string, string> = {
 
     <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
         <!-- Toolbar -->
-        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
+        <div class="flex flex-wrap items-center justify-between gap-4 px-4 py-4 md:px-6 border-b border-app">
             <div>
                 <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Projects</p>
                 <h1 class="text-xl font-bold text-app truncate max-w-md" style="font-family: Manrope, sans-serif;">{{ project.data.name }}</h1>
@@ -41,7 +41,7 @@ const statusColor: Record<string, string> = {
             </div>
         </div>
 
-        <div class="px-6 py-6 max-w-3xl">
+        <div class="px-4 py-6 md:px-6 max-w-3xl">
             <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
                 <div class="px-6 py-4 border-b border-app flex items-center gap-3">
                     <ClipboardList class="size-4 text-amber-400" />

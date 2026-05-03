@@ -26,7 +26,7 @@ const typeBadgeClass: Record<string, string> = {
     <Head :title="`Library — ${appName}`" />
 
     <!-- Hero -->
-    <section class="py-20 px-6 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 60%, #051424 100%);">
+    <section class="py-20 px-4 md:px-6 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 60%, #051424 100%);">
         <div class="max-w-3xl mx-auto">
             <span class="inline-flex items-center gap-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6">Library</span>
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight" style="font-family: Manrope, sans-serif;">Explore our library</h1>
@@ -35,7 +35,7 @@ const typeBadgeClass: Record<string, string> = {
     </section>
 
     <!-- Items grid -->
-    <section class="py-16 px-6 bg-[#051424]">
+    <section class="py-16 px-4 md:px-6 bg-[#051424]">
         <div class="max-w-6xl mx-auto">
             <div v-if="items.length === 0" class="text-center py-20">
                 <div class="size-16 rounded-2xl bg-slate-800 flex items-center justify-center mx-auto mb-5">

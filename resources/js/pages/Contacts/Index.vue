@@ -30,7 +30,7 @@ function deleteContact(id: number): void {
 
     <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
         <!-- Toolbar -->
-        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
+        <div class="flex items-center justify-between gap-4 px-4 py-4 md:px-6 border-b border-app">
             <div>
                 <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">CRM</p>
                 <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">Contacts</h1>
@@ -44,7 +44,7 @@ function deleteContact(id: number): void {
             </Link>
         </div>
 
-        <div class="px-6 py-6">
+        <div class="px-4 py-6 md:px-6">
             <!-- Contact grid -->
             <div v-if="crmStore.contacts.length > 0" class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 <div

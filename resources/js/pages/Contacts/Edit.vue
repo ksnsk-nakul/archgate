@@ -28,7 +28,7 @@ function submit(): void {
     <Head title="Edit contact" />
 
     <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
-        <div class="flex items-center gap-3 px-6 py-4 border-b border-app">
+        <div class="flex items-center gap-3 px-4 py-4 md:px-6 border-b border-app">
             <Link
                 :href="`/contacts/${contact.data.id}`"
                 class="flex items-center gap-1.5 text-xs font-semibold text-app-muted hover:text-app border border-app hover:border-app px-3 py-2 rounded-lg transition-colors"
@@ -41,7 +41,7 @@ function submit(): void {
             </div>
         </div>
 
-        <form class="px-6 py-6 max-w-2xl flex flex-col gap-5" @submit.prevent="submit">
+        <form class="px-4 py-6 md:px-6 max-w-2xl flex flex-col gap-5" @submit.prevent="submit">
             <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
                 <div class="px-6 py-4 border-b border-app">
                     <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Contact details</h2>
