@@ -414,197 +414,59 @@ const pageIconPaths: Record<string, string> = {
                 Pages · matches public site navigation order
             </p>
 
-            <div
-                class="border-app bg-app-surface divide-app divide-y overflow-hidden rounded-xl border"
-            >
+            <div class="border-app bg-app-surface divide-app divide-y overflow-hidden rounded-xl border">
                 <div
                     v-for="pg in pageList"
                     :key="pg.key"
-                    class="hover:bg-app-elevated/30 group flex items-center gap-3 px-4 py-3 transition-colors"
+                    class="hover:bg-app-elevated/40 group flex items-center gap-4 px-5 py-3.5 transition-colors"
                 >
-                    <!-- Page icon + title -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-slate-800 transition-colors group-hover:bg-[var(--primary)]/10"
-                            >
-                                <svg
-                                    class="size-4 text-slate-400 transition-colors group-hover:text-[var(--primary)]"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="1.5"
-                                        :d="pageIconPaths[pg.icon]"
-                                    />
-                                </svg>
-                            </div>
-                            <div>
-                                <p
-                                    class="text-sm font-bold text-white"
-                                    style="font-family: Manrope, sans-serif"
-                                >
-                                    {{ pg.label }}
-                                </p>
-                                <p class="mt-0.5 text-xs text-slate-500">
-                                    {{ pg.desc }}
-                                </p>
-                            </div>
-                        </div>
-                        <!-- Enabled toggle (not for Home) -->
+                    <!-- Icon -->
+                    <div class="bg-app-elevated flex size-9 shrink-0 items-center justify-center rounded-lg transition-colors group-hover:bg-[var(--primary)]/10">
+                        <svg class="text-app-muted size-4 transition-colors group-hover:text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="pageIconPaths[pg.icon]" />
+                        </svg>
+                    </div>
+
+                    <!-- Label + slug -->
+                    <div class="min-w-0 flex-1">
+                        <p class="text-app text-sm font-semibold leading-tight" style="font-family: Manrope, sans-serif">{{ pg.label }}</p>
+                        <p class="text-app-muted mt-0.5 font-mono text-xs">{{ pg.href ?? '(no public route)' }}</p>
+                    </div>
+
+                    <!-- Reorder buttons -->
+                    <div class="flex shrink-0 flex-col gap-0.5">
                         <button
-                            v-if="!pg.always"
-                            @click="requestToggle(pg.key)"
-                            :title="
-                                pageEnabled[pg.key]
-                                    ? 'Disable page'
-                                    : 'Enable page'
-                            "
-                            class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200"
-                            :class="
-                                pageEnabled[pg.key]
-                                    ? 'bg-[var(--primary)]'
-                                    : 'bg-slate-700'
-                            "
+                            @click="pageList.splice(pageList.indexOf(pg) - 1, 0, pageList.splice(pageList.indexOf(pg), 1)[0])"
+                            :disabled="pageList.indexOf(pg) === 0"
+                            class="text-app-muted hover:text-app hover:bg-app-elevated flex size-5 items-center justify-center rounded transition-colors disabled:cursor-not-allowed disabled:opacity-20"
                         >
-                            <svg
-                                class="size-3"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2.5"
-                                    d="M5 15l7-7 7 7"
-                                />
-                            </svg>
+                            <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" /></svg>
                         </button>
+                        <button
+                            @click="pageList.splice(pageList.indexOf(pg) + 1, 0, pageList.splice(pageList.indexOf(pg), 1)[0])"
+                            :disabled="pageList.indexOf(pg) === pageList.length - 1"
+                            class="text-app-muted hover:text-app hover:bg-app-elevated flex size-5 items-center justify-center rounded transition-colors disabled:cursor-not-allowed disabled:opacity-20"
+                        >
+                            <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+                        </button>
+                    </div>
+
+                    <!-- Status badge (fixed width so all rows align) -->
+                    <div class="flex w-28 shrink-0 justify-center">
+                        <span v-if="pg.always" class="text-app-muted bg-app-elevated border-app inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium">
+                            <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                            Always on
+                        </span>
                         <button
                             v-else
                             @click="requestToggle(pg.key)"
                             class="inline-flex w-full items-center justify-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors"
-                            :class="
-                                pageEnabled[pg.key]
-                                    ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
-                                    : 'bg-app-elevated border-app text-slate-500 hover:border-slate-600'
-                            "
+                            :class="pageEnabled[pg.key]
+                                ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
+                                : 'border-app bg-app-elevated text-slate-500 hover:border-slate-600'"
                         >
-                            <svg
-                                class="size-3"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2.5"
-                                    d="M19 9l-7 7-7-7"
-                                />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <!-- Page icon -->
-                    <div
-                        class="bg-app-elevated flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors group-hover:bg-[var(--primary)]/10"
-                    >
-                        <svg
-                            class="text-app-muted size-3.5 transition-colors group-hover:text-[var(--primary)]"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="1.5"
-                                :d="pageIconPaths[pg.icon]"
-                            />
-                        </svg>
-                    </div>
-
-                    <!-- Page name + slug -->
-                    <div class="min-w-0 flex-1">
-                        <p
-                            class="text-app text-sm leading-tight font-semibold"
-                            style="font-family: Manrope, sans-serif"
-                        >
-                            {{ pg.label }}
-                        </p>
-                        <p class="text-app-muted mt-0.5 font-mono text-xs">
-                            {{ pg.href ?? '(no public route)' }}
-                        </p>
-                    </div>
-
-                    <!-- Enabled / Disabled badge -->
-                    <div class="shrink-0">
-                        <!-- Home always-on lock badge -->
-                        <span
-                            v-if="pg.always"
-                            class="text-app-muted bg-app-elevated flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium"
-                        >
-                            <svg
-                                class="size-3"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                                />
-                            </svg>
-                            Always on
-                        </span>
-                        <!-- Toggleable badge -->
-                        <button
-                            v-else
-                            @click="requestToggle(pg.key)"
-                            class="flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold transition-colors"
-                            :class="
-                                pageEnabled[pg.key]
-                                    ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
-                                    : 'text-app-muted bg-app-elevated border-app hover:border-slate-500'
-                            "
-                        >
-                            <!-- Enabled: checkmark -->
-                            <svg
-                                v-if="pageEnabled[pg.key]"
-                                class="size-3"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2.5"
-                                    d="M5 13l4 4L19 7"
-                                />
-                            </svg>
-                            <!-- Disabled: dash -->
-                            <svg
-                                v-else
-                                class="size-3"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2.5"
-                                    d="M20 12H4"
-                                />
-                            </svg>
+                            <svg v-if="pageEnabled[pg.key]" class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                            <svg v-else class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 12H4" /></svg>
                             {{ pageEnabled[pg.key] ? 'Enabled' : 'Disabled' }}
                         </button>
                     </div>
@@ -612,46 +474,20 @@ const pageIconPaths: Record<string, string> = {
                     <!-- Edit button -->
                     <button
                         @click="activePage = pg.key"
-                        class="flex shrink-0 items-center gap-1.5 rounded-lg border border-[var(--primary)]/30 px-3 py-1.5 text-xs font-semibold text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/5"
+                        class="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-[var(--primary)]/30 px-3 py-1.5 text-xs font-semibold text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/5"
                     >
-                        <svg
-                            class="size-3.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                            />
-                        </svg>
+                        <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                         Edit
                     </button>
 
                     <!-- View live link -->
-                    <a
-                        v-if="pg.href"
-                        :href="pg.href"
-                        target="_blank"
-                        class="text-app-muted hover:text-app-muted flex shrink-0 items-center justify-center transition-colors"
+                    <a v-if="pg.href" :href="pg.href" target="_blank"
+                        class="text-app-muted hover:text-app hover:bg-app-elevated flex size-7 shrink-0 items-center justify-center rounded-lg transition-colors"
                         title="View live page"
                     >
-                        <svg
-                            class="size-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                            />
-                        </svg>
+                        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                     </a>
+                    <div v-else class="size-7 shrink-0" />
                 </div>
             </div>
         </div>
@@ -762,12 +598,12 @@ const pageIconPaths: Record<string, string> = {
         <div
             v-if="activePage !== null"
             class="flex min-h-0 flex-1"
-            :class="hasPreview ? 'divide-app divide-x' : ''"
+            :class="hasPreview ? 'lg:divide-app lg:divide-x' : ''"
         >
             <!-- Editor pane -->
             <div
-                class="flex flex-col gap-6 overflow-y-auto px-6 py-6"
-                :class="hasPreview ? 'w-1/2' : 'w-full max-w-4xl'"
+                class="flex min-w-0 flex-col gap-6 overflow-y-auto px-4 py-6 md:px-6"
+                :class="hasPreview ? 'w-full lg:w-1/2' : 'w-full max-w-4xl'"
             >
                 <!-- HOME: Hero section -->
                 <div
@@ -1332,7 +1168,7 @@ const pageIconPaths: Record<string, string> = {
             <!-- Live preview pane -->
             <div
                 v-if="hasPreview"
-                class="bg-app-bg flex w-1/2 flex-col overflow-y-auto"
+                class="bg-app-bg hidden w-1/2 flex-col overflow-y-auto lg:flex"
             >
                 <div
                     class="border-app bg-app-elevated sticky top-0 z-10 flex items-center justify-between border-b px-5 py-3"

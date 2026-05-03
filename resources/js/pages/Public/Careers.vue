@@ -19,7 +19,7 @@ const careers = computed<Career[]>(() => {
     <Head :title="`Careers — ${appName}`" />
 
     <!-- Hero -->
-    <section class="py-20 px-6 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 60%, #051424 100%);">
+    <section class="py-20 px-4 md:px-6 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 60%, #051424 100%);">
         <div class="max-w-3xl mx-auto">
             <span class="inline-flex items-center gap-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6">Careers</span>
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight" style="font-family: Manrope, sans-serif;">Join our team</h1>
@@ -28,7 +28,7 @@ const careers = computed<Career[]>(() => {
     </section>
 
     <!-- Job listings -->
-    <section class="py-16 px-6 bg-[#051424]">
+    <section class="py-16 px-4 md:px-6 bg-[#051424]">
         <div class="max-w-4xl mx-auto">
             <!-- Empty state -->
             <div v-if="careers.length === 0" class="text-center py-20">
@@ -48,8 +48,8 @@ const careers = computed<Career[]>(() => {
                     :key="i"
                     class="group rounded-2xl border border-slate-800 bg-[#0d1c2d] p-6 hover:border-[var(--primary)]/30 transition-colors"
                 >
-                    <div class="flex items-start justify-between gap-4 mb-3">
-                        <h3 class="text-lg font-bold text-white" style="font-family: Manrope, sans-serif;">{{ job.title }}</h3>
+                    <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
+                        <h3 class="text-lg font-bold text-white min-w-0" style="font-family: Manrope, sans-serif;">{{ job.title }}</h3>
                         <div class="flex items-center gap-2 shrink-0">
                             <span v-if="job.type" class="text-xs font-semibold text-[var(--primary)] bg-[var(--primary)]/10 border border-[var(--primary)]/20 px-2.5 py-1 rounded-full">{{ job.type }}</span>
                         </div>

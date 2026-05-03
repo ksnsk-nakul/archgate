@@ -28,7 +28,7 @@ const iconPaths: Record<string, string> = {
     <Head :title="`Services — ${appName}`" />
 
     <!-- Hero -->
-    <section class="py-20 px-6 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 60%, #051424 100%);">
+    <section class="py-20 px-4 md:px-6 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 60%, #051424 100%);">
         <div class="max-w-3xl mx-auto">
             <span class="inline-flex items-center gap-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6">Our Services</span>
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight" style="font-family: Manrope, sans-serif;">Everything your team needs</h1>
@@ -37,7 +37,7 @@ const iconPaths: Record<string, string> = {
     </section>
 
     <!-- Services grid -->
-    <section class="py-16 px-6 bg-[#051424]">
+    <section class="py-16 px-4 md:px-6 bg-[#051424]">
         <div class="max-w-6xl mx-auto">
             <div v-if="services.length === 0" class="text-center py-16 text-slate-500">No services configured yet.</div>
             <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -59,7 +59,7 @@ const iconPaths: Record<string, string> = {
     </section>
 
     <!-- CTA -->
-    <section class="py-20 px-6 bg-[#0a1929] text-center border-t border-slate-800">
+    <section class="py-20 px-4 md:px-6 bg-[#0a1929] text-center border-t border-slate-800">
         <div class="max-w-2xl mx-auto">
             <h2 class="text-3xl font-extrabold text-white mb-4" style="font-family: Manrope, sans-serif;">Ready to get started?</h2>
             <p class="text-slate-400 mb-8">Join teams already using {{ appName }} to work smarter.</p>

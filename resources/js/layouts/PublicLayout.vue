@@ -30,7 +30,7 @@ function isActive(href: string): boolean {
     <div class="min-h-screen flex flex-col bg-[#051424] text-[#d4e4fa]" style="font-family: Inter, sans-serif;">
         <!-- Top Nav -->
         <header class="sticky top-0 z-50 border-b border-slate-800 bg-[#051424]/95 backdrop-blur-sm">
-            <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-6">
+            <div class="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-4 md:gap-6">
                 <Link href="/" class="text-lg font-extrabold text-white hover:text-[var(--primary)] transition-colors" style="font-family: Manrope, sans-serif;">
                     {{ appName }}
                 </Link>
@@ -56,7 +56,7 @@ function isActive(href: string): boolean {
         </header>
         <main class="flex-1"><slot /></main>
         <footer class="border-t border-slate-800 bg-[#0a1929]">
-            <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="max-w-7xl mx-auto px-4 md:px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
                 <span class="text-sm text-slate-500">{{ footerText }}</span>
                 <nav class="flex items-center gap-4">
                     <a v-for="link in navLinks.slice(0,5)" :key="link.href" :href="link.href" class="text-xs text-slate-600 hover:text-slate-400 transition-colors">{{ link.label }}</a>

@@ -44,7 +44,7 @@ function submit() {
     <Head :title="`Contact — ${appName}`" />
 
     <!-- Hero -->
-    <section class="py-20 px-6 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 60%, #051424 100%);">
+    <section class="py-20 px-4 md:px-6 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 60%, #051424 100%);">
         <div class="max-w-3xl mx-auto">
             <span class="inline-flex items-center gap-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6">Contact</span>
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight" style="font-family: Manrope, sans-serif;">Get in touch</h1>
@@ -53,8 +53,8 @@ function submit() {
     </section>
 
     <!-- Two-column -->
-    <section class="py-16 px-6 bg-[#051424]">
-        <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12">
+    <section class="py-16 px-4 md:px-6 bg-[#051424]">
+        <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-6 md:gap-12">
 
             <!-- Contact info -->
             <div class="flex flex-col gap-6">

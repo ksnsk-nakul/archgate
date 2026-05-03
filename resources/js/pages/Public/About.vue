@@ -15,7 +15,7 @@ const aboutText = computed(() => page.props.landing?.about_text ?? '');
     <Head :title="`About — ${appName}`" />
 
     <!-- Hero -->
-    <section class="py-20 px-6 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 60%, #051424 100%);">
+    <section class="py-20 px-4 md:px-6 text-center" style="background: linear-gradient(135deg, #051424 0%, #0a1929 60%, #051424 100%);">
         <div class="max-w-3xl mx-auto">
             <span class="inline-flex items-center gap-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6">About Us</span>
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight" style="font-family: Manrope, sans-serif;">Who we are</h1>
@@ -23,7 +23,7 @@ const aboutText = computed(() => page.props.landing?.about_text ?? '');
     </section>
 
     <!-- About content -->
-    <section class="py-16 px-6 bg-[#051424]">
+    <section class="py-16 px-4 md:px-6 bg-[#051424]">
         <div class="max-w-3xl mx-auto">
             <div
                 v-if="aboutText"

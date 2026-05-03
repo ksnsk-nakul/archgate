@@ -78,16 +78,16 @@ function selectTheme(color: string): void {
 
     <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
         <!-- Toolbar -->
-        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
+        <div class="flex items-center justify-between gap-4 px-4 py-4 md:px-6 border-b border-app">
             <div>
                 <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Admin</p>
                 <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">App Settings</h1>
             </div>
         </div>
 
-        <div class="px-6 py-6 max-w-2xl">
+        <div class="px-4 py-6 md:px-6 max-w-2xl">
             <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
-                <div class="px-6 py-4 border-b border-app">
+                <div class="px-4 py-4 md:px-6 border-b border-app">
                     <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">App details</h2>
                     <p class="text-xs text-app-muted mt-0.5">Public app identity displayed across the platform.</p>
                 </div>
@@ -95,7 +95,7 @@ function selectTheme(color: string): void {
                 <Form
                     v-bind="update.form()"
                     enctype="multipart/form-data"
-                    class="px-6 py-6 flex flex-col gap-6"
+                    class="px-4 py-6 md:px-6 flex flex-col gap-6"
                     v-slot="{ errors, processing }"
                 >
                     <!-- App name -->
