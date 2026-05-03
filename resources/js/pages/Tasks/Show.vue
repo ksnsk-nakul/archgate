@@ -36,7 +36,7 @@ const statusColor: Record<string, string> = {
 
     <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
         <!-- Toolbar -->
-        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
+        <div class="flex flex-wrap items-center justify-between gap-4 px-4 py-4 md:px-6 border-b border-app">
             <div>
                 <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Tasks</p>
                 <h1 class="text-xl font-bold text-app truncate max-w-md" style="font-family: Manrope, sans-serif;">{{ task.data.title }}</h1>
@@ -57,7 +57,7 @@ const statusColor: Record<string, string> = {
             </div>
         </div>
 
-        <div class="px-6 py-6 flex flex-col gap-5 max-w-3xl">
+        <div class="px-4 py-6 md:px-6 flex flex-col gap-5 max-w-3xl">
             <!-- Task meta -->
             <div class="rounded-xl border border-app bg-app-surface overflow-hidden">
                 <div class="px-6 py-4 border-b border-app flex items-center gap-2">
@@ -65,7 +65,7 @@ const statusColor: Record<string, string> = {
                     <h2 class="text-sm font-bold text-app" style="font-family: Manrope, sans-serif;">Task details</h2>
                 </div>
                 <div class="px-6 py-5 flex flex-col gap-4">
-                    <div class="grid grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <p class="text-xs text-app-muted uppercase tracking-wider font-semibold mb-1">Status</p>
                             <span class="text-xs font-semibold px-2 py-0.5 rounded-full border" :class="statusColor[task.data.status] ?? 'text-app-muted bg-app-elevated border-app'">

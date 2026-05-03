@@ -78,7 +78,7 @@ const statusColor: Record<string, string> = {
 
     <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
         <!-- Toolbar -->
-        <div class="flex items-center gap-3 px-6 py-4 border-b border-app">
+        <div class="flex items-center gap-3 px-4 py-4 md:px-6 border-b border-app">
             <Link
                 :href="coursesIndex()"
                 class="flex items-center gap-1.5 text-xs font-semibold text-app-muted hover:text-app border border-app hover:border-app px-3 py-2 rounded-lg transition-colors"
@@ -91,7 +91,7 @@ const statusColor: Record<string, string> = {
             </div>
         </div>
 
-        <div class="px-6 py-6 grid gap-4 lg:grid-cols-3">
+        <div class="px-4 py-6 md:px-6 grid gap-4 lg:grid-cols-3">
             <!-- Course meta + enrollment -->
             <div class="flex flex-col gap-4 lg:col-span-1">
                 <div class="rounded-xl border border-app bg-app-surface overflow-hidden">

@@ -86,7 +86,7 @@ const typeColor: Record<string, string> = {
 
     <div class="flex flex-col min-h-full bg-app-bg text-app" style="font-family: Inter, sans-serif;">
         <!-- Breadcrumb toolbar -->
-        <div class="flex items-center gap-2 px-6 py-4 border-b border-app text-sm">
+        <div class="flex items-center gap-2 px-4 py-4 md:px-6 border-b border-app text-sm overflow-x-auto">
             <Link :href="`/courses/${course.data.id}`" class="text-app-muted hover:text-app transition-colors font-semibold">
                 {{ course.data.title }}
             </Link>
@@ -96,7 +96,7 @@ const typeColor: Record<string, string> = {
             <span class="text-app font-semibold truncate max-w-xs">{{ lesson.data.title }}</span>
         </div>
 
-        <div class="px-6 py-6 grid gap-4 lg:grid-cols-4">
+        <div class="px-4 py-6 md:px-6 grid gap-4 lg:grid-cols-4">
             <!-- Lesson content -->
             <div class="flex flex-col gap-4 lg:col-span-3">
                 <div class="rounded-xl border border-app bg-app-surface overflow-hidden">

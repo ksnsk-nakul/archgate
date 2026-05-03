@@ -98,7 +98,7 @@ async function deleteTask(id: number): Promise<void> {
         <!-- Main content area -->
         <div class="flex flex-col flex-1 min-w-0">
             <!-- Toolbar -->
-            <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-app">
+            <div class="flex flex-wrap items-center justify-between gap-4 px-4 py-4 md:px-6 border-b border-app">
                 <div>
                     <p class="text-xs text-app-muted font-semibold uppercase tracking-widest mb-0.5">Workspace</p>
                     <h1 class="text-xl font-bold text-app" style="font-family: Manrope, sans-serif;">My Tasks</h1>
@@ -194,7 +194,7 @@ async function deleteTask(id: number): Promise<void> {
             </div>
 
             <!-- LIST VIEW -->
-            <div v-else-if="viewMode === 'list'" class="px-6 py-5 flex flex-col gap-2">
+            <div v-else-if="viewMode === 'list'" class="px-4 py-5 md:px-6 flex flex-col gap-2">
                 <template v-for="section in sections" :key="section">
                     <div class="mb-1">
                         <!-- Section header -->
@@ -296,7 +296,7 @@ async function deleteTask(id: number): Promise<void> {
             </div>
 
             <!-- BOARD VIEW -->
-            <div v-else class="flex gap-4 px-6 py-5 overflow-x-auto min-h-[400px]">
+            <div v-else class="flex gap-4 px-4 py-5 md:px-6 overflow-x-auto min-h-[400px]">
                 <template v-for="section in sections" :key="section">
                     <div class="flex-shrink-0 w-72">
                         <div class="flex items-center gap-2 mb-3">
